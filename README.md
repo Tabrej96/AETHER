@@ -4,7 +4,7 @@
 
 ### The open-source AI engineering harness that **executes**, not just explains
 
-**117 agents · 540 skills · 54 workflows · 20 MCP tools · 21 capability engines — all Apache-2.0, all tested, all measured.**
+**20+ AETHER agents · 71 ECC agents · 314 ECC skills · 9 Capability Programs · 21 capability engines — all Apache-2.0, all tested, all measured.**
 
 [![Created by Tabrej](https://img.shields.io/badge/created%20by-Tabrej-orange)](https://github.com/Tabrej96)
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
@@ -34,7 +34,7 @@ long jobs if the machine crashes. Instead of *describing* a fix, it *does* the w
 | **Safety you can audit** | 119+ automated tests across 14 suites, every critical module covered, and a 12-stage release certification that blocks the build when anything regresses |
 | **Quality-gated catalog** | Every agent and skill is scored by a deterministic quality gate that checks for an executable verifier, zero-regression assertions, secret handling, and crash-recovery depth |
 | **21 capability engines** | Domain intelligence, browser automation, visual computer use, reverse engineering, workspace management, creative generation, and more — all integrated through stable contracts |
-| **Extensible** | 117 agents, 540 skills, 54 workflows, and 20 MCP tools you can compose, extend, or replace |
+| **Extensible** | 20+ AETHER native agents, 71 ECC-inspired agents, 314 skills, 9 Capability Programs, and 21 capability engines — compose, extend, or replace any component |
 
 ---
 

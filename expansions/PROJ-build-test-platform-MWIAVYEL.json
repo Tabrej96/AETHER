@@ -1,0 +1,977 @@
+{
+  "id": "PROJ-build-test-platform-MWIAVYEL",
+  "prompt": "Build a test platform",
+  "industry": {
+    "id": "marketplace",
+    "name": "Marketplace / Platform",
+    "keywords": [
+      "marketplace",
+      "seller",
+      "commission",
+      "listing",
+      "bid",
+      "payout",
+      "vendor",
+      "dispute",
+      "escrow",
+      "platform"
+    ],
+    "marketLeaders": [
+      "eBay",
+      "Etsy",
+      "Airbnb",
+      "Upwork",
+      "Fiverr"
+    ],
+    "complianceRequirements": [
+      "GDPR",
+      "KYC/AML",
+      "PCI DSS",
+      "Tax reporting (1099/109K)"
+    ],
+    "techStack": [
+      "Next.js",
+      "PostgreSQL",
+      "Redis",
+      "Stripe Connect",
+      "Elasticsearch",
+      "AWS SES"
+    ]
+  },
+  "pillars": [
+    {
+      "id": "P01",
+      "name": "Multi-tenant Architecture",
+      "description": "Seller and buyer isolation",
+      "requirements": [
+        {
+          "id": "MULTI-TENANT_ARCHITECTURE_REQ_01",
+          "description": "Separate seller workspaces"
+        },
+        {
+          "id": "MULTI-TENANT_ARCHITECTURE_REQ_02",
+          "description": "Commission tracking"
+        },
+        {
+          "id": "MULTI-TENANT_ARCHITECTURE_REQ_03",
+          "description": "Seller onboarding"
+        },
+        {
+          "id": "MULTI-TENANT_ARCHITECTURE_REQ_04",
+          "description": "Role-based access"
+        }
+      ],
+      "agent": "p11-fullstack",
+      "dependencies": []
+    },
+    {
+      "id": "P02",
+      "name": "Listing Management",
+      "description": "Product listing creation and management",
+      "requirements": [
+        {
+          "id": "LISTING_MANAGEMENT_REQ_01",
+          "description": "Listing CRUD"
+        },
+        {
+          "id": "LISTING_MANAGEMENT_REQ_02",
+          "description": "Listing templates"
+        },
+        {
+          "id": "LISTING_MANAGEMENT_REQ_03",
+          "description": "Bulk listing operations"
+        },
+        {
+          "id": "LISTING_MANAGEMENT_REQ_04",
+          "description": "Listing moderation"
+        }
+      ],
+      "agent": "p11-fullstack",
+      "dependencies": [
+        "P01"
+      ]
+    },
+    {
+      "id": "P03",
+      "name": "Search & Discovery",
+      "description": "Marketplace-wide search",
+      "requirements": [
+        {
+          "id": "SEARCH_&_DISCOVERY_REQ_01",
+          "description": "Full-text search"
+        },
+        {
+          "id": "SEARCH_&_DISCOVERY_REQ_02",
+          "description": "Faceted filtering"
+        },
+        {
+          "id": "SEARCH_&_DISCOVERY_REQ_03",
+          "description": "Seller-specific search"
+        },
+        {
+          "id": "SEARCH_&_DISCOVERY_REQ_04",
+          "description": "Recommendation engine"
+        }
+      ],
+      "agent": "p11-fullstack",
+      "dependencies": [
+        "P02"
+      ]
+    },
+    {
+      "id": "P04",
+      "name": "Cart & Checkout",
+      "description": "Multi-seller checkout flow",
+      "requirements": [
+        {
+          "id": "CART_&_CHECKOUT_REQ_01",
+          "description": "Multi-seller cart"
+        },
+        {
+          "id": "CART_&_CHECKOUT_REQ_02",
+          "description": "Split payments"
+        },
+        {
+          "id": "CART_&_CHECKOUT_REQ_03",
+          "description": "Order consolidation"
+        },
+        {
+          "id": "CART_&_CHECKOUT_REQ_04",
+          "description": "Checkout idempotency"
+        }
+      ],
+      "agent": "p11-fullstack",
+      "dependencies": [
+        "P03"
+      ]
+    },
+    {
+      "id": "P05",
+      "name": "Payment & Commission",
+      "description": "Payment splitting and commission",
+      "requirements": [
+        {
+          "id": "PAYMENT_&_COMMISSION_REQ_01",
+          "description": "Commission calculation"
+        },
+        {
+          "id": "PAYMENT_&_COMMISSION_REQ_02",
+          "description": "Seller payouts"
+        },
+        {
+          "id": "PAYMENT_&_COMMISSION_REQ_03",
+          "description": "Payment reconciliation"
+        },
+        {
+          "id": "PAYMENT_&_COMMISSION_REQ_04",
+          "description": "Dispute handling"
+        }
+      ],
+      "agent": "p13-business-logic",
+      "dependencies": [
+        "P04"
+      ]
+    },
+    {
+      "id": "P06",
+      "name": "Order Management",
+      "description": "Cross-seller order coordination",
+      "requirements": [
+        {
+          "id": "ORDER_MANAGEMENT_REQ_01",
+          "description": "Order state machine"
+        },
+        {
+          "id": "ORDER_MANAGEMENT_REQ_02",
+          "description": "Multi-seller tracking"
+        },
+        {
+          "id": "ORDER_MANAGEMENT_REQ_03",
+          "description": "Order cancellation"
+        },
+        {
+          "id": "ORDER_MANAGEMENT_REQ_04",
+          "description": "Refund coordination"
+        }
+      ],
+      "agent": "p13-business-logic",
+      "dependencies": [
+        "P05"
+      ]
+    },
+    {
+      "id": "P07",
+      "name": "Messaging System",
+      "description": "Buyer-seller communication",
+      "requirements": [
+        {
+          "id": "MESSAGING_SYSTEM_REQ_01",
+          "description": "Real-time chat"
+        },
+        {
+          "id": "MESSAGING_SYSTEM_REQ_02",
+          "description": "Message history"
+        },
+        {
+          "id": "MESSAGING_SYSTEM_REQ_03",
+          "description": "Attachment support"
+        },
+        {
+          "id": "MESSAGING_SYSTEM_REQ_04",
+          "description": "Spam filtering"
+        }
+      ],
+      "agent": "p11-fullstack",
+      "dependencies": [
+        "P01"
+      ]
+    },
+    {
+      "id": "P08",
+      "name": "Reviews & Ratings",
+      "description": "Trust and review system",
+      "requirements": [
+        {
+          "id": "REVIEWS_&_RATINGS_REQ_01",
+          "description": "Star ratings"
+        },
+        {
+          "id": "REVIEWS_&_RATINGS_REQ_02",
+          "description": "Review moderation"
+        },
+        {
+          "id": "REVIEWS_&_RATINGS_REQ_03",
+          "description": "Verified purchase badge"
+        },
+        {
+          "id": "REVIEWS_&_RATINGS_REQ_04",
+          "description": "Review helpfulness voting"
+        }
+      ],
+      "agent": "p11-fullstack",
+      "dependencies": [
+        "P06"
+      ]
+    },
+    {
+      "id": "P09",
+      "name": "Dispute Resolution",
+      "description": "Buyer-seller dispute handling",
+      "requirements": [
+        {
+          "id": "DISPUTE_RESOLUTION_REQ_01",
+          "description": "Dispute filing"
+        },
+        {
+          "id": "DISPUTE_RESOLUTION_REQ_02",
+          "description": "Evidence submission"
+        },
+        {
+          "id": "DISPUTE_RESOLUTION_REQ_03",
+          "description": "Mediation workflow"
+        },
+        {
+          "id": "DISPUTE_RESOLUTION_REQ_04",
+          "description": "Resolution tracking"
+        }
+      ],
+      "agent": "p13-business-logic",
+      "dependencies": [
+        "P08"
+      ]
+    },
+    {
+      "id": "P10",
+      "name": "Seller Dashboard",
+      "description": "Seller-facing management tools",
+      "requirements": [
+        {
+          "id": "SELLER_DASHBOARD_REQ_01",
+          "description": "Sales analytics"
+        },
+        {
+          "id": "SELLER_DASHBOARD_REQ_02",
+          "description": "Inventory management"
+        },
+        {
+          "id": "SELLER_DASHBOARD_REQ_03",
+          "description": "Payout history"
+        },
+        {
+          "id": "SELLER_DASHBOARD_REQ_04",
+          "description": "Performance metrics"
+        }
+      ],
+      "agent": "p11-fullstack",
+      "dependencies": [
+        "P01"
+      ]
+    },
+    {
+      "id": "P11",
+      "name": "Buyer Dashboard",
+      "description": "Buyer-facing account tools",
+      "requirements": [
+        {
+          "id": "BUYER_DASHBOARD_REQ_01",
+          "description": "Order history"
+        },
+        {
+          "id": "BUYER_DASHBOARD_REQ_02",
+          "description": "Wishlist"
+        },
+        {
+          "id": "BUYER_DASHBOARD_REQ_03",
+          "description": "Saved searches"
+        },
+        {
+          "id": "BUYER_DASHBOARD_REQ_04",
+          "description": "Return tracking"
+        }
+      ],
+      "agent": "p11-fullstack",
+      "dependencies": [
+        "P01"
+      ]
+    },
+    {
+      "id": "P12",
+      "name": "Authentication & Authorization",
+      "description": "Multi-role auth system",
+      "requirements": [
+        {
+          "id": "AUTHENTICATION_&_AUTHORIZATION_REQ_01",
+          "description": "Buyer/seller/admin roles"
+        },
+        {
+          "id": "AUTHENTICATION_&_AUTHORIZATION_REQ_02",
+          "description": "OAuth integration"
+        },
+        {
+          "id": "AUTHENTICATION_&_AUTHORIZATION_REQ_03",
+          "description": "Email verification"
+        },
+        {
+          "id": "AUTHENTICATION_&_AUTHORIZATION_REQ_04",
+          "description": "Account security"
+        }
+      ],
+      "agent": "p11-fullstack",
+      "dependencies": []
+    },
+    {
+      "id": "P13",
+      "name": "Commission & Payout Engine",
+      "description": "Financial settlement system",
+      "requirements": [
+        {
+          "id": "COMMISSION_&_PAYOUT_ENGINE_REQ_01",
+          "description": "Commission rules"
+        },
+        {
+          "id": "COMMISSION_&_PAYOUT_ENGINE_REQ_02",
+          "description": "Payout scheduling"
+        },
+        {
+          "id": "COMMISSION_&_PAYOUT_ENGINE_REQ_03",
+          "description": "Tax documentation"
+        },
+        {
+          "id": "COMMISSION_&_PAYOUT_ENGINE_REQ_04",
+          "description": "Payout reconciliation"
+        }
+      ],
+      "agent": "p13-business-logic",
+      "dependencies": [
+        "P05"
+      ]
+    },
+    {
+      "id": "P14",
+      "name": "Notification System",
+      "description": "Multi-party notifications",
+      "requirements": [
+        {
+          "id": "NOTIFICATION_SYSTEM_REQ_01",
+          "description": "Order notifications"
+        },
+        {
+          "id": "NOTIFICATION_SYSTEM_REQ_02",
+          "description": "Message alerts"
+        },
+        {
+          "id": "NOTIFICATION_SYSTEM_REQ_03",
+          "description": "Promotional emails"
+        },
+        {
+          "id": "NOTIFICATION_SYSTEM_REQ_04",
+          "description": "Push notifications"
+        }
+      ],
+      "agent": "p11-fullstack",
+      "dependencies": [
+        "P07"
+      ]
+    },
+    {
+      "id": "P15",
+      "name": "Admin & Moderation",
+      "description": "Platform-level administration",
+      "requirements": [
+        {
+          "id": "ADMIN_&_MODERATION_REQ_01",
+          "description": "User management"
+        },
+        {
+          "id": "ADMIN_&_MODERATION_REQ_02",
+          "description": "Content moderation"
+        },
+        {
+          "id": "ADMIN_&_MODERATION_REQ_03",
+          "description": "Dispute resolution"
+        },
+        {
+          "id": "ADMIN_&_MODERATION_REQ_04",
+          "description": "Platform analytics"
+        }
+      ],
+      "agent": "p11-fullstack",
+      "dependencies": [
+        "P09"
+      ]
+    },
+    {
+      "id": "P16",
+      "name": "Analytics Platform",
+      "description": "Marketplace analytics",
+      "requirements": [
+        {
+          "id": "ANALYTICS_PLATFORM_REQ_01",
+          "description": "GMV tracking"
+        },
+        {
+          "id": "ANALYTICS_PLATFORM_REQ_02",
+          "description": "Seller performance"
+        },
+        {
+          "id": "ANALYTICS_PLATFORM_REQ_03",
+          "description": "Category analytics"
+        },
+        {
+          "id": "ANALYTICS_PLATFORM_REQ_04",
+          "description": "Fraud detection"
+        }
+      ],
+      "agent": "p11-fullstack",
+      "dependencies": [
+        "P15"
+      ]
+    },
+    {
+      "id": "P17",
+      "name": "API & Integrations",
+      "description": "Public API for sellers",
+      "requirements": [
+        {
+          "id": "API_&_INTEGRATIONS_REQ_01",
+          "description": "REST API"
+        },
+        {
+          "id": "API_&_INTEGRATIONS_REQ_02",
+          "description": "Webhook support"
+        },
+        {
+          "id": "API_&_INTEGRATIONS_REQ_03",
+          "description": "SDK for popular languages"
+        },
+        {
+          "id": "API_&_INTEGRATIONS_REQ_04",
+          "description": "Rate limiting"
+        }
+      ],
+      "agent": "p11-fullstack",
+      "dependencies": [
+        "P12"
+      ]
+    },
+    {
+      "id": "P18",
+      "name": "Security & Compliance",
+      "description": "Platform security",
+      "requirements": [
+        {
+          "id": "SECURITY_&_COMPLIANCE_REQ_01",
+          "description": "KYC/AML checks"
+        },
+        {
+          "id": "SECURITY_&_COMPLIANCE_REQ_02",
+          "description": "Fraud detection"
+        },
+        {
+          "id": "SECURITY_&_COMPLIANCE_REQ_03",
+          "description": "Data encryption"
+        },
+        {
+          "id": "SECURITY_&_COMPLIANCE_REQ_04",
+          "description": "Audit logging"
+        }
+      ],
+      "agent": "security-suite",
+      "dependencies": [
+        "P13"
+      ]
+    },
+    {
+      "id": "P19",
+      "name": "Testing Suite",
+      "description": "Comprehensive testing",
+      "requirements": [
+        {
+          "id": "TESTING_SUITE_REQ_01",
+          "description": "Unit tests"
+        },
+        {
+          "id": "TESTING_SUITE_REQ_02",
+          "description": "Integration tests"
+        },
+        {
+          "id": "TESTING_SUITE_REQ_03",
+          "description": "E2E marketplace flows"
+        },
+        {
+          "id": "TESTING_SUITE_REQ_04",
+          "description": "Load tests"
+        }
+      ],
+      "agent": "p14-quality",
+      "dependencies": [
+        "P15"
+      ]
+    }
+  ],
+  "competitors": [
+    {
+      "name": "eBay",
+      "url": "https://ebay.com",
+      "features": [
+        "Auction model",
+        "Global marketplace",
+        "Seller tools",
+        "Buyer protection"
+      ],
+      "strengths": [
+        "Massive user base",
+        "Trusted brand",
+        "Global reach"
+      ],
+      "weaknesses": [
+        "Fee structure",
+        "Competition",
+        "Quality inconsistency"
+      ]
+    },
+    {
+      "name": "Etsy",
+      "url": "https://etsy.com",
+      "features": [
+        "Handmade focus",
+        "Seller shops",
+        "Personalization",
+        "Community"
+      ],
+      "strengths": [
+        "Niche market",
+        "Strong community",
+        "Brand recognition"
+      ],
+      "weaknesses": [
+        "Limited scale",
+        "Fee structure",
+        "Counterfeit issues"
+      ]
+    },
+    {
+      "name": "Airbnb",
+      "url": "https://airbnb.com",
+      "features": [
+        "Property listings",
+        "Booking system",
+        "Reviews",
+        "Host tools"
+      ],
+      "strengths": [
+        "Strong brand",
+        "Great UX",
+        "Trust system"
+      ],
+      "weaknesses": [
+        "Regulatory challenges",
+        "High fees",
+        "Quality control"
+      ]
+    }
+  ],
+  "acceptanceCriteria": [
+    {
+      "id": "AC-P01-1",
+      "description": "[object Object] - Implementation is complete and functional",
+      "check": "functionality",
+      "target": "P01:feature_complete"
+    },
+    {
+      "id": "AC-P02-1",
+      "description": "[object Object] - Implementation is complete and functional",
+      "check": "functionality",
+      "target": "P02:feature_complete"
+    },
+    {
+      "id": "AC-P03-1",
+      "description": "[object Object] - Search functionality works",
+      "check": "functionality",
+      "target": "P03:search_query,P03:filter_apply"
+    },
+    {
+      "id": "AC-P03-2",
+      "description": "[object Object] - Search functionality works",
+      "check": "functionality",
+      "target": "P03:search_query,P03:filter_apply"
+    },
+    {
+      "id": "AC-P03-3",
+      "description": "[object Object] - Search functionality works",
+      "check": "functionality",
+      "target": "P03:search_query,P03:filter_apply"
+    },
+    {
+      "id": "AC-P04-1",
+      "description": "[object Object] - Implementation is complete and functional",
+      "check": "functionality",
+      "target": "P04:feature_complete"
+    },
+    {
+      "id": "AC-P04-2",
+      "description": "[object Object] - Financial operations are accurate and idempotent",
+      "check": "functionality",
+      "target": "P04:idempotency,P04:amount_accuracy"
+    },
+    {
+      "id": "AC-P05-1",
+      "description": "[object Object] - Implementation is complete and functional",
+      "check": "functionality",
+      "target": "P05:feature_complete"
+    },
+    {
+      "id": "AC-P05-2",
+      "description": "[object Object] - Financial operations are accurate and idempotent",
+      "check": "functionality",
+      "target": "P05:idempotency,P05:amount_accuracy"
+    },
+    {
+      "id": "AC-P06-1",
+      "description": "[object Object] - Implementation is complete and functional",
+      "check": "functionality",
+      "target": "P06:feature_complete"
+    },
+    {
+      "id": "AC-P07-1",
+      "description": "[object Object] - Implementation is complete and functional",
+      "check": "functionality",
+      "target": "P07:feature_complete"
+    },
+    {
+      "id": "AC-P07-2",
+      "description": "[object Object] - Search functionality works",
+      "check": "functionality",
+      "target": "P07:search_query,P07:filter_apply"
+    },
+    {
+      "id": "AC-P08-1",
+      "description": "[object Object] - Implementation is complete and functional",
+      "check": "functionality",
+      "target": "P08:feature_complete"
+    },
+    {
+      "id": "AC-P09-1",
+      "description": "[object Object] - Implementation is complete and functional",
+      "check": "functionality",
+      "target": "P09:feature_complete"
+    },
+    {
+      "id": "AC-P10-1",
+      "description": "[object Object] - Reporting/analytics generates correctly",
+      "check": "functionality",
+      "target": "P10:report_generation,P10:data_accuracy"
+    },
+    {
+      "id": "AC-P10-2",
+      "description": "[object Object] - CRUD operations functional",
+      "check": "functionality",
+      "target": "P10:create,P10:read,P10:update,P10:delete"
+    },
+    {
+      "id": "AC-P11-1",
+      "description": "[object Object] - Implementation is complete and functional",
+      "check": "functionality",
+      "target": "P11:feature_complete"
+    },
+    {
+      "id": "AC-P11-2",
+      "description": "[object Object] - Search functionality works",
+      "check": "functionality",
+      "target": "P11:search_query,P11:filter_apply"
+    },
+    {
+      "id": "AC-P12-1",
+      "description": "[object Object] - Implementation is complete and functional",
+      "check": "functionality",
+      "target": "P12:feature_complete"
+    },
+    {
+      "id": "AC-P12-2",
+      "description": "[object Object] - Authentication/authorization pattern implemented",
+      "check": "code-pattern",
+      "target": "guard/auth.*|middleware/auth.*|requireAuth|hasRole|verifyToken"
+    },
+    {
+      "id": "AC-P12-3",
+      "description": "[object Object] - Integration works end-to-end",
+      "check": "integration",
+      "target": "P12:external_api,P12:webhook_delivery"
+    },
+    {
+      "id": "AC-P12-4",
+      "description": "[object Object] - Notification delivery verified",
+      "check": "functionality",
+      "target": "P12:notification_delivery,P12:preferences"
+    },
+    {
+      "id": "AC-P12-5",
+      "description": "[object Object] - Authentication/authorization pattern implemented",
+      "check": "code-pattern",
+      "target": "guard/auth.*|middleware/auth.*|requireAuth|hasRole|verifyToken"
+    },
+    {
+      "id": "AC-P13-1",
+      "description": "[object Object] - Implementation is complete and functional",
+      "check": "functionality",
+      "target": "P13:feature_complete"
+    },
+    {
+      "id": "AC-P14-1",
+      "description": "[object Object] - Notification delivery verified",
+      "check": "functionality",
+      "target": "P14:notification_delivery,P14:preferences"
+    },
+    {
+      "id": "AC-P14-2",
+      "description": "[object Object] - Notification delivery verified",
+      "check": "functionality",
+      "target": "P14:notification_delivery,P14:preferences"
+    },
+    {
+      "id": "AC-P14-3",
+      "description": "[object Object] - Notification delivery verified",
+      "check": "functionality",
+      "target": "P14:notification_delivery,P14:preferences"
+    },
+    {
+      "id": "AC-P14-4",
+      "description": "[object Object] - Notification delivery verified",
+      "check": "functionality",
+      "target": "P14:notification_delivery,P14:preferences"
+    },
+    {
+      "id": "AC-P15-1",
+      "description": "[object Object] - CRUD operations functional",
+      "check": "functionality",
+      "target": "P15:create,P15:read,P15:update,P15:delete"
+    },
+    {
+      "id": "AC-P15-2",
+      "description": "[object Object] - Reporting/analytics generates correctly",
+      "check": "functionality",
+      "target": "P15:report_generation,P15:data_accuracy"
+    },
+    {
+      "id": "AC-P16-1",
+      "description": "[object Object] - Implementation is complete and functional",
+      "check": "functionality",
+      "target": "P16:feature_complete"
+    },
+    {
+      "id": "AC-P16-2",
+      "description": "[object Object] - Reporting/analytics generates correctly",
+      "check": "functionality",
+      "target": "P16:report_generation,P16:data_accuracy"
+    },
+    {
+      "id": "AC-P17-1",
+      "description": "[object Object] - Implementation is complete and functional",
+      "check": "functionality",
+      "target": "P17:feature_complete"
+    },
+    {
+      "id": "AC-P17-2",
+      "description": "[object Object] - Integration works end-to-end",
+      "check": "integration",
+      "target": "P17:external_api,P17:webhook_delivery"
+    },
+    {
+      "id": "AC-P18-1",
+      "description": "[object Object] - Implementation is complete and functional",
+      "check": "functionality",
+      "target": "P18:feature_complete"
+    },
+    {
+      "id": "AC-P18-2",
+      "description": "[object Object] - Security controls in place",
+      "check": "code-pattern",
+      "target": "encrypt|hash|bcrypt|argon2|encryptionAtRest|TLS|cors"
+    },
+    {
+      "id": "AC-P19-1",
+      "description": "[object Object] - Test coverage implemented",
+      "check": "code-pattern",
+      "target": "describe\\(|it\\(|test\\(|expect\\(|vitest|jest"
+    },
+    {
+      "id": "AC-P19-2",
+      "description": "[object Object] - Test coverage implemented",
+      "check": "code-pattern",
+      "target": "describe\\(|it\\(|test\\(|expect\\(|vitest|jest"
+    },
+    {
+      "id": "AC-P19-3",
+      "description": "[object Object] - Integration works end-to-end",
+      "check": "integration",
+      "target": "P19:external_api,P19:webhook_delivery"
+    },
+    {
+      "id": "AC-P19-4",
+      "description": "[object Object] - Test coverage implemented",
+      "check": "code-pattern",
+      "target": "describe\\(|it\\(|test\\(|expect\\(|vitest|jest"
+    }
+  ],
+  "architecture": [
+    {
+      "name": "Presentation Layer",
+      "responsibilities": [
+        "UI components",
+        "Routing",
+        "State management",
+        "Responsive design"
+      ]
+    },
+    {
+      "name": "API Gateway",
+      "responsibilities": [
+        "Request routing",
+        "Authentication",
+        "Rate limiting",
+        "API versioning"
+      ]
+    },
+    {
+      "name": "Business Logic Layer",
+      "responsibilities": [
+        "Service orchestration",
+        "Domain logic",
+        "State machines",
+        "Event handling"
+      ]
+    },
+    {
+      "name": "Financial Core",
+      "responsibilities": [
+        "Ledger management",
+        "Transaction processing",
+        "Settlement",
+        "Audit trail"
+      ]
+    },
+    {
+      "name": "Data Access Layer",
+      "responsibilities": [
+        "Repository pattern",
+        "Query optimization",
+        "Connection pooling",
+        "Transaction management"
+      ]
+    },
+    {
+      "name": "Infrastructure Layer",
+      "responsibilities": [
+        "Database",
+        "Cache",
+        "Message queue",
+        "Object storage"
+      ]
+    },
+    {
+      "name": "Security Layer",
+      "responsibilities": [
+        "Encryption",
+        "Access control",
+        "Audit logging",
+        "Compliance"
+      ]
+    },
+    {
+      "name": "Observability Layer",
+      "responsibilities": [
+        "Metrics",
+        "Logging",
+        "Tracing",
+        "Alerting"
+      ]
+    }
+  ],
+  "techStack": [
+    {
+      "category": "Frontend",
+      "selection": "Next.js 14+ with TypeScript",
+      "rationale": "React Server Components for performance, App Router for navigation, TypeScript for type safety"
+    },
+    {
+      "category": "Backend",
+      "selection": "Node.js with Fastify",
+      "rationale": "High performance, low overhead, excellent ecosystem for the domain"
+    },
+    {
+      "category": "Database",
+      "selection": "PostgreSQL 16+",
+      "rationale": "ACID compliance, JSON support, excellent for complex queries, proven at scale"
+    },
+    {
+      "category": "Cache",
+      "selection": "Redis 7+",
+      "rationale": "In-memory caching, session storage, pub/sub for real-time features"
+    },
+    {
+      "category": "Authentication",
+      "selection": "Auth0 / Clerk / Better Auth",
+      "rationale": "Enterprise-grade auth with SSO, MFA, and compliance features"
+    },
+    {
+      "category": "Storage",
+      "selection": "AWS S3 / Cloudflare R2",
+      "rationale": "Scalable object storage with CDN integration and cost efficiency"
+    },
+    {
+      "category": "Monitoring",
+      "selection": "Datadog / Grafana + Prometheus",
+      "rationale": "Full observability stack for metrics, logs, and traces"
+    },
+    {
+      "category": "Search",
+      "selection": "Algolia / Elasticsearch",
+      "rationale": "Fast, relevant search with faceting and typo tolerance"
+    },
+    {
+      "category": "Payments",
+      "selection": "Stripe / Razorpay",
+      "rationale": "Compliant payment processing with global coverage"
+    }
+  ]
+}
