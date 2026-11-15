@@ -146,7 +146,7 @@ export function liveProviderConfigFromEnv(): ProviderConfig | null {
       inputPerMTokens: Number(env.AETHER_LIVE_PROVIDER_IN_USD_PER_M ?? 0),
       outputPerMTokens: Number(env.AETHER_LIVE_PROVIDER_OUT_USD_PER_M ?? 0),
     },
-    maxRetries: 2,
-    timeoutMs: 30_000,
+    maxRetries: Number(env.AETHER_LIVE_PROVIDER_MAX_RETRIES ?? 2),
+    timeoutMs: Number(env.AETHER_LIVE_PROVIDER_TIMEOUT_MS ?? 120_000),
   };
 }

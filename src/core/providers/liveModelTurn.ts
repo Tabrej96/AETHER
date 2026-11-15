@@ -183,6 +183,8 @@ export async function executeLiveModelTurn(req: LiveModelTurnRequest): Promise<L
   try {
     plan = parseModelPlan(completion.content);
   } catch (e) {
+    console.log('[DEBUG] Model output length:', completion.content.length);
+    console.log('[DEBUG] Model output first 500 chars:\n', completion.content.slice(0, 500));
     const o = fallbackOutcome(false, `model output unparseable: ${String((e as Error).message ?? e).slice(0, 160)}`);
     return { ...o, ...metrics };
   }
