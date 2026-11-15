@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Cofi — Sales Dashboard</title>
+<style>
+  :root {
+    --ink: #0f2233;       /* deep slate-blue ground */
+    --ink-2: #14425c;     /* panel fill */
+    --paper: #e8f0f2;     /* light text on dark */
+    --accent: #3e7cb1;    /* tide blue bars */
+    --accent-2: #7fd1c8;  /* sea-glass for KPI values */
+    --muted: #7d98a8;     /* sea-glass gray captions */
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: "Segoe UI", system-ui, sans-serif; background: var(--ink); color: var(--paper); font-size: 15px; line-height: 1.5; }
+
+  header { padding: 26px 34px 0; display: flex; align-items: baseline; gap: 14px; }
+  header h1 { margin: 0; font-size: 30px; font-weight: 800; letter-spacing: -0.02em; }
+  header .sub { color: var(--muted); font-size: 13px; }
+
+  main { padding: 20px 34px 10px; display: grid; gap: 16px; }
+
+  .kpis { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  .kpi { background: var(--ink-2); border: 1px solid #1d4d6b; border-radius: 12px; padding: 18px 20px; transition: transform 200ms cubic-bezier(.2,.7,.3,1), border-color 200ms; }
+  .kpi:hover { transform: translateY(-4px); border-color: var(--accent-2); }
+  .kpi .v { font-size: 32px; font-weight: 800; color: var(--accent-2); }
+  .kpi .l { color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; margin-top: 4px; }
+
+  .grid { display: grid; grid-template-columns: 3fr 2fr; gap: 14px; }
+  .card { background: var(--ink-2); border: 1px solid #1d4d6b; border-radius: 12px; padding: 18px 20px; }
+  .card h2 { margin: 0 0 12px; font-size: 16px; font-weight: 600; color: var(--paper); }
+
+  .bars { display: flex; align-items: flex-end; gap: 12px; height: 190px; padding-top: 8px; }
+  .col { flex: 1; text-align: center; color: var(--muted); font-size: 11px; }
+  .col .b { background: var(--accent); border-radius: 6px 6px 0 0; min-height: 4px; transition: filter 180ms; }
+  .col:hover .b { filter: brightness(1.35); }
+
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th { text-align: left; color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; padding: 8px 10px; border-bottom: 1px solid #1d4d6b; }
+  td { padding: 9px 10px; border-bottom: 1px solid #163247; }
+  tr { transition: background 160ms; }
+  tbody tr:hover { background: #1a4159; }
+
+  footer { color: var(--muted); font-size: 12px; padding: 18px 34px 26px; }
+  .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+
+  @media (max-width: 720px) {
+    .kpis, .grid { grid-template-columns: 1fr; }
+    header h1 { font-size: 24px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .kpi, .col .b, tr { transition: none; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <h1>Cofi — Sales Dashboard</h1>
+  <span class="sub">last 7 days · computed live from the embedded dataset</span>
+</header>
+<main>
+  <section class="kpis" aria-label="key metrics">
+    <div class="kpi"><div class="v" id="k-total">—</div><div class="l">Total sales</div></div>
+    <div class="kpi"><div class="v" id="k-orders">—</div><div class="l">Orders</div></div>
+    <div class="kpi"><div class="v" id="k-avg">—</div><div class="l">Avg order value</div></div>
+  </section>
+  <div class="grid">
+    <section class="card" aria-label="sales by day of week">
+      <h2>Sales by day</h2>
+      <div class="bars" id="bars"></div>
+      <p class="sr" id="bars-summary" aria-live="polite"></p>
+    </section>
+    <section class="card" aria-label="top selling products">
+      <h2>Top products</h2>
+      <table>
+        <thead><tr><th>Product</th><th>Sold</th></tr></thead>
+        <tbody id="top"></tbody>
+      </table>
+    </section>
+  </div>
+</main>
+<footer>Cofi coffee — internal metrics · all values computed in-page from the embedded sample dataset of 16 records.</footer>
+<script>
+  const DATA = [
+    {day:"Mon",product:"Espresso",qty:42,price:4.0},{day:"Mon",product:"Latte",qty:31,price:5.5},
+    {day:"Tue",product:"Espresso",qty:48,price:4.0},{day:"Tue",product:"Cold Brew",qty:22,price:5.0},
+    {day:"Wed",product:"Latte",qty:55,price:5.5},{day:"Wed",product:"Mocha",qty:19,price:6.0},
+    {day:"Thu",product:"Espresso",qty:61,price:4.0},{day:"Thu",product:"Latte",qty:40,price:5.5},
+    {day:"Fri",product:"Cold Brew",qty:73,price:5.0},{day:"Fri",product:"Espresso",qty:58,price:4.0},
+    {day:"Sat",product:"Mocha",qty:64,price:6.0},{day:"Sat",product:"Latte",qty:80,price:5.5},
+    {day:"Sun",product:"Cold Brew",qty:45,price:5.0},{day:"Sun",product:"Espresso",qty:37,price:4.0}
+  ];
+  const total = DATA.reduce((s, r) => s + r.qty * r.price, 0);
+  const orders = DATA.reduce((s, r) => s + r.qty, 0);
+  const money = (n) => "$" + n.toFixed(2);
+  document.getElementById("k-total").textContent = money(total);
+  document.getElementById("k-orders").textContent = String(orders);
+  document.getElementById("k-avg").textContent = money(total / orders);
+
+  const byDay = {};
+  for (const r of DATA) byDay[r.day] = (byDay[r.day] || 0) + r.qty * r.price;
+  const max = Math.max(...Object.values(byDay));
+  const days = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
+  document.getElementById("bars").innerHTML = days.map((d) =>
+    '<div class="col"><div class="b" style="height:' + Math.round((byDay[d] || 0) / max * 100) + '%" role="img" aria-label="' + d + ' sales ' + money(byDay[d] || 0) + '"></div>' + d + '</div>').join("");
+  document.getElementById("bars-summary").textContent = "Peak day: " + days.reduce((a, b) => (byDay[a] >= byDay[b] ? a : b));
+
+  const byProd = {};
+  for (const r of DATA) byProd[r.product] = (byProd[r.product] || 0) + r.qty;
+  document.getElementById("top").innerHTML = Object.entries(byProd).sort((a, b) => b[1] - a[1]).map(([n, q]) =>
+    '<tr><td>' + n + '</td><td>' + q + '</td></tr>').join("");
+</script>
+</body>
+</html>

@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="740" height="486" font-family="Segoe UI, Arial, sans-serif">
+<text x="12" y="24" font-size="16" font-weight="700" fill="#1a2332">Task completion — 3 reproducible tasks, measured in-repo (GATE 08)</text>
+<text x="12" y="44" font-size="12" fill="#5a6b82">Verified passes out of 3 independent trials · gray = needs its own host daemon (recorded UNMEASURED, never fabricated)</text>
+<text x="230" y="88" font-size="13" fill="#2b3a55" text-anchor="end">AETHER 2.0 engine</text>
+<rect x="240" y="72" width="320" height="22" rx="4" fill="#eef2f8"/>
+<rect x="240" y="72" width="320" height="22" rx="4" fill="#0f7d3b"/>
+<text x="572" y="88" font-size="13" font-weight="700" fill="#0f7d3b">3/3</text>
+<text x="230" y="132" font-size="13" fill="#2b3a55" text-anchor="end">Superpowers adapter</text>
+<rect x="240" y="116" width="320" height="22" rx="4" fill="#eef2f8"/>
+<rect x="240" y="116" width="213" height="22" rx="4" fill="#2f8fd6"/>
+<text x="572" y="132" font-size="13" font-weight="700" fill="#2f8fd6">2/3</text>
+<text x="230" y="176" font-size="13" fill="#2b3a55" text-anchor="end">Playwright adapter</text>
+<rect x="240" y="160" width="320" height="22" rx="4" fill="#eef2f8"/>
+<rect x="240" y="160" width="106" height="22" rx="4" fill="#2f8fd6"/>
+<text x="572" y="176" font-size="13" font-weight="700" fill="#2f8fd6">1/3</text>
+<text x="230" y="220" font-size="13" fill="#2b3a55" text-anchor="end">Agent-Browser adapter</text>
+<rect x="240" y="204" width="320" height="22" rx="4" fill="#eef2f8"/>
+<rect x="240" y="204" width="106" height="22" rx="4" fill="#2f8fd6"/>
+<text x="572" y="220" font-size="13" font-weight="700" fill="#2f8fd6">1/3</text>
+<text x="230" y="264" font-size="13" fill="#2b3a55" text-anchor="end">ECC adapter</text>
+<rect x="240" y="248" width="320" height="22" rx="4" fill="#eef2f8"/>
+<rect x="240" y="248" width="10" height="22" rx="4" fill="#2f8fd6"/>
+<text x="572" y="264" font-size="13" font-weight="700" fill="#2f8fd6">0/3</text>
+<text x="230" y="308" font-size="13" fill="#2b3a55" text-anchor="end">OpenHands</text>
+<rect x="240" y="292" width="320" height="22" rx="4" fill="#eef2f8"/>
+<rect x="240" y="292" width="0" height="22" rx="4" fill="#c3ccd8"/>
+<text x="572" y="308" font-size="13" font-weight="400" fill="#c3ccd8">UNMEASURED</text>
+<text x="230" y="352" font-size="13" fill="#2b3a55" text-anchor="end">OpenManus</text>
+<rect x="240" y="336" width="320" height="22" rx="4" fill="#eef2f8"/>
+<rect x="240" y="336" width="0" height="22" rx="4" fill="#c3ccd8"/>
+<text x="572" y="352" font-size="13" font-weight="400" fill="#c3ccd8">UNMEASURED</text>
+<text x="230" y="396" font-size="13" fill="#2b3a55" text-anchor="end">Browser-Use</text>
+<rect x="240" y="380" width="320" height="22" rx="4" fill="#eef2f8"/>
+<rect x="240" y="380" width="0" height="22" rx="4" fill="#c3ccd8"/>
+<text x="572" y="396" font-size="13" font-weight="400" fill="#c3ccd8">UNMEASURED</text>
+<text x="230" y="440" font-size="13" fill="#2b3a55" text-anchor="end">Skyvern</text>
+<rect x="240" y="424" width="320" height="22" rx="4" fill="#eef2f8"/>
+<rect x="240" y="424" width="0" height="22" rx="4" fill="#c3ccd8"/>
+<text x="572" y="440" font-size="13" font-weight="400" fill="#c3ccd8">UNMEASURED</text>
+</svg>

@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>AETHER 1.0 — Contributing</title>
+<link rel="stylesheet" href="style.css" />
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Copy buttons
+  document.querySelectorAll('.code-block .copy-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var code = btn.parentElement.querySelector('code').textContent;
+      navigator.clipboard.writeText(code).then(function() {
+        btn.textContent = 'Copied!';
+        btn.classList.add('copied');
+        setTimeout(function() { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000);
+      }).catch(function() {
+        btn.textContent = 'Error';
+        setTimeout(function() { btn.textContent = 'Copy'; }, 2000);
+      });
+    });
+  });
+
+  // Filter sections
+  var filterInput = document.getElementById('contrib-filter');
+  if (filterInput) {
+    filterInput.addEventListener('input', function() {
+      var q = filterInput.value.toLowerCase();
+      document.querySelectorAll('.contrib-section').forEach(function(el) {
+        var text = el.textContent.toLowerCase();
+        el.style.display = text.includes(q) ? '' : 'none';
+      });
+    });
+  }
+});
+</script>
+</head>
+<body>
+<header class="topbar">
+  <div class="wrap">
+    <div class="brand"><a href="index.html" style="color:inherit;text-decoration:none">AETHER <span class="vtag">v1.0</span></a></div>
+    <nav>
+      <a href="index.html#why">Home</a>
+      <a href="programs.html">Programs</a>
+      <a href="deep.html">P10 Deep</a>
+      <a href="fullstack.html">P11 Full-Stack</a>
+      <a href="evolution.html">Evolution</a>
+      <a href="benchmarks.html">Benchmarks</a>
+      <a href="compare.html">Compare</a>
+      <a href="showcase.html">Showcase</a>
+      <a href="getting-started.html">Guide</a>
+      <a href="api-reference.html">API</a>
+      <a href="contributing.html" class="active">Contributing</a>
+      <a href="https://github.com/Tabrej96/anythingwithaether" target="_blank" rel="noopener" title="GitHub"><img src="assets/github-mark.svg" alt="GitHub" style="filter:invert(1);width:16px;height:16px" /></a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="breadcrumb" style="margin-top:16px">
+    <a href="index.html">Home</a> <span class="sep">/</span> <span>Contributing</span>
+  </div>
+
+  <section class="hero">
+    <h1>Contributing to <em>AETHER</em></h1>
+    <p class="lede">
+      AETHER is open-source under the Apache-2.0 license, created and maintained by
+      <strong>Tabrej</strong>. Contributions are welcome — from bug reports to new
+      capability engines. Every contribution must pass the same quality gates
+      the project holds itself to: honest numbers, no fabricated claims, and
+      tests that prove what they say.
+    </p>
+    <p class="credit">
+      <span class="badge">Apache-2.0</span>
+      <span class="badge">119 tests / 14 suites</span>
+      <span class="badge">Quality gate &ge; 100/100</span>
+    </p>
+  </section>
+
+  <!-- Quick links -->
+  <section class="card animate-in">
+    <h2>Quick links</h2>
+    <div class="grid3">
+      <div class="tile">
+        <h3>Report a bug</h3>
+        <p>Found an issue? Open a GitHub Issue with reproduction steps and the output of <code>npx tsx bin/aether.ts validate</code>.</p>
+        <a href="https://github.com/Tabrej96/anythingwithaether/issues/new" target="_blank" rel="noopener" style="margin-top:8px;display:inline-block;font-size:13px">Open an issue →</a>
+      </div>
+      <div class="tile">
+        <h3>Submit a PR</h3>
+        <p>Fork the repo, make your changes, run the tests, and open a pull request against <code>main</code>.</p>
+        <a href="#pr-process" style="margin-top:8px;display:inline-block;font-size:13px">See PR process →</a>
+      </div>
+      <div class="tile">
+        <h3>Discuss</h3>
+        <p>Questions, ideas, or want to propose a new capability engine? Start a GitHub Discussion.</p>
+        <a href="https://github.com/Tabrej96/anythingwithaether/discussions" target="_blank" rel="noopener" style="margin-top:8px;display:inline-block;font-size:13px">Join discussion →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Development setup -->
+  <section class="card contrib-section" id="dev-setup">
+    <h2>Development setup</h2>
+
+    <h3>1. Fork and clone</h3>
+    <div class="code-block"><button class="copy-btn">Copy</button><pre><code>git clone https://github.com/YOUR_USERNAME/anythingwithaether.git && cd AETHER
+git remote add upstream https://github.com/Tabrej96/anythingwithaether.git</code></pre></div>
+
+    <h3>2. Install dependencies</h3>
+    <div class="code-block"><button class="copy-btn">Copy</button><pre><code>npm install --legacy-peer-deps</code></pre></div>
+    <p class="muted"><code>--legacy-peer-deps</code> is required on first install due to a peer-dep conflict with upstream ESR tooling. Subsequent installs are clean.</p>
+
+    <h3>3. Verify the setup</h3>
+    <div class="code-block"><button class="copy-btn">Copy</button><pre><code>npx tsx bin/aether.ts validate
+npx tsx --test src/core/aether.test.ts</code></pre></div>
+
+    <h3>4. Run the dev server (optional, for website)</h3>
+    <div class="code-block"><button class="copy-btn">Copy</button><pre><code>npm run dev   # if the React workbench exists
+# or just open website/index.html in a browser — no server needed</code></pre></div>
+
+    <h3>5. Create a branch</h3>
+    <div class="code-block"><button class="copy-btn">Copy</button><pre><code>git checkout -b feat/my-new-engine
+# or
+git checkout -b fix/bug-description</code></pre></div>
+  </section>
+
+  <!-- Code standards -->
+  <section class="card contrib-section" id="code-standards">
+    <h2>Code standards</h2>
+
+    <h3>License</h3>
+    <p>All AETHER-native code is <strong>Apache-2.0</strong>. Do not introduce GPL/AGPL dependencies into the core. External engines under copyleft licenses must be integrated strictly out-of-process (HTTP/CDP).</p>
+
+    <h3>No fabricated numbers</h3>
+    <p>The single most important rule in this project: <strong>every number must be measured, reproducible, or explicitly labeled UNMEASURED with a reproduction command.</strong> No claim is accepted without evidence. If a test cannot be run, it does not exist.</p>
+
+    <h3>TypeScript</h3>
+    <ul>
+      <li>Use <strong>ESM modules</strong> (<code>import</code> / <code>export</code>) — no CommonJS <code>require()</code></li>
+      <li>Strict types: no <code>any</code>, use <code>unknown</code> with type guards</li>
+      <li>Prefer <code>readonly</code> for immutable data</li>
+      <li>Use descriptive names: <code>computeGstInvoice()</code> not <code>calc()</code></li>
+    </ul>
+
+    <h3>Testing</h3>
+    <ul>
+      <li>Every new engine must have a test file in the same directory: <code>src/core/foo/foo.test.ts</code></li>
+      <li>Use Node's built-in <code>node:test</code> and <code>node:assert/strict</code></li>
+      <li>Tests must be deterministic: no random seeds, no network calls, no time-dependent assertions</li>
+      <li>Known-value tests for arithmetic: e.g. <code>assertEquals(180000, computeGst(100000, 0.18))</code></li>
+      <li>Flake detection: run each suite twice in the certification pipeline</li>
+    </ul>
+
+    <h3>Documentation</h3>
+    <ul>
+      <li>Every new engine needs a <code>docs/</code> page describing what it measures, how, and the command to reproduce</li>
+      <li>Provenance must be documented: what upstream project (if any) inspired it, what license that project uses, and what AETHER reimplemented</li>
+      <li>Add your engine to the <code>programs.html</code> listing with upstream credits</li>
+      <li>Update <code>QUICKSTART.md</code> if your engine has a CLI command</li>
+    </ul>
+
+    <h3>Website</h3>
+    <ul>
+      <li>All website pages use the shared <code>website/styles.css</code></li>
+      <li>Keep pages self-contained: no external JS/CSS dependencies</li>
+      <li>All links must work — test locally before submitting</li>
+      <li>Add Apache-2.0 license notice and Tabrej credit to every page footer</li>
+    </ul>
+  </section>
+
+  <!-- Testing requirements -->
+  <section class="card contrib-section" id="testing">
+    <h2>Testing requirements</h2>
+
+    <h3>Mandatory checks before submitting a PR</h3>
+    <div class="code-block"><button class="copy-btn">Copy</button><pre><code># 1. Validate all components
+npx tsx bin/aether.ts validate
+
+# 2. Run the full test suite
+npx tsx --test src/core/aether.test.ts
+
+# 3. Run your specific engine's tests
+npx tsx --test src/core/your-engine/your-engine.test.ts
+
+# 4. Run the benchmark suite
+npx tsx bin/aether.ts benchmark
+
+# 5. (If applicable) Run with live provider
+npx tsx bin/aether.ts programs --live</code></pre></div>
+
+    <h3>Test coverage expectations</h3>
+    <table>
+      <thead><tr><th>Module type</th><th>Minimum coverage</th><th>Test type</th></tr></thead>
+      <tbody>
+        <tr><td>Core engines</td><td>100%</td><td>Unit + integration</td></tr>
+        <tr><td>Calculation engines</td><td>100%</td><td>Known-value assertions</td></tr>
+        <tr><td>Security/authorization gates</td><td>100%</td><td>Negative tests (must verify blocking works)</td></tr>
+        <tr><td>MCP tools</td><td>100%</td><td>Input validation + structured error paths</td></tr>
+        <tr><td>Benchmark adapters</td><td>100%</td><td>Fixture-based with real output shapes</td></tr>
+        <tr><td>Website pages</td><td>Manual</td><td>All links resolve, responsive on mobile</td></tr>
+      </tbody>
+    </table>
+
+    <h3>The quality gate</h3>
+    <p>Every agent and skill must score <strong>100/100</strong> on the deterministic quality gate. The gate checks for:</p>
+    <ol>
+      <li>An executable verifier (the component can prove it works)</li>
+      <li>A zero-regression assertion (the component proves it doesn't break)</li>
+      <li>Secret handling (no API keys, credentials, or tokens in source)</li>
+      <li>Crash-recovery depth (what happens when the runtime crashes mid-execution)</li>
+    </ol>
+  </section>
+
+  <!-- PR process -->
+  <section class="card contrib-section" id="pr-process">
+    <h2>Pull request process</h2>
+
+    <ol>
+      <li>
+        <strong>Fork &amp; branch:</strong> Create a feature branch from <code>main</code>.
+        Use a descriptive name: <code>feat/p16-shipping-calculations</code> or <code>fix/p05-snapshot-tokens</code>.
+      </li>
+      <li>
+        <strong>Implement:</strong> Write your code, tests, and docs. Follow the code standards above.
+        Every new engine needs:
+        <ul>
+          <li>The engine file(s) in <code>src/core/</code></li>
+          <li>A test file in the same directory</li>
+          <li>A docs page in <code>docs/</code></li>
+          <li>An entry in <code>website/programs.html</code> (if it's a new program)</li>
+          <li>An update to <code>QUICKSTART.md</code> (if it has a CLI command)</li>
+        </ul>
+      </li>
+      <li>
+        <strong>Run all checks:</strong>
+        <div class="code-block"><button class="copy-btn">Copy</button><pre><code>npx tsx bin/aether.ts validate
+npx tsx --test src/core/aether.test.ts
+npx tsx bin/aether.ts benchmark</code></pre></div>
+      </li>
+      <li>
+        <strong>Commit:</strong> Write a clear commit message. End with the attribution line:
+        <div class="code-block"><button class="copy-btn">Copy</button><pre><code>feat(programs): add P22 — Distributed Execution Intelligence
+
+Adds a distributed execution engine with work-stealing scheduling,
+fault-tolerant checkpointing, and cross-node verification.
+
+Co-Authored-By: Claude Fable 5.2 &lt;noreply@anthropic.com&gt;</code></pre></div>
+      </li>
+      <li>
+        <strong>Open the PR:</strong>
+        <ul>
+          <li>PR title: clear and descriptive</li>
+          <li>PR description: what, why, how, measured results</li>
+          <li>End PR description with: <code>Generated with [Claude Code](https://claude.com/claude-code)</code></li>
+          <li>Link to any relevant issues</li>
+        </ul>
+      </li>
+      <li>
+        <strong>CI checks:</strong> The automated tests must pass. If they don't, fix them before requesting review.
+      </li>
+      <li>
+        <strong>Review:</strong> A maintainer will review for correctness, honesty of claims, test coverage, and license compliance.
+        Address all review comments.
+      </li>
+      <li>
+        <strong>Merge:</strong> Once approved and CI passes, a maintainer merges your PR.
+      </li>
+    </ol>
+  </section>
+
+  <!-- Adding a new program -->
+  <section class="card contrib-section">
+    <h2>Adding a new capability engine</h2>
+    <p>If you want to add a new engine to AETHER, here's the checklist:</p>
+
+    <div class="callout info">
+      <strong>First, is it a first-party engine or an upstream integration?</strong>
+      First-party engines (P10-P21 style) are original Apache-2.0 code.
+      Upstream integrations study an external project and reimplement its strongest idea
+      as native AETHER code, following the 12-step research process.
+    </div>
+
+    <h3>First-party engine checklist</h3>
+    <ol>
+      <li>Create <code>src/core/yourEngine/yourEngine.ts</code> implementing the <code>ProgramEngine</code> interface</li>
+      <li>Create <code>src/core/yourEngine/yourEngine.test.ts</code> with known-value assertions</li>
+      <li>Register in <code>bin/aether.ts</code> with a CLI command and MCP tool name</li>
+      <li>Add to <code>website/programs.html</code> or <code>website/evolution.html</code></li>
+      <li>Document in <code>docs/</code> — include measured results and reproduction commands</li>
+      <li>Update <code>QUICKSTART.md</code> with the new command</li>
+      <li>Update <code>README.md</code> links table if a new page was added</li>
+    </ol>
+
+    <h3>Upstream integration checklist</h3>
+    <ol>
+      <li>Clone the upstream repo and verify its license</li>
+      <li>Read the architecture and extract the strongest idea</li>
+      <li>Reimplement as native AETHER code (Apache-2.0)</li>
+      <li>Document the upstream source, license, and what was extracted in <code>NOTICE.md</code></li>
+      <li>If the upstream license is AGPL/GPL, ensure integration is strictly out-of-process</li>
+      <li>Write tests that prove your reimplementation matches the upstream behavior</li>
+      <li>Benchmark against the upstream tool and record honest numbers</li>
+    </ol>
+  </section>
+
+  <!-- Community -->
+  <section class="card contrib-section">
+    <h2>Community</h2>
+    <p>AETHER is built by the community, for the community. Here's how to get involved:</p>
+    <div class="grid3">
+      <div class="tile">
+        <h3>GitHub Discussions</h3>
+        <p>Ask questions, share ideas, and connect with other contributors.</p>
+        <a href="https://github.com/Tabrej96/anythingwithaether/discussions" target="_blank" rel="noopener" style="margin-top:8px;display:inline-block;font-size:13px">Join discussions →</a>
+      </div>
+      <div class="tile">
+        <h3>Issues</h3>
+        <p>Report bugs, request features, or ask for help. Search existing issues first.</p>
+        <a href="https://github.com/Tabrej96/anythingwithaether/issues" target="_blank" rel="noopener" style="margin-top:8px;display:inline-block;font-size:13px">View issues →</a>
+      </div>
+      <div class="tile">
+        <h3>Contributions</h3>
+        <p>Fork, branch, implement, test, and submit a PR. See the PR process above.</p>
+        <a href="https://github.com/Tabrej96/anythingwithaether/fork" target="_blank" rel="noopener" style="margin-top:8px;display:inline-block;font-size:13px">Fork repo →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- License -->
+  <section class="card contrib-section">
+    <h2>License</h2>
+    <p>AETHER is released under the <strong>Apache License 2.0</strong>. By contributing, you agree that your contributions will be licensed under the same terms.</p>
+    <p>Key points:</p>
+    <ul>
+      <li>You retain copyright to your contributions</li>
+      <li>Your contributions are licensed under Apache-2.0</li>
+      <li>You have the right to submit the contribution</li>
+      <li>No AGPL/GPL code may be linked into the AETHER core</li>
+    </ul>
+    <p>See <code>LICENSE</code> for the full text and <code>docs/AETHER_LICENSE_AND_PROVENANCE.md</code> for detailed provenance rules.</p>
+  </section>
+
+  <!-- Credits -->
+  <section class="card">
+    <h2>Credits</h2>
+    <p>AETHER was created and is maintained by <strong><a href="https://github.com/Tabrej96">Tabrej</a></strong>.</p>
+    <p class="muted">Upstream inspiration credits: ECC · Superpowers · REA · OpenHands · OpenManus · AutoGen · Browser Use · Agent Browser · Skyvern · OmniParser · Lightpanda · Playwright · Puter · Obsidian · ComfyUI · Three.js · Model Context Protocol · Tree-sitter · FFmpeg · whisper.cpp · D3.js · OpenTofu · Kubernetes · PostgreSQL · WireGuard · Caddy. Full attribution in <a href="https://github.com/Tabrej96/anythingwithaether/blob/main/NOTICE.md">NOTICE.md</a>.</p>
+  </section>
+
+</main>
+
+<footer class="wrap">
+  <div class="footer-links">
+    <span>AETHER v1.0 · Created by <a href="https://github.com/Tabrej96">Tabrej</a> · License: <span class="license-badge">Apache-2.0</span></span>
+    <span><a href="https://github.com/Tabrej96/anythingwithaether" target="_blank" rel="noopener"><img src="assets/github-mark.svg" alt="" style="filter:invert(1);width:14px;vertical-align:-2px" /> GitHub</a></span>
+  </div>
+</footer>
+</body>
+</html>

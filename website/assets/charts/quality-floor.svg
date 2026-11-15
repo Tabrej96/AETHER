@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="200" font-family="Segoe UI, Arial, sans-serif">
+<text x="12" y="24" font-size="16" font-weight="700" fill="#1a2332">Catalog quality floor — measured, machine-enforced</text>
+<text x="12" y="44" font-size="12" fill="#5a6b82">Score out of 100 from the deterministic scorer · the gate re-measures this on every release run</text>
+<text x="20" y="70" font-size="14" font-weight="700" fill="#1a2332">Agents (117 components)</text>
+<text x="20" y="104" font-size="12" fill="#5a6b82">before gate</text>
+<rect x="130" y="92" width="230" height="18" rx="3" fill="#c3ccd8"/>
+<text x="368" y="106" font-size="12" fill="#c3ccd8">floor 72</text>
+<text x="20" y="134" font-size="12" fill="#5a6b82">after gate</text>
+<rect x="130" y="122" width="320" height="18" rx="3" fill="#0f7d3b"/>
+<text x="458" y="136" font-size="12" font-weight="700" fill="#0f7d3b">floor 100 (max)</text>
+<text x="340" y="70" font-size="14" font-weight="700" fill="#1a2332">Skills (540 components)</text>
+<text x="340" y="104" font-size="12" fill="#5a6b82">before gate</text>
+<rect x="450" y="92" width="262" height="18" rx="3" fill="#c3ccd8"/>
+<text x="720" y="106" font-size="12" fill="#c3ccd8">floor 82</text>
+<text x="340" y="134" font-size="12" fill="#5a6b82">after gate</text>
+<rect x="450" y="122" width="320" height="18" rx="3" fill="#0f7d3b"/>
+<text x="778" y="136" font-size="12" font-weight="700" fill="#0f7d3b">floor 100 (max)</text>
+<text x="20" y="180" font-size="12" fill="#0f7d3b" font-weight="600">Result: all 657 components now score 100/100 · a regression would fail the release pipeline</text>
+</svg>

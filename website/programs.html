@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>AETHER 1.0 — The Nine Programs</title>
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<header class="topbar">
+  <div class="wrap">
+    <div class="brand">AETHER <span class="vtag">v1.0</span></div>
+    <nav>
+      <a href="index.html#why">Home</a>
+      <a href="index.html#nine">Overview</a>
+      <a href="programs.html" class="active">9 Programs</a>
+      <a href="deep.html">P10 Deep</a>
+      <a href="fullstack.html">P11 Full-Stack</a>
+      <a href="evolution.html">Evolution P12&ndash;P21</a>
+      <a href="benchmarks.html">Benchmarks</a>
+      <a href="compare.html">Compare</a>
+      <a href="showcase.html">Showcase</a>
+      <a href="getting-started.html">Guide</a>
+      <a href="api-reference.html">API</a>
+      <a href="contributing.html">Contributing</a>
+      <a href="index.html#install">Install</a>
+      <a href="https://github.com/Tabrej96/AETHER" target="_blank" rel="noopener" title="Open the GitHub repository"><img class="gh-mark" src="assets/github-mark.svg" alt="GitHub" style="filter: invert(1);"/><span>GitHub</span></a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="card">
+    <h1>The nine programs</h1>
+    <p class="lede">
+      Each program followed the same 12-step process: clone the upstream repo &rarr; verify ownership
+      &amp; license &rarr; inspect the architecture &rarr; extract the strongest idea &rarr; re-implement it as a
+      native, tested AETHER engine &rarr; benchmark it. Full research notes live in
+      <code>docs/AETHER_NINE_PROGRAM_RESEARCH.md</code>.
+    </p>
+    <p class="muted" style="margin-top:10px">
+      Every engine here is original Apache-2.0 code. The projects below are credited as
+      <strong>inspiration sources</strong> only &mdash; no AGPL/GPL code is linked into AETHER's core.
+      See <a href="benchmarks.html">benchmarks</a> for the measured numbers and
+      <a href="compare.html">compare</a> for the side-by-side builds.
+    </p>
+  </section>
+
+  <section class="card prog">
+    <h2>P01 &mdash; Development Intelligence</h2>
+    <p class="upstream">Inspiration: <a href="https://github.com/affaan-m/ECC">affaan-m/ECC</a> (MIT) &middot; <a href="https://github.com/obra/superpowers">obra/superpowers</a> (MIT)</p>
+    <p>Turns ECC's skill/trigger catalog and Superpowers' brainstorm&rarr;plan&rarr;TDD discipline into one composed, gate-enforced pipeline: deterministic skill discovery, a research-first gate, a Red-Green-Refactor state machine, a debugging hypothesis ledger, and instinct extraction into the memory promotion gate. It does <em>not</em> create a second skill system &mdash; it ranks and gates the existing 540.</p>
+    <p class="measured"><strong>Measured:</strong> happy path discovers 3 ranked skills and clears every gate; a research-missing task is blocked with 2 explicit reasons.</p>
+    <p class="code"><code>npx tsx bin/aether.ts programs</code> &rarr; P01 &middot; <code>skills-discovered-in-happy-path = 3</code></p>
+  </section>
+
+  <section class="card prog">
+    <h2>P02 &mdash; Reverse Intelligence</h2>
+    <p class="upstream">Inspiration: <a href="https://github.com/morluto/rea">morluto/rea</a> (MIT)</p>
+    <p>An isolated, permission-controlled reverse-engineering subsystem: application architecture extraction, dependency discovery, structure reconstruction, and automated reporting &mdash; gated by a hard <code>assertAuthorization()</code> pre-condition. It only operates on software the user owns or is authorized to investigate (OWNED, AUTHORIZED_LICENSE, CTF_TARGET, or DEFENSIVE_SECURITY, with recorded evidence). Binary / network / UI-behavior slots are declared UNMEASURED rather than fabricated.</p>
+    <p class="measured"><strong>Measured:</strong> unauthorized targets throw before any data is read; a 4-module synthetic service reconstructs to 4 layers and 2 external dependencies.</p>
+  </section>
+
+  <section class="card prog">
+    <h2>P03 &mdash; Autonomous Execution</h2>
+    <p class="upstream">Inspiration: <a href="https://github.com/All-Hands-AI/OpenHands">All-Hands-AI/OpenHands</a> (MIT) &middot; <a href="https://github.com/FoundationAgents/OpenManus">FoundationAgents/OpenManus</a> (MIT)</p>
+    <p>Architecture comparison, not runtime duplication: OpenHands' event-stream resumption + OpenManus' plan-and-act loop become a <em>step-level</em> resumable executor. A goal becomes a dependency-ordered plan; every step has a deterministic verify predicate; a crash checkpoint records completed steps + state; resume replays <em>only</em> the failed steps; dependents of a failed step are skipped, not run against stale state.</p>
+    <p class="measured"><strong>Measured:</strong> run 1 completes 2/4 and checkpoints; resume from that checkpoint completes 4/4 and self-verifies. Exactly the 2 remaining steps finished after resume.</p>
+  </section>
+
+  <section class="card prog">
+    <h2>P04 &mdash; Multi-Agent Orchestration</h2>
+    <p class="upstream">Inspiration: <a href="https://github.com/microsoft/autogen">microsoft/autogen</a> (archived &mdash; successor: <a href="https://github.com/microsoft/agent-framework">Microsoft Agent Framework</a>)</p>
+    <p>AutoGen is used strictly as an architectural reference (event bus, group chat, agent teams) &mdash; no AutoGen dependency, no Agent Framework dependency. The AETHER-native orchestrator: append-only event log, task-dependency-graph parallel waves, retry-once-then-fail-fast, group-conversation turns between waves, and deterministic termination when a capability is missing (no unbounded re-scheduling).</p>
+    <p class="measured"><strong>Measured:</strong> 3-task DAG executes in 2 parallel waves with 1 deterministic retry and 1 group-conversation turn; a missing-capability task fails fast with named evidence.</p>
+  </section>
+
+  <section class="card prog">
+    <h2>P05 &mdash; Browser Intelligence</h2>
+    <p class="upstream">Inspiration: <a href="https://github.com/browser-use/browser-use">browser-use/browser-use</a> (MIT) &middot; <a href="https://github.com/vercel-labs/agent-browser">vercel-labs/agent-browser</a> (Apache-2.0)</p>
+    <p>One unified Browser Engine with <em>ranked</em> interaction strategies: deterministic DOM/ARIA locators and compact <code>[ref]</code> accessibility snapshots first; form-fill and screenshot verification second; vision coordinates only as an escalation (reported UNMEASURED without a live backend &mdash; never a fabricated hit). Live execution is delegated to the P07 provider abstraction.</p>
+    <p class="measured"><strong>Measured:</strong> a 5-node form snapshot costs 15 tokens vs ~190 raw-DOM tokens &mdash; 92% saved; labeled inputs resolve at &ge;0.9 confidence; unresolvable queries return <code>null</code> + escalation.</p>
+  </section>
+
+  <section class="card prog">
+    <h2>P06 &mdash; Visual Computer Intelligence</h2>
+    <p class="upstream">Inspiration: <a href="https://github.com/Skyvern-AI/skyvern">Skyvern-AI/skyvern</a> (AGPL-3.0, out-of-process) &middot; <a href="https://github.com/microsoft/OmniParser">microsoft/OmniParser</a> (CC-BY-4.0)</p>
+    <p>The perception &rarr; reasoning &rarr; action &rarr; verification loop: detected elements with normalized bboxes, deterministic grounding (role &times; confidence &times; label), click/coordinate actions, and a verification step that only counts when the observed post-action state matches the expectation. Below the confidence floor the loop aborts and asks for a real vision backend &mdash; it does not guess pixels. Skyvern is studied out-of-process only (AGPL); OmniParser's grounding concept is reimplemented clean-room.</p>
+    <p class="measured"><strong>Measured:</strong> verified goal reached in 1 step; ungrounded intent aborts in 1 step with an UNMEASURED note.</p>
+  </section>
+
+  <section class="card prog">
+    <h2>P07 &mdash; Browser Runtime</h2>
+    <p class="upstream">Inspiration: <a href="https://github.com/lightpanda-io/browser">lightpanda-io/browser</a> (AGPL-3.0-only) &middot; <a href="https://github.com/microsoft/playwright">microsoft/playwright</a> (Apache-2.0)</p>
+    <p>A provider abstraction that selects a browser backend per task: Playwright's full cross-browser capability surface, Lightpanda's resource-efficient CDP subset, or bare headless Chromium. A provider is <code>compatible</code> only when it genuinely covers every required capability; gaps are returned with <code>verificationRequired: true</code>. Compatibility is verified per task, not assumed &mdash; Lightpanda is <em>not</em> treated as a drop-in Chromium.</p>
+    <p class="measured"><strong>Measured:</strong> 4 task profiles verified &mdash; 3 fully-compatible picks; the WebGL-capture profile is correctly flagged unverified.</p>
+  </section>
+
+  <section class="card prog">
+    <h2>P08 &mdash; Workspace &amp; Knowledge Ecosystem</h2>
+    <p class="upstream">Inspiration: <a href="https://github.com/HeyPuter/puter">HeyPuter/puter</a> (AGPL-3.0-only, out-of-process) &middot; <a href="https://github.com/obsidianmd/obsidian-releases">obsidianmd/obsidian-releases</a> (public registry)</p>
+    <p>Per the program brief: Obsidian Releases contains <em>no proprietary app source</em> &mdash; it is the public plugin/theme registry, which is exactly what this program studies. A Markdown vault becomes a knowledge graph (wiki-links + tag clusters, degree, orphans); workspace planning places notes into project folders; plugin discovery audits every candidate's permissions and SPDX license before it may register.</p>
+    <p class="measured"><strong>Measured:</strong> 4-note vault &rarr; 4 deduplicated edges, orphan detected; 4 files planned into 3 folders; 1 plugin discovered with 1 audited permission.</p>
+  </section>
+
+  <section class="card prog">
+    <h2>P09 &mdash; Creative &amp; Visual Intelligence</h2>
+    <p class="upstream">Inspiration: <a href="https://github.com/Comfy-Org/ComfyUI">Comfy-Org/ComfyUI</a> (GPL-3.0, out-of-process) &middot; <a href="https://github.com/mrdoob/three.js">mrdoob/three.js</a> (MIT)</p>
+    <p>Modular generation backend + separate 3D frontend, as the brief requires. The ComfyUI node-graph concept becomes a clean-room, backend-agnostic topological scheduler (cycle-safe, unknown backends resolve to null rather than a guess); Three.js' scene graph becomes an in-process model with deterministic render order and a draw-call estimate. ComfyUI itself plugs in as an out-of-process backend only &mdash; GPL code is never linked into the Apache-2.0 core.</p>
+    <p class="measured"><strong>Measured:</strong> 4-node generation graph &rarr; 4 topological layers; cyclic graph throws; 3-object scene &rarr; render order <code>[root, m1, l1]</code>, 2 draw calls.</p>
+  </section>
+
+  <section class="card">
+    <h2>The integration contract</h2>
+    <p>Every capability is registered with full provenance and a controlled lifecycle:</p>
+    <p class="code" style="text-align:center"><code>DISCOVER &rarr; INSTALL &rarr; VALIDATE &rarr; REGISTER &rarr; EXECUTE &rarr; MONITOR &rarr; UPDATE &rarr; REMOVE</code></p>
+    <p class="muted">Files: <code>src/core/programs/types.ts</code> (contracts) &middot; <code>src/core/programs/registry.ts</code> (lifecycle manager) &middot; <code>docs/AETHER_INTEGRATION_REGISTRY.md</code> (machine-generated registry).</p>
+  </section>
+</main>
+
+<footer class="wrap">
+  <p>AETHER v1.0 &middot; Created by <a href="https://github.com/Tabrej96">Tabrej</a> &middot; Apache-2.0 &middot;
+    <a href="index.html">home</a> &middot;
+    <a href="benchmarks.html">benchmarks</a> &middot;
+    <a href="compare.html">compare</a> &middot;
+    <a href="showcase.html">showcase</a>
+  </p>
+  <p class="muted">Inspiration credits: ECC &middot; Superpowers &middot; REA &middot; OpenHands &middot; OpenManus &middot; AutoGen &middot; Browser Use &middot; Agent Browser &middot; Skyvern &middot; OmniParser &middot; Lightpanda &middot; Playwright &middot; Puter &middot; Obsidian &middot; ComfyUI &middot; Three.js &middot; <a href="NOTICE.md">full attribution</a></p>
+</footer>
+</body>
+</html>

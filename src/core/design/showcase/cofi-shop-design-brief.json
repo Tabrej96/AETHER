@@ -1,0 +1,21 @@
+{
+  "concept": "Design vision for: Build me a Cofi shop Website. Identity: Espresso & Cream · asymmetric 12-column editorial grid with oversized display type. A coffee shop should feel like the counter, not a template: warm ink, cream paper, one decisive caramel accent. The layout breaks its own grid on purpose (cards stagger), the type is oversized and confident, and the one signature interaction — hover-lift with a caramel sweep — is the product cards, the thing a customer actually touches.",
+  "palette": [
+    { "hex": "#2b1d12", "role": "ink", "why": "espresso-dark base for type: warmth without muddiness" },
+    { "hex": "#f3ead9", "role": "paper", "why": "cream ground: high contrast, no sterile white" },
+    { "hex": "#c17a3d", "role": "accent", "why": "single caramel accent for CTAs and the hover sweep" },
+    { "hex": "#8a4a22", "role": "accent-2", "why": "ember for hover/pressed depth of the accent" },
+    { "hex": "#4a3526", "role": "muted", "why": "mocha for secondary text, hairlines, and the cart panel" },
+    { "hex": "#e7d7bd", "role": "muted-2", "why": "latte for card fills and zebra surfaces" }
+  ],
+  "layout": "asymmetric 12-column editorial grid with oversized display type; hero + bento cart panel; cards stagger vertically so the grid visibly breaks",
+  "signatureInteraction": "hover-lift card: translateY(-6px) with a subtle rotate on a 200ms cubic-bezier ease-out, plus a 4px caramel accent sweep along the card's bottom edge",
+  "a11yConstraints": [
+    "WCAG AA contrast (>= 4.5:1) on all body text against its background",
+    ":focus-visible ring on every interactive element",
+    "prefers-reduced-motion guard: all transitions/animations disabled when set",
+    "aria-label on icon-only controls; aria-live region for the cart total",
+    "lang attribute on the html element"
+  ],
+  "typography": "serif display stack (Iowan Old Style, Georgia, Times New Roman) over the same serif for body, weight-driven hierarchy 400/700/800; display at clamp(3rem, 7vw, 5.4rem) with 1.05 leading"
+}

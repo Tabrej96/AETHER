@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="530" height="434" font-family="Segoe UI, Arial, sans-serif">
+<text x="12" y="24" font-size="16" font-weight="700" fill="#dce6f5">Test matrix — 119 tests, 14 suites, every one flake-free (run twice, identical results)</text>
+<text x="230" y="52" font-size="12" fill="#dce6f5" text-anchor="end">Core engine regression</text>
+<rect x="240" y="41" width="76" height="15" rx="3" fill="#5b8cff"/>
+<text x="322" y="52" font-size="12" fill="#5b8cff" font-weight="700">8</text>
+<text x="230" y="78" font-size="12" fill="#dce6f5" text-anchor="end">Crypto &amp; persistence</text>
+<rect x="240" y="67" width="86" height="15" rx="3" fill="#5b8cff"/>
+<text x="332" y="78" font-size="12" fill="#5b8cff" font-weight="700">9</text>
+<text x="230" y="104" font-size="12" fill="#dce6f5" text-anchor="end">MCP protocol &amp; tools</text>
+<rect x="240" y="93" width="105" height="15" rx="3" fill="#5b8cff"/>
+<text x="351" y="104" font-size="12" fill="#5b8cff" font-weight="700">11</text>
+<text x="230" y="130" font-size="12" fill="#dce6f5" text-anchor="end">Real execution &amp; sandbox</text>
+<rect x="240" y="119" width="200" height="15" rx="3" fill="#5b8cff"/>
+<text x="446" y="130" font-size="12" fill="#5b8cff" font-weight="700">21</text>
+<text x="230" y="156" font-size="12" fill="#dce6f5" text-anchor="end">Provider contract (live HTTP)</text>
+<rect x="240" y="145" width="114" height="15" rx="3" fill="#5b8cff"/>
+<text x="360" y="156" font-size="12" fill="#5b8cff" font-weight="700">12</text>
+<text x="230" y="182" font-size="12" fill="#dce6f5" text-anchor="end">Security suite</text>
+<rect x="240" y="171" width="143" height="15" rx="3" fill="#5b8cff"/>
+<text x="389" y="182" font-size="12" fill="#5b8cff" font-weight="700">15</text>
+<text x="230" y="208" font-size="12" fill="#dce6f5" text-anchor="end">Multi-agent waves</text>
+<rect x="240" y="197" width="29" height="15" rx="3" fill="#5b8cff"/>
+<text x="275" y="208" font-size="12" fill="#5b8cff" font-weight="700">3</text>
+<text x="230" y="234" font-size="12" fill="#dce6f5" text-anchor="end">Nine program engines</text>
+<rect x="240" y="223" width="95" height="15" rx="3" fill="#5b8cff"/>
+<text x="341" y="234" font-size="12" fill="#5b8cff" font-weight="700">10</text>
+<text x="230" y="260" font-size="12" fill="#dce6f5" text-anchor="end">Live model end-to-end</text>
+<rect x="240" y="249" width="10" height="15" rx="3" fill="#5b8cff"/>
+<text x="256" y="260" font-size="12" fill="#5b8cff" font-weight="700">1</text>
+<text x="230" y="286" font-size="12" fill="#dce6f5" text-anchor="end">Live autonomous turn</text>
+<rect x="240" y="275" width="48" height="15" rx="3" fill="#5b8cff"/>
+<text x="294" y="286" font-size="12" fill="#5b8cff" font-weight="700">5</text>
+<text x="230" y="312" font-size="12" fill="#dce6f5" text-anchor="end">Durable sessions</text>
+<rect x="240" y="301" width="29" height="15" rx="3" fill="#5b8cff"/>
+<text x="275" y="312" font-size="12" fill="#5b8cff" font-weight="700">3</text>
+<text x="230" y="338" font-size="12" fill="#dce6f5" text-anchor="end">Multi-agent model turns</text>
+<rect x="240" y="327" width="38" height="15" rx="3" fill="#5b8cff"/>
+<text x="284" y="338" font-size="12" fill="#5b8cff" font-weight="700">4</text>
+<text x="230" y="364" font-size="12" fill="#dce6f5" text-anchor="end">Catalog legend gate</text>
+<rect x="240" y="353" width="57" height="15" rx="3" fill="#5b8cff"/>
+<text x="303" y="364" font-size="12" fill="#5b8cff" font-weight="700">6</text>
+<text x="230" y="390" font-size="12" fill="#dce6f5" text-anchor="end">Universal benchmark adapters</text>
+<rect x="240" y="379" width="105" height="15" rx="3" fill="#5b8cff"/>
+<text x="351" y="390" font-size="12" fill="#5b8cff" font-weight="700">11</text>
+<text x="12" y="424" font-size="12" fill="#4cd6a0" font-weight="600">Critical modules hold ≥ 88% combined (stmt+fn+branch) coverage — floor 80%</text>
+</svg>

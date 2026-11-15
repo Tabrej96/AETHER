@@ -1,0 +1,16 @@
+node_modules/
+dist/
+coverage/
+.env*
+!.env.example
+.DS_Store
+*.log
+.aistudio/
+.aether/
+tmp/
+*.tgz
+_debug.ts
+gen_*.cjs
+_bench/
+bench/
+_build/

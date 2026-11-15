@@ -1,0 +1,21 @@
+{
+  "config": {},
+  "suites": [
+    {
+      "title": "checkout.flow.spec.ts",
+      "specs": [
+        { "title": "renders a valid email error", "ok": true, "status": "expected" },
+        { "title": "blocks submission of malformed email", "ok": true, "status": "expected" },
+        { "title": "persists cart across navigation", "ok": true, "status": "expected" },
+        { "title": "shows accessible error message on checkout failure", "ok": true, "status": "expected" }
+      ]
+    }
+  ],
+  "stats": {
+    "expected": 4,
+    "unexpected": 0,
+    "skipped": 0,
+    "duration": 1284
+  },
+  "errors": []
+}

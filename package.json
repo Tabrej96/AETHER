@@ -1,0 +1,78 @@
+{
+  "name": "aether-harness",
+  "private": false,
+  "version": "1.0.0",
+  "description": "AETHER v1.0: The 100x Sovereign Open-Source AI Engineering Harness (117 Agents, 540 Skills, 54 Workflows, 8-Tool MCP Server). Created by Tabrej.",
+  "author": "Tabrej",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Tabrej96/anythingwithaether.git"
+  },
+  "bin": {
+    "aether": "./dist/bins/aether.mjs",
+    "aether-mcp": "./dist/bins/aether-mcp.mjs"
+  },
+  "type": "module",
+  "engines": {
+    "node": ">=18"
+  },
+  "files": [
+    "dist/bins",
+    "bin",
+    "mcp",
+    "install.sh",
+    "README.md",
+    "LICENSE",
+    "package.json"
+  ],
+  "scripts": {
+    "dev": "vite --port=3000 --host=0.0.0.0",
+    "build": "vite build",
+    "build:bins": "node scripts/build-bins.mjs",
+    "prepare": "node scripts/build-bins.mjs",
+    "preview": "vite preview",
+    "clean": "rm -rf dist server.js",
+    "lint": "tsc --noEmit",
+    "test": "tsx --test src/core/aether.test.ts",
+    "aether:validate": "tsx bin/aether.ts validate",
+    "aether:refine": "tsx bin/aether.ts refine",
+    "aether:benchmark": "tsx bin/aether.ts benchmark",
+    "aether:mcp": "tsx bin/aether.ts mcp",
+    "aether:install-all": "tsx bin/aether.ts install --all --target all-harnesses --mcp"
+  },
+  "dependencies": {
+    "@google/genai": "^2.4.0",
+    "@tailwindcss/vite": "^4.3.3",
+    "@vitejs/plugin-react": "^6.1.1",
+    "dotenv": "^17.2.3",
+    "express": "^4.21.2",
+    "lucide-react": "^0.546.0",
+    "motion": "^12.23.24",
+    "react": "^19.0.1",
+    "react-dom": "^19.0.1",
+    "vite": "^8.3.0"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/node": "^22.14.0",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "autoprefixer": "^10.4.21",
+    "c8": "^12.0.0",
+    "esbuild": "^0.25.0",
+    "tailwindcss": "^4.3.3",
+    "tsx": "^4.21.0",
+    "typescript": "^7.0.2"
+  },
+  "homepage": "https://github.com/Tabrej96/anythingwithaether",
+  "keywords": [
+    "ai",
+    "agents",
+    "benchmark",
+    "harness",
+    "autonomous",
+    "security",
+    "mcp"
+  ]
+}

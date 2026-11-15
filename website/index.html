@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>AETHER — The open-source AI engineering harness that executes</title>
+<meta name="description" content="AETHER: a free, open-source toolkit that gives AI coding agents real engineering superpowers — autonomous execution, multi-agent teams, crash-proof checkpoints, and a machine-verified catalog. Created by Tabrej." />
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<header class="topbar">
+  <div class="wrap">
+    <div class="brand">AETHER <span class="vtag">v1.0</span></div>
+    <nav>
+      <a href="programs.html">9 Programs</a>
+      <a href="getting-started.html">Getting Started</a>
+      <a href="api-reference.html">API Reference</a>
+      <a href="contributing.html">Contributing</a>
+      <a href="#install">Install</a>
+      <a href="https://github.com/Tabrej96/AETHER" target="_blank" rel="noopener" class="gh-link" title="Open the GitHub repository">
+        <img src="assets/github-mark.svg" alt="GitHub" style="filter: invert(1);" width="18" height="18" />
+        GitHub
+      </a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="hero">
+    <h1>The open-source AI engineering harness that <em>executes</em>, not just explains.</h1>
+    <p class="lede">
+      AETHER gives your coding agent <strong>real engineering superpowers</strong>: it plans the task,
+      splits it across agent teams, runs the code, checks the result, and remembers long jobs even if
+      the machine crashes. Instead of <em>describing</em> a fix, it <em>does</em> the work and
+      <em>proves</em> it.
+    </p>
+    <p class="credit">Created by <strong>Tabrej</strong> · Apache-2.0 · 711 verified components · zero new runtime dependencies</p>
+  </section>
+
+  <section id="goal" class="card">
+    <h2>Our goal — and what we've already achieved</h2>
+    <table>
+      <thead><tr><th>The goal</th><th>Achieved so far (measured, not claimed)</th></tr></thead>
+      <tbody>
+        <tr><td><strong>A harness that finishes real tasks</strong></td><td>The autonomous runtime runs real file + shell work in an isolated sandbox, verifies it with SHA-256 Merkle checkpoints, and <strong>resumes a crashed job from the exact step it stopped at</strong>.</td></tr>
+        <tr><td><strong>Multi-agent teams without chaos</strong></td><td>Agent teams run in parallel waves with exclusive file locks — proven by real parallel-work tests, not a simulation.</td></tr>
+        <tr><td><strong>Safety you can audit</strong></td><td><strong>119 automated tests</strong> across 14 suites, every critical module ≥88% covered, and a 12-stage release certification that blocks the build when anything regresses.</td></tr>
+        <tr><td><strong>Legendary components, not filler</strong></td><td>All 657 agents/skills now score the maximum on our deterministic quality gate (floor raised 72/82 → 100/100), re-checked on every release.</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section id="why" class="card">
+    <h2>Why use AETHER</h2>
+    <div class="grid3">
+      <div class="tile"><h3>It verifies, it doesn't guess</h3><p>Every capability ships with a deterministic verifier: adversarial gates, per-step checks, and honest UNMEASURED markers instead of fabricated numbers.</p></div>
+      <div class="tile"><h3>It's model-driven when you say so</h3><p>Point it at a real model and the autonomous loop asks the model to plan the change — then verifies that plan against invariants and security gates before applying it. A failed plan falls back honestly; it's never faked.</p></div>
+      <div class="tile"><h3>It's license-clean by construction</h3><p>AGPL/GPL tools (Skyvern, Lightpanda, Puter, ComfyUI) are integrated strictly out-of-process. The core stays Apache-2.0 — safe to ship anywhere.</p></div>
+      <div class="tile"><h3>It resumes, it doesn't restart</h3><p>Long tasks checkpoint at step granularity; sessions are journaled to disk, so a restart recovers the task, the leases, and the pending approvals.</p></div>
+      <div class="tile"><h3>It's isolated, not pretend-isolated</h3><p>Shell execution is default-deny (an empty allowlist disables it), and a container backend runs commands with no network and all capabilities dropped.</p></div>
+      <div class="tile"><h3>It's installable, not aspirational</h3><p>One command installs the whole platform into Claude Code, Cursor, Codex, OpenCode, or MCP — or just the domain pack you need.</p></div>
+    </div>
+  </section>
+
+  <section class="card" id="numbers">
+    <h2>The numbers, in plain sight</h2>
+    <p class="muted">Three charts, all generated from the release evidence in this repo — no decoration.</p>
+    <figure class="chart"><img src="assets/charts-dark/task-pass-rate.svg" alt="Task completion: AETHER 3/3, Superpowers 2/3, Playwright 1/3, Agent-Browser 1/3, ECC 0/3, daemon tools UNMEASURED" /></figure>
+    <figure class="chart"><img src="assets/charts-dark/quality-floor.svg" alt="Catalog quality floor raised from 72/82 to 100/100" /></figure>
+    <figure class="chart"><img src="assets/charts-dark/test-matrix.svg" alt="119 tests across 14 flake-free suites" /></figure>
+    <p class="muted"><strong>Read the first chart the right way:</strong> the gray bars aren't failures — OpenHands, OpenManus, Browser-Use and Skyvern need their own daemons to run, so AETHER records them as <em>UNMEASURED</em> instead of inventing a number. What the chart proves: AETHER's engine passed 3/3 on every task; the closest competitor adapter passed 2/3; a popular static-skill harness (ECC) passed 0/3 on real execution.</p>
+  </section>
+
+  <section id="nine" class="card">
+    <h2>The nine capability programs</h2>
+    <p class="muted">Deep-dive each one (with upstream comparisons) in <a href="programs.html">programs.html</a>.</p>
+    <ol class="progs">
+      <li><strong>Development Intelligence</strong> — research-first + TDD gates on top of the skill catalog. <span class="measured">measured: 3 skills discovered, gates enforced</span></li>
+      <li><strong>Reverse Intelligence</strong> — permission-gated application architecture reconstruction. <span class="measured">measured: 4 modules, 2 external deps</span></li>
+      <li><strong>Autonomous Execution</strong> — crash-resumable, step-verified task execution, now driven by real model turns. <span class="measured">measured: 2/4 → 4/4 after resume</span></li>
+      <li><strong>Multi-Agent Orchestration</strong> — event-bus waves with retry-once fail-fast, with genuine per-agent model calls. <span class="measured">measured: 2 parallel waves</span></li>
+      <li><strong>Browser Intelligence</strong> — unified engine, ranked strategies, compact a11y snapshots. <span class="measured">measured: 92% token savings vs raw DOM</span></li>
+      <li><strong>Visual Computer</strong> — perception → reasoning → action → verification loop. <span class="measured">measured: verified goal in 1 step</span></li>
+      <li><strong>Browser Runtime</strong> — provider abstraction with honest capability-gap detection. <span class="measured">measured: 4 task profiles verified</span></li>
+      <li><strong>Workspace &amp; Knowledge</strong> — markdown vault → knowledge graph + plugin discovery. <span class="measured">measured: 4 edges, orphans detected</span></li>
+      <li><strong>Creative &amp; Visual</strong> — node-graph generation backend + separate 3D scene model. <span class="measured">measured: 4 topological layers</span></li>
+    </ol>
+  </section>
+
+  <section id="install" class="card">
+    <h2>Get started in 60 seconds</h2>
+<pre><code>git clone https://github.com/Tabrej96/anythingwithaether.git &amp;&amp; cd AETHER
+npm install --legacy-peer-deps
+
+# 1. See it work (no API keys needed for the deterministic engines)
+npx tsx bin/aether.ts programs
+
+# 2. Prove every component validates
+npx tsx bin/aether.ts validate
+
+# 3. Install AETHER into your editor of choice (all, or just a domain pack)
+./install.sh --all --target all-harnesses --write .</code></pre>
+    <p>That's it. You now have <strong>711 validated components</strong> + the 20-tool MCP server in your project.</p>
+
+    <h3>Optional: drive it with a real model</h3>
+    <p>Set an <code>AETHER_LIVE_PROVIDER_*</code> key in <code>.env</code> and run <code>npx tsx bin/aether.ts runtime --live</code>.
+    AETHER asks the model to plan the change, then verifies that plan against the repository's invariants
+    and its security gates <strong>before</strong> applying it. If the model's patch fails a check, AETHER
+    says so and falls back to the verified patch — it never fakes a success.</p>
+
+    <h3>Requirements</h3>
+    <ul>
+      <li><strong>Node.js ≥ 18</strong> (LTS recommended; verified on Node 24) and <strong>npm</strong> with network access on first install.</li>
+      <li>Works fully offline after <code>npm install</code> — every in-process capability is deterministic TypeScript with no API keys.</li>
+      <li>Optional: a browser process (Playwright) for live P05/P06/P07 tasks; optional: out-of-process AGPL/GPL engines.</li>
+    </ul>
+  </section>
+
+  <section class="card" id="docs">
+    <h2>Documentation &amp; provenance</h2>
+    <ul>
+      <li><code>docs/INSTALLATION.md</code> · <code>docs/CONFIGURATION.md</code> · <code>docs/PROVIDERS.md</code> — operator-facing how-tos (including live-provider setup).</li>
+      <li><code>docs/AGENTS.md</code> (117) · <code>docs/SKILLS.md</code> (540) · <code>docs/MCP.md</code> (8 tools) — what ships and how to use it.</li>
+      <li><code>docs/TROUBLESHOOTING.md</code> · <code>docs/CHANGELOG.md</code> · <code>docs/SBOM.md</code> — every failure state mapped, and the bill of materials.</li>
+      <li><code>docs/UNIVERSAL_BENCHMARK_FORMAT.md</code> — the universal benchmark format + 5 real-format adapters (<code>npx tsx bin/aether.ts universal</code>).</li>
+      <li><code>NOTICE.md</code> — upstream open-source inspiration credits.</li>
+    </ul>
+  </section>
+</main>
+
+<footer class="wrap">
+  <p>AETHER v1.0 · Created by <a href="https://github.com/Tabrej96">Tabrej</a> · Apache-2.0 ·
+    <a href="https://github.com/Tabrej96/AETHER" target="_blank" rel="noopener">
+      <img src="assets/github-mark.svg" alt="" style="filter: invert(1); width:14px; vertical-align:-2px;" />
+      github.com/Tabrej96/AETHER
+    </a>
+  </p>
+  <p class="muted">Upstream inspiration credits: Model Context Protocol · Tree-sitter · FFmpeg · Remotion · whisper.cpp · Three.js · D3.js · OpenTofu · Kubernetes · PostgreSQL · Everything Claude Code (see NOTICE.md).</p>
+</footer>
+</body>
+</html>

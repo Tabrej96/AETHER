@@ -1,0 +1,6 @@
+{
+  "name": "AETHER — The 100x Open-Source AI Engineering Harness",
+  "description": "Next-generation open-source AI coding harness and engineering intelligence ecosystem with neural context slicing, dynamic agent swarms, predictive blast-radius analysis, adversarial verification, layered provenance memory, and cross-harness installers.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

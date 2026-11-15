@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>AETHER 1.0 — API Reference</title>
+<link rel="stylesheet" href="style.css" />
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Sidebar nav active state
+  var tocLinks = document.querySelectorAll('.toc-nav a');
+  var sections = [];
+  tocLinks.forEach(function(link) {
+    var id = link.getAttribute('href').replace('#', '');
+    var section = document.getElementById(id);
+    if (section) sections.push({ id: id, el: section, link: link });
+  });
+  function onScroll() {
+    var scrollY = window.scrollY + 100;
+    var current = sections[0];
+    sections.forEach(function(s) {
+      if (s.el.offsetTop <= scrollY) current = s;
+    });
+    sections.forEach(function(s) { s.link.style.color = ''; });
+    if (current) current.link.style.color = 'var(--accent)';
+  }
+  window.addEventListener('scroll', onScroll);
+  onScroll();
+
+  // Copy buttons
+  document.querySelectorAll('.code-block .copy-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var code = btn.parentElement.querySelector('code').textContent;
+      navigator.clipboard.writeText(code).then(function() {
+        btn.textContent = 'Copied!';
+        btn.classList.add('copied');
+        setTimeout(function() { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000);
+      }).catch(function() {
+        btn.textContent = 'Error';
+        setTimeout(function() { btn.textContent = 'Copy'; }, 2000);
+      });
+    });
+  });
+});
+</script>
+</head>
+<body>
+<header class="topbar">
+  <div class="wrap">
+    <div class="brand"><a href="index.html" style="color:inherit;text-decoration:none">AETHER <span class="vtag">v1.0</span></a></div>
+    <nav>
+      <a href="index.html#why">Home</a>
+      <a href="programs.html">Programs</a>
+      <a href="deep.html">P10 Deep</a>
+      <a href="fullstack.html">P11 Full-Stack</a>
+      <a href="evolution.html">Evolution</a>
+      <a href="benchmarks.html">Benchmarks</a>
+      <a href="compare.html">Compare</a>
+      <a href="showcase.html">Showcase</a>
+      <a href="getting-started.html">Guide</a>
+      <a href="api-reference.html" class="active">API</a>
+      <a href="contributing.html">Contributing</a>
+      <a href="https://github.com/Tabrej96/anythingwithaether" target="_blank" rel="noopener" title="GitHub"><img src="assets/github-mark.svg" alt="GitHub" style="filter:invert(1);width:16px;height:16px" /></a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="breadcrumb" style="margin-top:16px">
+    <a href="index.html">Home</a> <span class="sep">/</span> <a href="getting-started.html">Guide</a> <span class="sep">/</span> <span>API Reference</span>
+  </div>
+
+  <section class="hero">
+    <h1>API Reference</h1>
+    <p class="lede">
+      Complete documentation for AETHER's engines, MCP tools, CLI commands,
+      TypeScript types, and integration patterns. All APIs are deterministic,
+      offline-capable, and Apache-2.0.
+    </p>
+    <p class="credit">
+      <span class="badge">20 MCP Tools</span>
+      <span class="badge">21 Engines</span>
+      <span class="badge">TypeScript ESM</span>
+    </p>
+  </section>
+
+  <!-- TOC -->
+  <div class="toc toc-nav">
+    <h3>On this page</h3>
+    <ol>
+      <li><a href="#cli">CLI Commands</a></li>
+      <li><a href="#mcp">MCP Tools (20 tools)</a></li>
+      <li><a href="#engines">Engine Reference</a></li>
+      <li><a href="#types">TypeScript Types</a></li>
+      <li><a href="#integration">Integration Patterns</a></li>
+    </ol>
+  </div>
+
+  <!-- CLI Commands -->
+  <section class="card" id="cli">
+    <h2>1. CLI Commands</h2>
+    <p class="muted">AETHER ships with a single CLI entry point: <code>bin/aether.ts</code>. Use <code>npx tsx bin/aether.ts &lt;command&gt;</code> or the installed <code>aether</code> binary.</p>
+
+    <h3>Program commands (P01-P09)</h3>
+    <table>
+      <thead><tr><th>Command</th><th>Engine</th><th>Description</th><th>Time</th></tr></thead>
+      <tbody>
+        <tr><td><code>programs</code></td><td>All P01-P09</td><td>Run the full nine-program capability registry</td><td>~10s</td></tr>
+        <tr><td><code>validate</code></td><td>P01</td><td>Validate all 711 components (agents, skills, workflows)</td><td>~5s</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Intelligence commands (P10-P11)</h3>
+    <table>
+      <thead><tr><th>Command</th><th>Engine</th><th>Description</th><th>Time</th></tr></thead>
+      <tbody>
+        <tr><td><code>deep</code></td><td>P10</td><td>Deep execution intelligence: GST invoice, tamper guard, live browser recompute</td><td>~15s</td></tr>
+        <tr><td><code>deep --no-browser</code></td><td>P10</td><td>Same without driving a browser</td><td>~10s</td></tr>
+        <tr><td><code>fullstack</code></td><td>P11</td><td>Architecture decision, API contract, data/reliability/tenancy review</td><td>~5s</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Evolution commands (P12-P21)</h3>
+    <table>
+      <thead><tr><th>Command</th><th>Engine</th><th>Description</th><th>Time</th></tr></thead>
+      <tbody>
+        <tr><td><code>strategy "..."</code></td><td>P12</td><td>Project classification + effort policy + PROJECT_STRATEGY.md</td><td>~3s</td></tr>
+        <tr><td><code>business "..."</code></td><td>P13</td><td>Domain model, state machines, edge cases, possibility engine, metric discipline</td><td>~3s</td></tr>
+        <tr><td><code>panel "..."</code></td><td>P14</td><td>Nine-reviewer independent quality panel verdict</td><td>~5s</td></tr>
+        <tr><td><code>evolve</code></td><td>P15</td><td>Regression suite + measured promote/hold/reject demonstration</td><td>~5s</td></tr>
+        <tr><td><code>calc</code></td><td>P16</td><td>Paise-exact EMI, proration, refund, settlement (BigInt)</td><td>~2s</td></tr>
+        <tr><td><code>wf</code></td><td>P17</td><td>Approval, reconciliation, settlement workflow patterns</td><td>~2s</td></tr>
+        <tr><td><code>hufit</code></td><td>P18</td><td>Human-centered workflow audit (fatigue, gaps, theater)</td><td>~2s</td></tr>
+        <tr><td><code>design</code></td><td>P19</td><td>Design-taste layer + template-slop detector</td><td>~2s</td></tr>
+        <tr><td><code>plan "..."</code></td><td>P20</td><td>Orchestration planner: execution mode, catalog-verified team, waves</td><td>~2s</td></tr>
+        <tr><td><code>design-system [CATEGORY] [DIRECTION]</code></td><td>P21</td><td>Design-system generator: 12 directions, tokens, WCAG contrast</td><td>~2s</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Utility commands</h3>
+    <table>
+      <thead><tr><th>Command</th><th>Description</th><th>Time</th></tr></thead>
+      <tbody>
+        <tr><td><code>benchmark</code></td><td>Reproducible benchmark suite</td><td>~15s</td></tr>
+        <tr><td><code>benchmark --live</code></td><td>Benchmark suite with live provider</td><td>~30s</td></tr>
+        <tr><td><code>universal</code></td><td>Universal benchmark format adapter bridge</td><td>~5s</td></tr>
+        <tr><td><code>compare</code></td><td>Full ECC/AETHER/raw-model comparison (needs provider)</td><td>~2min</td></tr>
+        <tr><td><code>install --target X --write .</code></td><td>Install AETHER into your editor/harness</td><td>~10s</td></tr>
+        <tr><td><code>uninstall --write .</code></td><td>Remove AETHER files (only what it wrote)</td><td>~5s</td></tr>
+        <tr><td><code>runtime --live</code></td><td>Autonomous runtime driven by a real model</td><td>varies</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- MCP Tools -->
+  <section class="card" id="mcp">
+    <h2>2. MCP Tools (20 tools)</h2>
+    <p class="muted">AETHER exposes its capabilities through the <strong>Model Context Protocol</strong> (MCP). All 20 tools are pure-deterministic — they cannot fail at runtime. A malformed argument returns a structured <code>BLOCKED</code>, never a crash.</p>
+
+    <h3>Program tools (P01-P09)</h3>
+    <table>
+      <thead><tr><th>Tool</th><th>Parameters</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td><code>aether_programs</code></td><td>none</td><td>Run the full nine-program registry. Returns capability list + measured results.</td></tr>
+        <tr><td><code>aether_validate</code></td><td>none</td><td>Validate all 711 components. Returns OK or lists failures.</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Intelligence tools (P10-P11)</h3>
+    <table>
+      <thead><tr><th>Tool</th><th>Parameters</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td><code>aether_deep_intel</code></td><td><code>task</code>, <code>invoice</code> (optional JSON)</td><td>Deep execution intelligence: requirement depth, domain discovery, calculation accuracy, decision records. Returns exact paise invoice with GST breakdown.</td></tr>
+        <tr><td><code>aether_fullstack</code></td><td><code>plan</code> (JSON)</td><td>Architecture decision, API contract diff, data-model review, reliability policy, tenancy enforcement, production-readiness gate.</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Evolution tools (P12-P21)</h3>
+    <table>
+      <thead><tr><th>Tool</th><th>Parameters</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td><code>aether_project_strategy</code></td><td><code>product</code></td><td>P12: Multi-label classification, effort policy, PROJECT_STRATEGY.md generation.</td></tr>
+        <tr><td><code>aether_business_logic</code></td><td><code>product</code></td><td>P13: Domain model, lifecycle state machines, edge-case catalog, possibility engine, metric discipline.</td></tr>
+        <tr><td><code>aether_quality_panel</code></td><td><code>plan</code></td><td>P14: Nine-reviewer independent quality panel with evidence-gated verdicts.</td></tr>
+        <tr><td><code>aether_evolution</code></td><td>none</td><td>P15: Regression suite run + measured promote/hold/reject demonstration.</td></tr>
+        <tr><td><code>aether_calculations</code></td><td><code>operation</code>, <code>params</code></td><td>P16: Paise-exact commissions, proration, refunds, shipping, EMI, FX, settlement.</td></tr>
+        <tr><td><code>aether_workflow</code></td><td><code>pattern</code>, <code>params</code></td><td>P17: Approval, dispute, reconciliation, period settlement patterns.</td></tr>
+        <tr><td><code>aether_human_workflow</code></td><td><code>workflow</code></td><td>P18: Human-centered workflow audit (fatigue, gaps, theater, lag, irreversibility).</td></tr>
+        <tr><td><code>aether_design_taste</code></td><td><code>artifact</code>, <code>category</code></td><td>P19: Design-taste audit + template-slop detector.</td></tr>
+        <tr><td><code>aether_orchestration_plan</code></td><td><code>prompt</code>, <code>mode</code> (optional)</td><td>P20: Execution plan — mode, catalog-verified team, waves, requirement tiers.</td></tr>
+        <tr><td><code>aether_design_system</code></td><td><code>category</code>, <code>direction</code></td><td>P21: Design-system generator — 12 creative directions, tokens with measured WCAG contrast.</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Security &amp; utility tools</h3>
+    <table>
+      <thead><tr><th>Tool</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td><code>aether_security_spotlighter</code></td><td>Scan inputs for injection, secret exposure, and other security patterns. Always active regardless of MCP policy.</td></tr>
+        <tr><td><code>aether_reverse</code></td><td>Permission-gated reverse engineering: architecture extraction, dependency discovery. Requires authorization gate.</td></tr>
+        <tr><td><code>aether_browser</code></td><td>Browser control: accessibility tree, element resolution, click actions, screenshots.</td></tr>
+        <tr><td><code>aether_knowledge</code></td><td>Knowledge graph: wiki-link extraction, tag clusters, orphan detection.</td></tr>
+        <tr><td><code>aether_creative</code></td><td>Creative backend: node-graph generation, 3D scene model, topological scheduling.</td></tr>
+        <tr><td><code>aether_benchmark</code></td><td>Run reproducible benchmarks with universal format output.</td></tr>
+        <tr><td><code>aether_install</code></td><td>Install AETHER agents/skills into a target harness.</td></tr>
+        <tr><td><code>aether_uninstall</code></td><td>Remove AETHER files (path-containment guarded).</td></tr>
+      </tbody>
+    </table>
+
+    <div class="callout info">
+      <strong>MCP registration:</strong> See <code>docs/MCP.md</code> for the full registration guide.
+      Register the server in Claude Code, Cursor, Codex, OpenCode, or any MCP-compatible client.
+    </div>
+  </section>
+
+  <!-- Engine Reference -->
+  <section class="card" id="engines">
+    <h2>3. Engine Reference</h2>
+    <p class="muted">Every engine is accessed via CLI command or MCP tool. All engines are original Apache-2.0 TypeScript code under <code>src/core/</code>.</p>
+
+    <table>
+      <thead><tr><th>Engine</th><th>File</th><th>What it does</th><th>Measured</th></tr></thead>
+      <tbody>
+        <tr><td><strong>P01 Development</strong></td><td><code>src/core/programs/p01DevelopmentIntelligence.ts</code></td><td>Skill discovery + TDD gates + debugging ledger + memory promotion</td><td>3 skills discovered, 2 block reasons</td></tr>
+        <tr><td><strong>P02 Reverse</strong></td><td><code>src/core/programs/p02ReverseIntelligence.ts</code></td><td>Architecture extraction, dependency discovery, authorization-gated reporting</td><td>4 modules, 2 external deps</td></tr>
+        <tr><td><strong>P03 Autonomous</strong></td><td><code>src/core/programs/p03AutonomousExecution.ts</code></td><td>Step-level crash-resumable execution with deterministic verify predicates</td><td>2/4 → 4/4 after resume</td></tr>
+        <tr><td><strong>P04 Orchestration</strong></td><td><code>src/core/swarmEngine.ts</code></td><td>Event-bus waves, retry-once fail-fast, group-conversation turns</td><td>2 parallel waves</td></tr>
+        <tr><td><strong>P05 Browser</strong></td><td><code>src/core/intel/domainPacks/browserPack/</code></td><td>Unified browser engine with ranked strategies, compact a11y snapshots</td><td>92% token savings</td></tr>
+        <tr><td><strong>P06 Visual</strong></td><td><code>src/core/programs/p06VisualComputerIntelligence.ts</code></td><td>Perception → reasoning → action → verification loop</td><td>Verified goal in 1 step</td></tr>
+        <tr><td><strong>P07 Runtime</strong></td><td><code>src/core/programs/p07BrowserRuntime.ts</code></td><td>Provider abstraction with honest capability-gap detection</td><td>4 task profiles verified</td></tr>
+        <tr><td><strong>P08 Knowledge</strong></td><td><code>src/core/programs/p08WorkspaceKnowledge.ts</code></td><td>Markdown vault → knowledge graph + plugin discovery</td><td>4 edges, orphans detected</td></tr>
+        <tr><td><strong>P09 Creative</strong></td><td><code>src/core/programs/p09CreativeVisualIntelligence.ts</code></td><td>Node-graph generation + separate 3D scene model</td><td>4 topological layers</td></tr>
+        <tr><td><strong>P10 Deep</strong></td><td><code>src/core/intel/deepExecution/</code></td><td>Requirement depth, domain discovery, calculation accuracy, decision records</td><td>Exact paise GST invoice</td></tr>
+        <tr><td><strong>P11 Full-Stack</strong></td><td><code>src/core/fullstack/</code></td><td>Architecture, API contracts, data model, reliability, tenancy, readiness</td><td>5 contract mismatches</td></tr>
+        <tr><td><strong>P12 Strategy</strong></td><td><code>src/core/projectIntelligence/</code></td><td>Product classification, effort policy, PROJECT_STRATEGY.md</td><td>27 categories, multi-label</td></tr>
+        <tr><td><strong>P13 Business</strong></td><td><code>src/core/businessLogic/</code></td><td>Domain model, state machines, edge cases, possibility engine, metrics</td><td>10 edge cases</td></tr>
+        <tr><td><strong>P14 Panel</strong></td><td><code>src/core/review/</code></td><td>Nine-reviewer independent quality panel</td><td>9 evidenced findings</td></tr>
+        <tr><td><strong>P15 Evolution</strong></td><td><code>src/core/evolution/</code></td><td>Regression suite, promote/hold/reject loop, R4 governance</td><td>Mean 88.4 over 10 tasks</td></tr>
+        <tr><td><strong>P16 Calculations</strong></td><td><code>src/core/finance/calculations.ts</code></td><td>Paise-exact EMI, proration, refunds, shipping, FX, settlement</td><td>BigInt, 1-paise precision</td></tr>
+        <tr><td><strong>P17 Workflow</strong></td><td><code>src/core/workflow/patterns.ts</code></td><td>Approval, dispute, reconciliation, settlement patterns</td><td>Idempotent period settlement</td></tr>
+        <tr><td><strong>P18 Human</strong></td><td><code>src/core/workflow/human.ts</code></td><td>Human-centered workflow audit (fatigue, gaps, theater, lag)</td><td>8 named findings</td></tr>
+        <tr><td><strong>P19 Design Taste</strong></td><td><code>src/core/design/designTaste.ts</code></td><td>Category design language + template-slop detector</td><td>0-100 score, slop tells</td></tr>
+        <tr><td><strong>P20 Orchestrator</strong></td><td><code>src/core/orchestration/executionPlanner.ts</code></td><td>Execution mode, catalog-verified team, waves, requirement tiers</td><td>7 modes, agent budget</td></tr>
+        <tr><td><strong>P21 Design System</strong></td><td><code>src/core/design/designSystem.ts</code></td><td>12 creative directions, token set, measured WCAG contrast, gate+taste starter</td><td>28/28 categories PASS</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- TypeScript Types -->
+  <section class="card" id="types">
+    <h2>4. TypeScript Types</h2>
+    <p class="muted">Key types used across the AETHER engine. All types are in <code>src/core/types.ts</code> and program-specific modules.</p>
+
+    <h3>Core types</h3>
+    <div class="code-block"><button class="copy-btn">Copy</button><pre><code>// Program lifecycle states (DISCOVER → INSTALL → VALIDATE → REGISTER → EXECUTE → MONITOR → UPDATE → REMOVE)
+type ProgramStatus = 'discovered' | 'installed' | 'validated' | 'registered' | 'executing' | 'monitoring' | 'updating' | 'removed';
+
+// Capability registration
+interface Capability {
+  id: string;                    // e.g. "cap-p01-development-intelligence"
+  name: string;
+  version: string;
+  status: ProgramStatus;
+  provenance: ProvenanceRecord;
+  testResults: TestResult[];
+  license: string;
+}
+
+// Provenance record (every capability has one)
+interface ProvenanceRecord {
+  upstreamRepo?: string;         // Inspiration source (if any)
+  upstreamLicense?: string;      // License of upstream source
+  adaptationNotes: string;       // What was extracted and reimplemented
+  isFirstParty: boolean;         // true for P10-P21 (no external repo studied)
+}
+
+// Test result
+interface TestResult {
+  suite: string;
+  passed: number;
+  failed: number;
+  flakeFree: boolean;
+}
+
+// Measurement record (no fabricated numbers)
+interface MeasurementRecord {
+  metric: string;
+  value: number | string;
+  unit?: string;
+  status: 'MEASURED' | 'UNMEASURED' | 'UNAVAILABLE';
+  reproductionCommand?: string;
+}</code></pre></div>
+
+    <h3>Program engine interface</h3>
+    <div class="code-block"><button class="copy-btn">Copy</button><pre><code>// Every program engine implements this contract
+interface ProgramEngine {
+  readonly id: string;
+  readonly name: string;
+  readonly version: string;
+
+  // Lifecycle
+  discover(): Promise&lt;DiscoveryResult&gt;;
+  install(): Promise&lt;InstallResult&gt;;
+  validate(): Promise&lt;ValidationResult&gt;;
+  register(registry: IntegrationRegistry): Promise&lt;void&gt;;
+  execute(input: unknown): Promise&lt;ExecutionResult&gt;;
+  monitor(): Promise&lt;MonitorResult&gt;;
+  update(version: string): Promise&lt;UpdateResult&gt;;
+  remove(): Promise&lt;void&gt;;
+}
+
+// Engine result (deterministic, structured)
+interface ExecutionResult {
+  ok: boolean;
+  output: unknown;
+  errors: string[];
+  metadata: Record&lt;string, unknown&gt;;
+  verificationHash: string;     // SHA-256 of output for audit
+}</code></pre></div>
+
+    <h3>Money types (P10/P16)</h3>
+    <div class="code-block"><button class="copy-btn">Copy</button><pre><code>// P10 Money primitive — integer paise, never binary floats
+type Paise = number &amp; { readonly __brand: 'Paise' };
+type Money = {
+  paise: Paise;
+  currency: 'INR' | 'USD' | 'EUR' | 'GBP';
+  source: string;               // Provenance: rate table + effective date
+  effectiveDate: string;        // ISO date
+};
+
+// P16 Calculation types
+interface Commission {
+  gross: Paise;
+  rate: number;                 // percentage, e.g. 0.05 = 5%
+  effectiveDate: string;
+  net: Paise;                   // gross - commission
+}
+
+interface EMI {
+  principal: Paise;
+  annualRate: number;           // percentage, e.g. 8 = 8%
+  months: number;
+  monthlyPaise: Paise;          // BigInt closed form
+  totalPaise: Paise;
+}</code></pre></div>
+
+    <h3>Browser types (P05/P07)</h3>
+    <div class="code-block"><button class="copy-btn">Copy</button><pre><code>// P05 Browser engine
+interface BrowserSnapshot {
+  strategy: 'DETERMINISTIC_DOM' | 'ARIA_ROLE' | 'A11Y_TREE' | 'VISION_ESCALATION';
+  tokensUsed: number;
+  elements: AccessibilityNode[];
+  confidence: number;           // 0-1
+  unresolvedQueries: string[];
+}
+
+interface AccessibilityNode {
+  ref: string;                  // e.g. "main&gt;div&gt;section&gt;article:nth-of-type(1)&gt;button"
+  role: string;
+  label: string;
+  bbox?: { x: number; y: number; w: number; h: number };
+}
+
+// P07 Provider abstraction
+type BrowserProvider = 'playwright' | 'lightpanda' | 'chromium';
+interface ProviderCapability {
+  provider: BrowserProvider;
+  compatible: boolean;
+  gaps: string[];
+  verificationRequired: boolean;
+}</code></pre></div>
+  </section>
+
+  <!-- Integration Patterns -->
+  <section class="card" id="integration">
+    <h2>5. Integration Patterns</h2>
+
+    <h3>Pattern 1: CLI integration</h3>
+    <p>The simplest integration: call AETHER as a subprocess from your own code.</p>
+    <div class="code-block"><button class="copy-btn">Copy</button><pre><code>// Node.js subprocess example
+import { spawn } from 'child_process';
+
+function runAether(command, args = []) {
+  return new Promise((resolve, reject) => {
+    const proc = spawn('npx', ['tsx', 'bin/aether.ts', command, ...args], {
+      cwd: '/path/to/AETHER',
+      stdio: ['pipe', 'pipe', 'pipe']
+    });
+    let stdout = '', stderr = '';
+    proc.stdout.on('data', d => stdout += d);
+    proc.stderr.on('data', d => stderr += d);
+    proc.on('close', code => {
+      if (code === 0) resolve(JSON.parse(stdout));
+      else reject(new Error(stderr || `Exit ${code}`));
+    });
+  });
+}
+
+// Usage
+const programs = await runAether('programs');
+const result = await runAether('deep', ['--no-browser']);</code></pre></div>
+
+    <h3>Pattern 2: MCP integration</h3>
+    <p>For AI coding agents: register AETHER as an MCP server.</p>
+    <div class="code-block"><button class="copy-btn">Copy</button><pre><code>// Claude Code: .claude/settings.json
+{
+  "mcpServers": {
+    "aether": {
+      "command": "npx",
+      "args": ["tsx", "bin/aether.ts", "mcp"],
+      "cwd": "/path/to/AETHER"
+    }
+  }
+}
+
+// Then use tools in conversation:
+// &lt;UseMcp&gt;
+//   &lt;tool&gt;aether_deep_intel&lt;/tool&gt;
+//   &lt;args&gt;{ "task": "validate invoice #1234" }&lt;/args&gt;
+// &lt;/UseMcp&gt;</code></pre></div>
+
+    <h3>Pattern 3: Library import</h3>
+    <p>For TypeScript projects that want to import AETHER engines directly.</p>
+    <div class="code-block"><button class="copy-btn">Copy</button><pre><code>// After npm install aether-harness
+import { DeepIntelligenceEngine } from 'aether-harness/src/core/intel/deepExecution';
+import { FullstackEngine } from 'aether-harness/src/core/fullstack';
+
+const deep = new DeepIntelligenceEngine();
+const result = await deep.execute({
+  task: 'Compute GST invoice',
+  invoice: { /* ... */ }
+});
+
+if (result.ok) {
+  console.log('Paise total:', result.output.grandTotalPaise);
+  console.log('Tax breakdown:', result.output.taxBreakdown);
+}</code></pre></div>
+
+    <h3>Pattern 4: Harness install</h3>
+    <p>Install AETHER agents and skills into your existing editor/harness.</p>
+    <div class="code-block"><button class="copy-btn">Copy</button><pre><code>// Install all packs into Claude Code
+npx tsx bin/aether.ts install --all --target claude-code --write .
+
+// Install specific packs into Cursor
+npx tsx bin/aether.ts install \
+  --target cursor \
+  --packs aws-cloud-vps,design-ui,finance-intel \
+  --mcp \
+  --write .
+
+// Verify what was installed
+cat .aether/owned-files.json</code></pre></div>
+
+    <h3>Pattern 5: Live provider (optional)</h3>
+    <p>Drive AETHER with a real model for the autonomous runtime.</p>
+    <div class="code-block"><button class="copy-btn">Copy</button><pre><code># .env
+AETHER_LIVE_PROVIDER_URL="https://api.anthropic.com/v1"
+AETHER_LIVE_PROVIDER_KEY="sk-ant-..."
+AETHER_LIVE_PROVIDER_MODEL="claude-sonnet-4-20250514"
+AETHER_LIVE_PROVIDER_VENDOR="anthropic"
+AETHER_LIVE_PROVIDER_IN_USD_PER_M="3"
+AETHER_LIVE_PROVIDER_OUT_USD_PER_M="15"
+
+# Run with live model
+npx tsx bin/aether.ts runtime --live</code></pre></div>
+
+    <div class="callout info" style="margin-top:16px">
+      <strong>Important:</strong> Without <code>AETHER_LIVE_PROVIDER_*</code> keys, every AETHER engine
+      runs deterministically and offline. The live provider is only needed for the model-driven
+      execution paths. All benchmarks, tests, and most engines work without it.
+    </div>
+  </section>
+
+  <!-- Source code links -->
+  <section class="card">
+    <h2>Source code structure</h2>
+    <p class="muted">Key directories and files for contributors and integrators.</p>
+    <table>
+      <thead><tr><th>Path</th><th>Purpose</th></tr></thead>
+      <tbody>
+        <tr><td><code>bin/aether.ts</code></td><td>CLI entry point (all commands)</td></tr>
+        <tr><td><code>src/core/types.ts</code></td><td>Core TypeScript types</td></tr>
+        <tr><td><code>src/core/programs/</code></td><td>P01-P09 engine implementations</td></tr>
+        <tr><td><code>src/core/intel/</code></td><td>P10 deep intelligence + domain packs</td></tr>
+        <tr><td><code>src/core/fullstack/</code></td><td>P11 full-stack engineering intelligence</td></tr>
+        <tr><td><code>src/core/projectIntelligence/</code></td><td>P12 project strategy</td></tr>
+        <tr><td><code>src/core/businessLogic/</code></td><td>P13 business logic</td></tr>
+        <tr><td><code>src/core/review/</code></td><td>P14 quality panel</td></tr>
+        <tr><td><code>src/core/evolution/</code></td><td>P15 controlled evolution engine</td></tr>
+        <tr><td><code>src/core/finance/</code></td><td>P10 Money + P16 calculations</td></tr>
+        <tr><td><code>src/core/workflow/</code></td><td>P17 patterns + P18 human workflow</td></tr>
+        <tr><td><code>src/core/design/</code></td><td>P19 design taste + P21 design system</td></tr>
+        <tr><td><code>src/core/orchestration/</code></td><td>P20 execution planner</td></tr>
+        <tr><td><code>src/core/benchmarks/</code></td><td>Benchmark runner + universal format adapters</td></tr>
+        <tr><td><code>src/core/intel/domainPacks/</code></td><td>Domain-specific capability packs</td></tr>
+        <tr><td><code>src/core/ecosystemAdapters.ts</code></td><td>External engine adapters (out-of-process)</td></tr>
+        <tr><td><code>src/core/ecosystemRegistry.ts</code></td><td>External engine registration + lifecycle</td></tr>
+        <tr><td><code>docs/</code></td><td>Full documentation (INSTALLATION, CONFIGURATION, PROVIDERS, MCP, etc.)</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+</main>
+
+<footer class="wrap">
+  <div class="footer-links">
+    <span>AETHER v1.0 · Created by <a href="https://github.com/Tabrej96">Tabrej</a> · License: <span class="license-badge">Apache-2.0</span></span>
+    <span><a href="https://github.com/Tabrej96/anythingwithaether" target="_blank" rel="noopener"><img src="assets/github-mark.svg" alt="" style="filter:invert(1);width:14px;vertical-align:-2px" /> GitHub</a></span>
+  </div>
+</footer>
+</body>
+</html>

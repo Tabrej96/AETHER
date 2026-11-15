@@ -1,0 +1,72 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/Tabrej96/anythingwithaether/blob/main/schema/v1.0/install.json",
+  "title": "AETHER v1.0 Selective/All Install Manifest (.aether/manifest.json)",
+  "description": "Schema for the compiled AETHER install manifest written by `aether install`. Created by Tabrej. Apache-2.0.",
+  "type": "object",
+  "createdBy": "Tabrej (https://github.com/Tabrej96/anythingwithaether)",
+  "license": "Apache-2.0",
+  "additionalProperties": true,
+  "required": [
+    "$schema",
+    "createdBy",
+    "license",
+    "installMode",
+    "harnessTarget",
+    "contextArchitecture",
+    "counts",
+    "openSourceCreditsVerified"
+  ],
+  "properties": {
+    "$schema": { "type": "string" },
+    "createdBy": { "type": "string" },
+    "license": { "type": "string", "const": "Apache-2.0" },
+    "installMode": { "type": "string", "enum": ["ONE_COMMAND_ALL", "SELECTIVE_CUSTOM"] },
+    "harnessTarget": {
+      "type": "string",
+      "enum": ["claude-code", "codex", "cursor", "opencode", "mcp-server", "all-harnesses"]
+    },
+    "contextArchitecture": {
+      "type": "string",
+      "const": "LAZY_AST_PREDICATE_INDEX_PLUS_MCP"
+    },
+    "idleTokenBudgetMax": { "type": "number" },
+    "measuredIdleTokens": { "type": "number" },
+    "staticHarnessTokensSaved": { "type": "number" },
+    "domainPacksInstalled": { "type": "array", "items": { "type": "string" } },
+    "counts": {
+      "type": "object",
+      "required": ["specializedAgents", "validatedSkills", "scopedRules", "mcpServerTools"],
+      "properties": {
+        "specializedAgents": { "type": "number" },
+        "validatedSkills": { "type": "number" },
+        "scopedRules": { "type": "number" },
+        "mcpServerTools": { "type": "number", "enum": [0, 8] }
+      }
+    },
+    "mcpServer": {
+      "type": "object",
+      "properties": {
+        "command": { "type": "string" },
+        "args": { "type": "array", "items": { "type": "string" } },
+        "transport": { "type": "string", "const": "stdio-jsonrpc-2.0" },
+        "toolsExposed": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "sampleEnabledAgents": { "type": "array" },
+    "sampleLazySkillTriggers": { "type": "array" },
+    "scopedRules": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "glob", "attribution"],
+        "properties": {
+          "id": { "type": "string" },
+          "glob": { "type": "string" },
+          "attribution": { "type": "string" }
+        }
+      }
+    },
+    "openSourceCreditsVerified": { "type": "boolean" }
+  }
+}

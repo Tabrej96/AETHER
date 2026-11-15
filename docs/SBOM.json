@@ -1,0 +1,6722 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.5",
+  "serialNumber": "urn:uuid:00000000-0000-0000-0000-000000000001",
+  "version": 1,
+  "metadata": {
+    "timestamp": "2026-11-14T11:47:17.039Z",
+    "component": {
+      "type": "application",
+      "bomRef": "pkg:npm/aether-harness@1.0.0",
+      "name": "aether-harness",
+      "version": "1.0.0"
+    },
+    "tools": [
+      {
+        "vendor": "aether",
+        "name": "generate-sbom.ts",
+        "version": "1.0.0"
+      }
+    ]
+  },
+  "components": [
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@bcoe/v8-coverage@1.0.2",
+      "name": "@bcoe/v8-coverage",
+      "version": "1.0.2",
+      "purl": "pkg:npm/@bcoe/v8-coverage@1.0.2",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@bcoe/v8-coverage/-/v8-coverage-1.0.2.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        },
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=18"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@emnapi/core@2.0.0-beta.2",
+      "name": "@emnapi/core",
+      "version": "2.0.0-beta.2",
+      "purl": "pkg:npm/@emnapi/core@2.0.0-beta.2",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@emnapi/core/-/core-2.0.0-beta.2.tgz"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@emnapi/runtime@2.0.0-beta.2",
+      "name": "@emnapi/runtime",
+      "version": "2.0.0-beta.2",
+      "purl": "pkg:npm/@emnapi/runtime@2.0.0-beta.2",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@emnapi/runtime/-/runtime-2.0.0-beta.2.tgz"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@emnapi/wasi-threads@2.2.0",
+      "name": "@emnapi/wasi-threads",
+      "version": "2.2.0",
+      "purl": "pkg:npm/@emnapi/wasi-threads@2.2.0",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@emnapi/wasi-threads/-/wasi-threads-2.2.0.tgz"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@esbuild/aix-ppc64@0.25.12",
+      "name": "@esbuild/aix-ppc64",
+      "version": "0.25.12",
+      "purl": "pkg:npm/@esbuild/aix-ppc64@0.25.12",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@esbuild/aix-ppc64/-/aix-ppc64-0.25.12.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        },
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=18"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@esbuild/android-arm@0.25.12",
+      "name": "@esbuild/android-arm",
+      "version": "0.25.12",
+      "purl": "pkg:npm/@esbuild/android-arm@0.25.12",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@esbuild/android-arm/-/android-arm-0.25.12.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        },
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=18"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@esbuild/android-arm64@0.25.12",
+      "name": "@esbuild/android-arm64",
+      "version": "0.25.12",
+      "purl": "pkg:npm/@esbuild/android-arm64@0.25.12",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@esbuild/android-arm64/-/android-arm64-0.25.12.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        },
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=18"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@esbuild/android-x64@0.25.12",
+      "name": "@esbuild/android-x64",
+      "version": "0.25.12",
+      "purl": "pkg:npm/@esbuild/android-x64@0.25.12",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@esbuild/android-x64/-/android-x64-0.25.12.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        },
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=18"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@esbuild/darwin-arm64@0.25.12",
+      "name": "@esbuild/darwin-arm64",
+      "version": "0.25.12",
+      "purl": "pkg:npm/@esbuild/darwin-arm64@0.25.12",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@esbuild/darwin-arm64/-/darwin-arm64-0.25.12.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        },
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=18"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@esbuild/darwin-x64@0.25.12",
+      "name": "@esbuild/darwin-x64",
+      "version": "0.25.12",
+      "purl": "pkg:npm/@esbuild/darwin-x64@0.25.12",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@esbuild/darwin-x64/-/darwin-x64-0.25.12.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        },
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=18"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@esbuild/freebsd-arm64@0.25.12",
+      "name": "@esbuild/freebsd-arm64",
+      "version": "0.25.12",
+      "purl": "pkg:npm/@esbuild/freebsd-arm64@0.25.12",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@esbuild/freebsd-arm64/-/freebsd-arm64-0.25.12.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        },
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=18"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@esbuild/freebsd-x64@0.25.12",
+      "name": "@esbuild/freebsd-x64",
+      "version": "0.25.12",
+      "purl": "pkg:npm/@esbuild/freebsd-x64@0.25.12",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@esbuild/freebsd-x64/-/freebsd-x64-0.25.12.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        },
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=18"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@esbuild/linux-arm@0.25.12",
+      "name": "@esbuild/linux-arm",
+      "version": "0.25.12",
+      "purl": "pkg:npm/@esbuild/linux-arm@0.25.12",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@esbuild/linux-arm/-/linux-arm-0.25.12.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        },
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=18"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@esbuild/linux-arm64@0.25.12",
+      "name": "@esbuild/linux-arm64",
+      "version": "0.25.12",
+      "purl": "pkg:npm/@esbuild/linux-arm64@0.25.12",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@esbuild/linux-arm64/-/linux-arm64-0.25.12.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        },
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=18"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@esbuild/linux-ia32@0.25.12",
+      "name": "@esbuild/linux-ia32",
+      "version": "0.25.12",
+      "purl": "pkg:npm/@esbuild/linux-ia32@0.25.12",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@esbuild/linux-ia32/-/linux-ia32-0.25.12.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        },
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=18"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@esbuild/linux-loong64@0.25.12",
+      "name": "@esbuild/linux-loong64",
+      "version": "0.25.12",
+      "purl": "pkg:npm/@esbuild/linux-loong64@0.25.12",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@esbuild/linux-loong64/-/linux-loong64-0.25.12.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        },
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=18"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@esbuild/linux-mips64el@0.25.12",
+      "name": "@esbuild/linux-mips64el",
+      "version": "0.25.12",
+      "purl": "pkg:npm/@esbuild/linux-mips64el@0.25.12",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@esbuild/linux-mips64el/-/linux-mips64el-0.25.12.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        },
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=18"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@esbuild/linux-ppc64@0.25.12",
+      "name": "@esbuild/linux-ppc64",
+      "version": "0.25.12",
+      "purl": "pkg:npm/@esbuild/linux-ppc64@0.25.12",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@esbuild/linux-ppc64/-/linux-ppc64-0.25.12.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        },
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=18"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@esbuild/linux-riscv64@0.25.12",
+      "name": "@esbuild/linux-riscv64",
+      "version": "0.25.12",
+      "purl": "pkg:npm/@esbuild/linux-riscv64@0.25.12",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@esbuild/linux-riscv64/-/linux-riscv64-0.25.12.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        },
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=18"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@esbuild/linux-s390x@0.25.12",
+      "name": "@esbuild/linux-s390x",
+      "version": "0.25.12",
+      "purl": "pkg:npm/@esbuild/linux-s390x@0.25.12",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@esbuild/linux-s390x/-/linux-s390x-0.25.12.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        },
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=18"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@esbuild/linux-x64@0.25.12",
+      "name": "@esbuild/linux-x64",
+      "version": "0.25.12",
+      "purl": "pkg:npm/@esbuild/linux-x64@0.25.12",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@esbuild/linux-x64/-/linux-x64-0.25.12.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        },
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=18"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@esbuild/netbsd-arm64@0.25.12",
+      "name": "@esbuild/netbsd-arm64",
+      "version": "0.25.12",
+      "purl": "pkg:npm/@esbuild/netbsd-arm64@0.25.12",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@esbuild/netbsd-arm64/-/netbsd-arm64-0.25.12.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        },
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=18"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@esbuild/netbsd-x64@0.25.12",
+      "name": "@esbuild/netbsd-x64",
+      "version": "0.25.12",
+      "purl": "pkg:npm/@esbuild/netbsd-x64@0.25.12",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@esbuild/netbsd-x64/-/netbsd-x64-0.25.12.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        },
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=18"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@esbuild/openbsd-arm64@0.25.12",
+      "name": "@esbuild/openbsd-arm64",
+      "version": "0.25.12",
+      "purl": "pkg:npm/@esbuild/openbsd-arm64@0.25.12",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@esbuild/openbsd-arm64/-/openbsd-arm64-0.25.12.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        },
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=18"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@esbuild/openbsd-x64@0.25.12",
+      "name": "@esbuild/openbsd-x64",
+      "version": "0.25.12",
+      "purl": "pkg:npm/@esbuild/openbsd-x64@0.25.12",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@esbuild/openbsd-x64/-/openbsd-x64-0.25.12.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        },
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=18"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@esbuild/openharmony-arm64@0.25.12",
+      "name": "@esbuild/openharmony-arm64",
+      "version": "0.25.12",
+      "purl": "pkg:npm/@esbuild/openharmony-arm64@0.25.12",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@esbuild/openharmony-arm64/-/openharmony-arm64-0.25.12.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        },
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=18"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@esbuild/sunos-x64@0.25.12",
+      "name": "@esbuild/sunos-x64",
+      "version": "0.25.12",
+      "purl": "pkg:npm/@esbuild/sunos-x64@0.25.12",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@esbuild/sunos-x64/-/sunos-x64-0.25.12.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        },
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=18"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@esbuild/win32-arm64@0.25.12",
+      "name": "@esbuild/win32-arm64",
+      "version": "0.25.12",
+      "purl": "pkg:npm/@esbuild/win32-arm64@0.25.12",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@esbuild/win32-arm64/-/win32-arm64-0.25.12.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        },
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=18"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@esbuild/win32-ia32@0.25.12",
+      "name": "@esbuild/win32-ia32",
+      "version": "0.25.12",
+      "purl": "pkg:npm/@esbuild/win32-ia32@0.25.12",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@esbuild/win32-ia32/-/win32-ia32-0.25.12.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        },
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=18"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@esbuild/win32-x64@0.25.12",
+      "name": "@esbuild/win32-x64",
+      "version": "0.25.12",
+      "purl": "pkg:npm/@esbuild/win32-x64@0.25.12",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@esbuild/win32-x64/-/win32-x64-0.25.12.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        },
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=18"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@google/genai@2.32.0",
+      "name": "@google/genai",
+      "version": "2.32.0",
+      "purl": "pkg:npm/@google/genai@2.32.0",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@google/genai/-/genai-2.32.0.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=20.0.0"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@istanbuljs/schema@0.1.6",
+      "name": "@istanbuljs/schema",
+      "version": "0.1.6",
+      "purl": "pkg:npm/@istanbuljs/schema@0.1.6",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@istanbuljs/schema/-/schema-0.1.6.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        },
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=8"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@jridgewell/gen-mapping@0.3.13",
+      "name": "@jridgewell/gen-mapping",
+      "version": "0.3.13",
+      "purl": "pkg:npm/@jridgewell/gen-mapping@0.3.13",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@jridgewell/gen-mapping/-/gen-mapping-0.3.13.tgz"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@jridgewell/remapping@2.3.5",
+      "name": "@jridgewell/remapping",
+      "version": "2.3.5",
+      "purl": "pkg:npm/@jridgewell/remapping@2.3.5",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@jridgewell/remapping/-/remapping-2.3.5.tgz"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@jridgewell/resolve-uri@3.1.2",
+      "name": "@jridgewell/resolve-uri",
+      "version": "3.1.2",
+      "purl": "pkg:npm/@jridgewell/resolve-uri@3.1.2",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@jridgewell/resolve-uri/-/resolve-uri-3.1.2.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=6.0.0"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@jridgewell/sourcemap-codec@1.6.0",
+      "name": "@jridgewell/sourcemap-codec",
+      "version": "1.6.0",
+      "purl": "pkg:npm/@jridgewell/sourcemap-codec@1.6.0",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@jridgewell/sourcemap-codec/-/sourcemap-codec-1.6.0.tgz"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@jridgewell/trace-mapping@0.3.31",
+      "name": "@jridgewell/trace-mapping",
+      "version": "0.3.31",
+      "purl": "pkg:npm/@jridgewell/trace-mapping@0.3.31",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@jridgewell/trace-mapping/-/trace-mapping-0.3.31.tgz"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@napi-rs/wasm-runtime@1.2.6",
+      "name": "@napi-rs/wasm-runtime",
+      "version": "1.2.6",
+      "purl": "pkg:npm/@napi-rs/wasm-runtime@1.2.6",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@napi-rs/wasm-runtime/-/wasm-runtime-1.2.6.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": "^20.19.0 || ^22.13.0 || >=23.5.0"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@oxc-project/types@0.156.0",
+      "name": "@oxc-project/types",
+      "version": "0.156.0",
+      "purl": "pkg:npm/@oxc-project/types@0.156.0",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@oxc-project/types/-/types-0.156.0.tgz"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@protobufjs/aspromise@1.1.2",
+      "name": "@protobufjs/aspromise",
+      "version": "1.1.2",
+      "purl": "pkg:npm/@protobufjs/aspromise@1.1.2",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@protobufjs/aspromise/-/aspromise-1.1.2.tgz"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@protobufjs/base64@1.1.2",
+      "name": "@protobufjs/base64",
+      "version": "1.1.2",
+      "purl": "pkg:npm/@protobufjs/base64@1.1.2",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@protobufjs/base64/-/base64-1.1.2.tgz"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@protobufjs/codegen@2.0.5",
+      "name": "@protobufjs/codegen",
+      "version": "2.0.5",
+      "purl": "pkg:npm/@protobufjs/codegen@2.0.5",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@protobufjs/codegen/-/codegen-2.0.5.tgz"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@protobufjs/eventemitter@1.1.1",
+      "name": "@protobufjs/eventemitter",
+      "version": "1.1.1",
+      "purl": "pkg:npm/@protobufjs/eventemitter@1.1.1",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@protobufjs/eventemitter/-/eventemitter-1.1.1.tgz"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@protobufjs/fetch@1.1.1",
+      "name": "@protobufjs/fetch",
+      "version": "1.1.1",
+      "purl": "pkg:npm/@protobufjs/fetch@1.1.1",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@protobufjs/fetch/-/fetch-1.1.1.tgz"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@protobufjs/float@1.0.2",
+      "name": "@protobufjs/float",
+      "version": "1.0.2",
+      "purl": "pkg:npm/@protobufjs/float@1.0.2",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@protobufjs/float/-/float-1.0.2.tgz"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@protobufjs/path@1.1.2",
+      "name": "@protobufjs/path",
+      "version": "1.1.2",
+      "purl": "pkg:npm/@protobufjs/path@1.1.2",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@protobufjs/path/-/path-1.1.2.tgz"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@protobufjs/pool@1.1.0",
+      "name": "@protobufjs/pool",
+      "version": "1.1.0",
+      "purl": "pkg:npm/@protobufjs/pool@1.1.0",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@protobufjs/pool/-/pool-1.1.0.tgz"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@protobufjs/utf8@1.1.2",
+      "name": "@protobufjs/utf8",
+      "version": "1.1.2",
+      "purl": "pkg:npm/@protobufjs/utf8@1.1.2",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@protobufjs/utf8/-/utf8-1.1.2.tgz"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@rolldown/binding-android-arm-eabi@1.2.19",
+      "name": "@rolldown/binding-android-arm-eabi",
+      "version": "1.2.19",
+      "purl": "pkg:npm/@rolldown/binding-android-arm-eabi@1.2.19",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@rolldown/binding-android-arm-eabi/-/binding-android-arm-eabi-1.2.19.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": "^20.19.0 || >=22.12.0"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@rolldown/binding-android-arm64@1.2.19",
+      "name": "@rolldown/binding-android-arm64",
+      "version": "1.2.19",
+      "purl": "pkg:npm/@rolldown/binding-android-arm64@1.2.19",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@rolldown/binding-android-arm64/-/binding-android-arm64-1.2.19.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": "^20.19.0 || >=22.12.0"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@rolldown/binding-darwin-arm64@1.2.19",
+      "name": "@rolldown/binding-darwin-arm64",
+      "version": "1.2.19",
+      "purl": "pkg:npm/@rolldown/binding-darwin-arm64@1.2.19",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@rolldown/binding-darwin-arm64/-/binding-darwin-arm64-1.2.19.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": "^20.19.0 || >=22.12.0"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@rolldown/binding-darwin-x64@1.2.19",
+      "name": "@rolldown/binding-darwin-x64",
+      "version": "1.2.19",
+      "purl": "pkg:npm/@rolldown/binding-darwin-x64@1.2.19",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@rolldown/binding-darwin-x64/-/binding-darwin-x64-1.2.19.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": "^20.19.0 || >=22.12.0"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@rolldown/binding-freebsd-x64@1.2.19",
+      "name": "@rolldown/binding-freebsd-x64",
+      "version": "1.2.19",
+      "purl": "pkg:npm/@rolldown/binding-freebsd-x64@1.2.19",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@rolldown/binding-freebsd-x64/-/binding-freebsd-x64-1.2.19.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": "^20.19.0 || >=22.12.0"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@rolldown/binding-linux-arm-gnueabihf@1.2.19",
+      "name": "@rolldown/binding-linux-arm-gnueabihf",
+      "version": "1.2.19",
+      "purl": "pkg:npm/@rolldown/binding-linux-arm-gnueabihf@1.2.19",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@rolldown/binding-linux-arm-gnueabihf/-/binding-linux-arm-gnueabihf-1.2.19.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": "^20.19.0 || >=22.12.0"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@rolldown/binding-linux-arm64-gnu@1.2.19",
+      "name": "@rolldown/binding-linux-arm64-gnu",
+      "version": "1.2.19",
+      "purl": "pkg:npm/@rolldown/binding-linux-arm64-gnu@1.2.19",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@rolldown/binding-linux-arm64-gnu/-/binding-linux-arm64-gnu-1.2.19.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": "^20.19.0 || >=22.12.0"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@rolldown/binding-linux-arm64-musl@1.2.19",
+      "name": "@rolldown/binding-linux-arm64-musl",
+      "version": "1.2.19",
+      "purl": "pkg:npm/@rolldown/binding-linux-arm64-musl@1.2.19",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@rolldown/binding-linux-arm64-musl/-/binding-linux-arm64-musl-1.2.19.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": "^20.19.0 || >=22.12.0"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@rolldown/binding-linux-ppc64-gnu@1.2.19",
+      "name": "@rolldown/binding-linux-ppc64-gnu",
+      "version": "1.2.19",
+      "purl": "pkg:npm/@rolldown/binding-linux-ppc64-gnu@1.2.19",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@rolldown/binding-linux-ppc64-gnu/-/binding-linux-ppc64-gnu-1.2.19.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": "^20.19.0 || >=22.12.0"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@rolldown/binding-linux-s390x-gnu@1.2.19",
+      "name": "@rolldown/binding-linux-s390x-gnu",
+      "version": "1.2.19",
+      "purl": "pkg:npm/@rolldown/binding-linux-s390x-gnu@1.2.19",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@rolldown/binding-linux-s390x-gnu/-/binding-linux-s390x-gnu-1.2.19.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": "^20.19.0 || >=22.12.0"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@rolldown/binding-linux-x64-gnu@1.2.19",
+      "name": "@rolldown/binding-linux-x64-gnu",
+      "version": "1.2.19",
+      "purl": "pkg:npm/@rolldown/binding-linux-x64-gnu@1.2.19",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@rolldown/binding-linux-x64-gnu/-/binding-linux-x64-gnu-1.2.19.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": "^20.19.0 || >=22.12.0"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@rolldown/binding-linux-x64-musl@1.2.19",
+      "name": "@rolldown/binding-linux-x64-musl",
+      "version": "1.2.19",
+      "purl": "pkg:npm/@rolldown/binding-linux-x64-musl@1.2.19",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@rolldown/binding-linux-x64-musl/-/binding-linux-x64-musl-1.2.19.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": "^20.19.0 || >=22.12.0"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@rolldown/binding-openharmony-arm64@1.2.19",
+      "name": "@rolldown/binding-openharmony-arm64",
+      "version": "1.2.19",
+      "purl": "pkg:npm/@rolldown/binding-openharmony-arm64@1.2.19",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@rolldown/binding-openharmony-arm64/-/binding-openharmony-arm64-1.2.19.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": "^20.19.0 || >=22.12.0"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@rolldown/binding-wasm32-wasi@1.2.19",
+      "name": "@rolldown/binding-wasm32-wasi",
+      "version": "1.2.19",
+      "purl": "pkg:npm/@rolldown/binding-wasm32-wasi@1.2.19",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@rolldown/binding-wasm32-wasi/-/binding-wasm32-wasi-1.2.19.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": "^20.19.0 || ^22.13.0 || >=23.5.0"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@rolldown/binding-win32-arm64-msvc@1.2.19",
+      "name": "@rolldown/binding-win32-arm64-msvc",
+      "version": "1.2.19",
+      "purl": "pkg:npm/@rolldown/binding-win32-arm64-msvc@1.2.19",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@rolldown/binding-win32-arm64-msvc/-/binding-win32-arm64-msvc-1.2.19.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": "^20.19.0 || >=22.12.0"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@rolldown/binding-win32-x64-msvc@1.2.19",
+      "name": "@rolldown/binding-win32-x64-msvc",
+      "version": "1.2.19",
+      "purl": "pkg:npm/@rolldown/binding-win32-x64-msvc@1.2.19",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@rolldown/binding-win32-x64-msvc/-/binding-win32-x64-msvc-1.2.19.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": "^20.19.0 || >=22.12.0"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@rolldown/pluginutils@1.1.0",
+      "name": "@rolldown/pluginutils",
+      "version": "1.1.0",
+      "purl": "pkg:npm/@rolldown/pluginutils@1.1.0",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@rolldown/pluginutils/-/pluginutils-1.1.0.tgz"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@tailwindcss/node@4.3.5",
+      "name": "@tailwindcss/node",
+      "version": "4.3.5",
+      "purl": "pkg:npm/@tailwindcss/node@4.3.5",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@tailwindcss/node/-/node-4.3.5.tgz"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@tailwindcss/oxide@4.3.5",
+      "name": "@tailwindcss/oxide",
+      "version": "4.3.5",
+      "purl": "pkg:npm/@tailwindcss/oxide@4.3.5",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@tailwindcss/oxide/-/oxide-4.3.5.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">= 20"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@tailwindcss/oxide-android-arm64@4.3.5",
+      "name": "@tailwindcss/oxide-android-arm64",
+      "version": "4.3.5",
+      "purl": "pkg:npm/@tailwindcss/oxide-android-arm64@4.3.5",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@tailwindcss/oxide-android-arm64/-/oxide-android-arm64-4.3.5.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">= 20"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@tailwindcss/oxide-darwin-arm64@4.3.5",
+      "name": "@tailwindcss/oxide-darwin-arm64",
+      "version": "4.3.5",
+      "purl": "pkg:npm/@tailwindcss/oxide-darwin-arm64@4.3.5",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@tailwindcss/oxide-darwin-arm64/-/oxide-darwin-arm64-4.3.5.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">= 20"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@tailwindcss/oxide-darwin-x64@4.3.5",
+      "name": "@tailwindcss/oxide-darwin-x64",
+      "version": "4.3.5",
+      "purl": "pkg:npm/@tailwindcss/oxide-darwin-x64@4.3.5",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@tailwindcss/oxide-darwin-x64/-/oxide-darwin-x64-4.3.5.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">= 20"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@tailwindcss/oxide-freebsd-x64@4.3.5",
+      "name": "@tailwindcss/oxide-freebsd-x64",
+      "version": "4.3.5",
+      "purl": "pkg:npm/@tailwindcss/oxide-freebsd-x64@4.3.5",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@tailwindcss/oxide-freebsd-x64/-/oxide-freebsd-x64-4.3.5.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">= 20"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@tailwindcss/oxide-linux-arm-gnueabihf@4.3.5",
+      "name": "@tailwindcss/oxide-linux-arm-gnueabihf",
+      "version": "4.3.5",
+      "purl": "pkg:npm/@tailwindcss/oxide-linux-arm-gnueabihf@4.3.5",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@tailwindcss/oxide-linux-arm-gnueabihf/-/oxide-linux-arm-gnueabihf-4.3.5.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">= 20"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@tailwindcss/oxide-linux-arm64-gnu@4.3.5",
+      "name": "@tailwindcss/oxide-linux-arm64-gnu",
+      "version": "4.3.5",
+      "purl": "pkg:npm/@tailwindcss/oxide-linux-arm64-gnu@4.3.5",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@tailwindcss/oxide-linux-arm64-gnu/-/oxide-linux-arm64-gnu-4.3.5.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">= 20"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@tailwindcss/oxide-linux-arm64-musl@4.3.5",
+      "name": "@tailwindcss/oxide-linux-arm64-musl",
+      "version": "4.3.5",
+      "purl": "pkg:npm/@tailwindcss/oxide-linux-arm64-musl@4.3.5",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@tailwindcss/oxide-linux-arm64-musl/-/oxide-linux-arm64-musl-4.3.5.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">= 20"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@tailwindcss/oxide-linux-x64-gnu@4.3.5",
+      "name": "@tailwindcss/oxide-linux-x64-gnu",
+      "version": "4.3.5",
+      "purl": "pkg:npm/@tailwindcss/oxide-linux-x64-gnu@4.3.5",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@tailwindcss/oxide-linux-x64-gnu/-/oxide-linux-x64-gnu-4.3.5.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">= 20"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@tailwindcss/oxide-linux-x64-musl@4.3.5",
+      "name": "@tailwindcss/oxide-linux-x64-musl",
+      "version": "4.3.5",
+      "purl": "pkg:npm/@tailwindcss/oxide-linux-x64-musl@4.3.5",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@tailwindcss/oxide-linux-x64-musl/-/oxide-linux-x64-musl-4.3.5.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">= 20"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@tailwindcss/oxide-wasm32-wasi@4.3.5",
+      "name": "@tailwindcss/oxide-wasm32-wasi",
+      "version": "4.3.5",
+      "purl": "pkg:npm/@tailwindcss/oxide-wasm32-wasi@4.3.5",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@tailwindcss/oxide-wasm32-wasi/-/oxide-wasm32-wasi-4.3.5.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": "^20.19.0 || ^22.13.0 || >=23.5.0"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@emnapi/core@1.11.3",
+      "name": "@emnapi/core",
+      "version": "1.11.3",
+      "purl": "pkg:npm/@emnapi/core@1.11.3"
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@emnapi/runtime@1.11.3",
+      "name": "@emnapi/runtime",
+      "version": "1.11.3",
+      "purl": "pkg:npm/@emnapi/runtime@1.11.3"
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@emnapi/wasi-threads@1.2.3",
+      "name": "@emnapi/wasi-threads",
+      "version": "1.2.3",
+      "purl": "pkg:npm/@emnapi/wasi-threads@1.2.3"
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@napi-rs/wasm-runtime@1.2.2",
+      "name": "@napi-rs/wasm-runtime",
+      "version": "1.2.2",
+      "purl": "pkg:npm/@napi-rs/wasm-runtime@1.2.2",
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": "^20.19.0 || ^22.13.0 || >=23.5.0"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@tybys/wasm-util@0.10.3",
+      "name": "@tybys/wasm-util",
+      "version": "0.10.3",
+      "purl": "pkg:npm/@tybys/wasm-util@0.10.3"
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/tslib@2.8.1",
+      "name": "tslib",
+      "version": "2.8.1",
+      "purl": "pkg:npm/tslib@2.8.1"
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@tailwindcss/oxide-win32-arm64-msvc@4.3.5",
+      "name": "@tailwindcss/oxide-win32-arm64-msvc",
+      "version": "4.3.5",
+      "purl": "pkg:npm/@tailwindcss/oxide-win32-arm64-msvc@4.3.5",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@tailwindcss/oxide-win32-arm64-msvc/-/oxide-win32-arm64-msvc-4.3.5.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">= 20"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@tailwindcss/oxide-win32-x64-msvc@4.3.5",
+      "name": "@tailwindcss/oxide-win32-x64-msvc",
+      "version": "4.3.5",
+      "purl": "pkg:npm/@tailwindcss/oxide-win32-x64-msvc@4.3.5",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@tailwindcss/oxide-win32-x64-msvc/-/oxide-win32-x64-msvc-4.3.5.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">= 20"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@tailwindcss/vite@4.3.5",
+      "name": "@tailwindcss/vite",
+      "version": "4.3.5",
+      "purl": "pkg:npm/@tailwindcss/vite@4.3.5",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@tailwindcss/vite/-/vite-4.3.5.tgz"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@tybys/wasm-util@0.10.4",
+      "name": "@tybys/wasm-util",
+      "version": "0.10.4",
+      "purl": "pkg:npm/@tybys/wasm-util@0.10.4",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@tybys/wasm-util/-/wasm-util-0.10.4.tgz"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@types/body-parser@1.19.6",
+      "name": "@types/body-parser",
+      "version": "1.19.6",
+      "purl": "pkg:npm/@types/body-parser@1.19.6",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@types/body-parser/-/body-parser-1.19.6.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@types/connect@3.4.38",
+      "name": "@types/connect",
+      "version": "3.4.38",
+      "purl": "pkg:npm/@types/connect@3.4.38",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@types/connect/-/connect-3.4.38.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@types/express@4.17.25",
+      "name": "@types/express",
+      "version": "4.17.25",
+      "purl": "pkg:npm/@types/express@4.17.25",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@types/express/-/express-4.17.25.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@types/express-serve-static-core@4.19.9",
+      "name": "@types/express-serve-static-core",
+      "version": "4.19.9",
+      "purl": "pkg:npm/@types/express-serve-static-core@4.19.9",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@types/express-serve-static-core/-/express-serve-static-core-4.19.9.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@types/http-errors@2.0.5",
+      "name": "@types/http-errors",
+      "version": "2.0.5",
+      "purl": "pkg:npm/@types/http-errors@2.0.5",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@types/http-errors/-/http-errors-2.0.5.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@types/istanbul-lib-coverage@2.0.6",
+      "name": "@types/istanbul-lib-coverage",
+      "version": "2.0.6",
+      "purl": "pkg:npm/@types/istanbul-lib-coverage@2.0.6",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@types/istanbul-lib-coverage/-/istanbul-lib-coverage-2.0.6.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@types/mime@1.3.5",
+      "name": "@types/mime",
+      "version": "1.3.5",
+      "purl": "pkg:npm/@types/mime@1.3.5",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@types/mime/-/mime-1.3.5.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@types/node@22.20.5",
+      "name": "@types/node",
+      "version": "22.20.5",
+      "purl": "pkg:npm/@types/node@22.20.5",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@types/node/-/node-22.20.5.tgz"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@types/qs@6.15.1",
+      "name": "@types/qs",
+      "version": "6.15.1",
+      "purl": "pkg:npm/@types/qs@6.15.1",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@types/qs/-/qs-6.15.1.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@types/range-parser@1.2.7",
+      "name": "@types/range-parser",
+      "version": "1.2.7",
+      "purl": "pkg:npm/@types/range-parser@1.2.7",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@types/range-parser/-/range-parser-1.2.7.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@types/react@19.3.0",
+      "name": "@types/react",
+      "version": "19.3.0",
+      "purl": "pkg:npm/@types/react@19.3.0",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@types/react/-/react-19.3.0.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@types/react-dom@19.3.0",
+      "name": "@types/react-dom",
+      "version": "19.3.0",
+      "purl": "pkg:npm/@types/react-dom@19.3.0",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@types/react-dom/-/react-dom-19.3.0.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@types/retry@0.12.0",
+      "name": "@types/retry",
+      "version": "0.12.0",
+      "purl": "pkg:npm/@types/retry@0.12.0",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@types/retry/-/retry-0.12.0.tgz"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@types/send@1.2.1",
+      "name": "@types/send",
+      "version": "1.2.1",
+      "purl": "pkg:npm/@types/send@1.2.1",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@types/send/-/send-1.2.1.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@types/serve-static@1.15.10",
+      "name": "@types/serve-static",
+      "version": "1.15.10",
+      "purl": "pkg:npm/@types/serve-static@1.15.10",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@types/serve-static/-/serve-static-1.15.10.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@types/send@0.17.6",
+      "name": "@types/send",
+      "version": "0.17.6",
+      "purl": "pkg:npm/@types/send@0.17.6",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@types/send/-/send-0.17.6.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@typescript/typescript-aix-ppc64@7.0.2",
+      "name": "@typescript/typescript-aix-ppc64",
+      "version": "7.0.2",
+      "purl": "pkg:npm/@typescript/typescript-aix-ppc64@7.0.2",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@typescript/typescript-aix-ppc64/-/typescript-aix-ppc64-7.0.2.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        },
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=16.20.0"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@typescript/typescript-darwin-arm64@7.0.2",
+      "name": "@typescript/typescript-darwin-arm64",
+      "version": "7.0.2",
+      "purl": "pkg:npm/@typescript/typescript-darwin-arm64@7.0.2",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@typescript/typescript-darwin-arm64/-/typescript-darwin-arm64-7.0.2.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        },
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=16.20.0"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@typescript/typescript-darwin-x64@7.0.2",
+      "name": "@typescript/typescript-darwin-x64",
+      "version": "7.0.2",
+      "purl": "pkg:npm/@typescript/typescript-darwin-x64@7.0.2",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@typescript/typescript-darwin-x64/-/typescript-darwin-x64-7.0.2.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        },
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=16.20.0"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@typescript/typescript-freebsd-arm64@7.0.2",
+      "name": "@typescript/typescript-freebsd-arm64",
+      "version": "7.0.2",
+      "purl": "pkg:npm/@typescript/typescript-freebsd-arm64@7.0.2",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@typescript/typescript-freebsd-arm64/-/typescript-freebsd-arm64-7.0.2.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        },
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=16.20.0"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@typescript/typescript-freebsd-x64@7.0.2",
+      "name": "@typescript/typescript-freebsd-x64",
+      "version": "7.0.2",
+      "purl": "pkg:npm/@typescript/typescript-freebsd-x64@7.0.2",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@typescript/typescript-freebsd-x64/-/typescript-freebsd-x64-7.0.2.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        },
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=16.20.0"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@typescript/typescript-linux-arm@7.0.2",
+      "name": "@typescript/typescript-linux-arm",
+      "version": "7.0.2",
+      "purl": "pkg:npm/@typescript/typescript-linux-arm@7.0.2",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@typescript/typescript-linux-arm/-/typescript-linux-arm-7.0.2.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        },
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=16.20.0"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@typescript/typescript-linux-arm64@7.0.2",
+      "name": "@typescript/typescript-linux-arm64",
+      "version": "7.0.2",
+      "purl": "pkg:npm/@typescript/typescript-linux-arm64@7.0.2",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@typescript/typescript-linux-arm64/-/typescript-linux-arm64-7.0.2.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        },
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=16.20.0"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@typescript/typescript-linux-loong64@7.0.2",
+      "name": "@typescript/typescript-linux-loong64",
+      "version": "7.0.2",
+      "purl": "pkg:npm/@typescript/typescript-linux-loong64@7.0.2",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@typescript/typescript-linux-loong64/-/typescript-linux-loong64-7.0.2.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        },
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=16.20.0"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@typescript/typescript-linux-mips64el@7.0.2",
+      "name": "@typescript/typescript-linux-mips64el",
+      "version": "7.0.2",
+      "purl": "pkg:npm/@typescript/typescript-linux-mips64el@7.0.2",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@typescript/typescript-linux-mips64el/-/typescript-linux-mips64el-7.0.2.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        },
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=16.20.0"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@typescript/typescript-linux-ppc64@7.0.2",
+      "name": "@typescript/typescript-linux-ppc64",
+      "version": "7.0.2",
+      "purl": "pkg:npm/@typescript/typescript-linux-ppc64@7.0.2",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@typescript/typescript-linux-ppc64/-/typescript-linux-ppc64-7.0.2.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        },
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=16.20.0"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@typescript/typescript-linux-riscv64@7.0.2",
+      "name": "@typescript/typescript-linux-riscv64",
+      "version": "7.0.2",
+      "purl": "pkg:npm/@typescript/typescript-linux-riscv64@7.0.2",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@typescript/typescript-linux-riscv64/-/typescript-linux-riscv64-7.0.2.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        },
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=16.20.0"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@typescript/typescript-linux-s390x@7.0.2",
+      "name": "@typescript/typescript-linux-s390x",
+      "version": "7.0.2",
+      "purl": "pkg:npm/@typescript/typescript-linux-s390x@7.0.2",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@typescript/typescript-linux-s390x/-/typescript-linux-s390x-7.0.2.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        },
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=16.20.0"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@typescript/typescript-linux-x64@7.0.2",
+      "name": "@typescript/typescript-linux-x64",
+      "version": "7.0.2",
+      "purl": "pkg:npm/@typescript/typescript-linux-x64@7.0.2",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@typescript/typescript-linux-x64/-/typescript-linux-x64-7.0.2.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        },
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=16.20.0"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@typescript/typescript-netbsd-arm64@7.0.2",
+      "name": "@typescript/typescript-netbsd-arm64",
+      "version": "7.0.2",
+      "purl": "pkg:npm/@typescript/typescript-netbsd-arm64@7.0.2",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@typescript/typescript-netbsd-arm64/-/typescript-netbsd-arm64-7.0.2.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        },
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=16.20.0"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@typescript/typescript-netbsd-x64@7.0.2",
+      "name": "@typescript/typescript-netbsd-x64",
+      "version": "7.0.2",
+      "purl": "pkg:npm/@typescript/typescript-netbsd-x64@7.0.2",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@typescript/typescript-netbsd-x64/-/typescript-netbsd-x64-7.0.2.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        },
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=16.20.0"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@typescript/typescript-openbsd-arm64@7.0.2",
+      "name": "@typescript/typescript-openbsd-arm64",
+      "version": "7.0.2",
+      "purl": "pkg:npm/@typescript/typescript-openbsd-arm64@7.0.2",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@typescript/typescript-openbsd-arm64/-/typescript-openbsd-arm64-7.0.2.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        },
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=16.20.0"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@typescript/typescript-openbsd-x64@7.0.2",
+      "name": "@typescript/typescript-openbsd-x64",
+      "version": "7.0.2",
+      "purl": "pkg:npm/@typescript/typescript-openbsd-x64@7.0.2",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@typescript/typescript-openbsd-x64/-/typescript-openbsd-x64-7.0.2.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        },
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=16.20.0"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@typescript/typescript-sunos-x64@7.0.2",
+      "name": "@typescript/typescript-sunos-x64",
+      "version": "7.0.2",
+      "purl": "pkg:npm/@typescript/typescript-sunos-x64@7.0.2",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@typescript/typescript-sunos-x64/-/typescript-sunos-x64-7.0.2.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        },
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=16.20.0"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@typescript/typescript-win32-arm64@7.0.2",
+      "name": "@typescript/typescript-win32-arm64",
+      "version": "7.0.2",
+      "purl": "pkg:npm/@typescript/typescript-win32-arm64@7.0.2",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@typescript/typescript-win32-arm64/-/typescript-win32-arm64-7.0.2.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        },
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=16.20.0"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@typescript/typescript-win32-x64@7.0.2",
+      "name": "@typescript/typescript-win32-x64",
+      "version": "7.0.2",
+      "purl": "pkg:npm/@typescript/typescript-win32-x64@7.0.2",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@typescript/typescript-win32-x64/-/typescript-win32-x64-7.0.2.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        },
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=16.20.0"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@vitejs/plugin-react@6.3.0",
+      "name": "@vitejs/plugin-react",
+      "version": "6.3.0",
+      "purl": "pkg:npm/@vitejs/plugin-react@6.3.0",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@vitejs/plugin-react/-/plugin-react-6.3.0.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": "^20.19.0 || >=22.12.0"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/accepts@1.3.8",
+      "name": "accepts",
+      "version": "1.3.8",
+      "purl": "pkg:npm/accepts@1.3.8",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/accepts/-/accepts-1.3.8.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">= 0.6"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/agent-base@7.1.4",
+      "name": "agent-base",
+      "version": "7.1.4",
+      "purl": "pkg:npm/agent-base@7.1.4",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/agent-base/-/agent-base-7.1.4.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">= 14"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/ansi-regex@6.6.0",
+      "name": "ansi-regex",
+      "version": "6.6.0",
+      "purl": "pkg:npm/ansi-regex@6.6.0",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/ansi-regex/-/ansi-regex-6.6.0.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        },
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=12"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/ansi-styles@6.2.3",
+      "name": "ansi-styles",
+      "version": "6.2.3",
+      "purl": "pkg:npm/ansi-styles@6.2.3",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/ansi-styles/-/ansi-styles-6.2.3.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        },
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=12"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/array-flatten@1.1.1",
+      "name": "array-flatten",
+      "version": "1.1.1",
+      "purl": "pkg:npm/array-flatten@1.1.1",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/array-flatten/-/array-flatten-1.1.1.tgz"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/autoprefixer@10.6.2",
+      "name": "autoprefixer",
+      "version": "10.6.2",
+      "purl": "pkg:npm/autoprefixer@10.6.2",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/autoprefixer/-/autoprefixer-10.6.2.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        },
+        {
+          "name": "cdx:nodeEngine",
+          "value": "^10 || ^12 || >=14"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/balanced-match@4.0.4",
+      "name": "balanced-match",
+      "version": "4.0.4",
+      "purl": "pkg:npm/balanced-match@4.0.4",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/balanced-match/-/balanced-match-4.0.4.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        },
+        {
+          "name": "cdx:nodeEngine",
+          "value": "18 || 20 || >=22"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/base64-js@1.5.1",
+      "name": "base64-js",
+      "version": "1.5.1",
+      "purl": "pkg:npm/base64-js@1.5.1",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/base64-js/-/base64-js-1.5.1.tgz"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/baseline-browser-mapping@2.11.36",
+      "name": "baseline-browser-mapping",
+      "version": "2.11.36",
+      "purl": "pkg:npm/baseline-browser-mapping@2.11.36",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/baseline-browser-mapping/-/baseline-browser-mapping-2.11.36.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        },
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=6.0.0"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/bignumber.js@9.3.1",
+      "name": "bignumber.js",
+      "version": "9.3.1",
+      "purl": "pkg:npm/bignumber.js@9.3.1",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/bignumber.js/-/bignumber.js-9.3.1.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": "*"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/body-parser@1.20.9",
+      "name": "body-parser",
+      "version": "1.20.9",
+      "purl": "pkg:npm/body-parser@1.20.9",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/body-parser/-/body-parser-1.20.9.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">= 0.8"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/brace-expansion@5.0.13",
+      "name": "brace-expansion",
+      "version": "5.0.13",
+      "purl": "pkg:npm/brace-expansion@5.0.13",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/brace-expansion/-/brace-expansion-5.0.13.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        },
+        {
+          "name": "cdx:nodeEngine",
+          "value": "20 || >=22"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/browserslist@4.29.5",
+      "name": "browserslist",
+      "version": "4.29.5",
+      "purl": "pkg:npm/browserslist@4.29.5",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/browserslist/-/browserslist-4.29.5.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        },
+        {
+          "name": "cdx:nodeEngine",
+          "value": "^6 || ^7 || ^8 || ^9 || ^10 || ^11 || ^12 || >=13.7"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/buffer-equal-constant-time@1.0.1",
+      "name": "buffer-equal-constant-time",
+      "version": "1.0.1",
+      "purl": "pkg:npm/buffer-equal-constant-time@1.0.1",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/buffer-equal-constant-time/-/buffer-equal-constant-time-1.0.1.tgz"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/bytes@3.1.2",
+      "name": "bytes",
+      "version": "3.1.2",
+      "purl": "pkg:npm/bytes@3.1.2",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/bytes/-/bytes-3.1.2.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">= 0.8"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/c8@12.0.0",
+      "name": "c8",
+      "version": "12.0.0",
+      "purl": "pkg:npm/c8@12.0.0",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/c8/-/c8-12.0.0.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        },
+        {
+          "name": "cdx:nodeEngine",
+          "value": "^20.19.0 || ^22.12.0 || >=23"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/call-bind-apply-helpers@1.0.2",
+      "name": "call-bind-apply-helpers",
+      "version": "1.0.2",
+      "purl": "pkg:npm/call-bind-apply-helpers@1.0.2",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/call-bind-apply-helpers/-/call-bind-apply-helpers-1.0.2.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">= 0.4"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/call-bound@1.0.4",
+      "name": "call-bound",
+      "version": "1.0.4",
+      "purl": "pkg:npm/call-bound@1.0.4",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/call-bound/-/call-bound-1.0.4.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">= 0.4"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/caniuse-lite@1.0.30001826",
+      "name": "caniuse-lite",
+      "version": "1.0.30001826",
+      "purl": "pkg:npm/caniuse-lite@1.0.30001826",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/caniuse-lite/-/caniuse-lite-1.0.30001826.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/cliui@9.0.1",
+      "name": "cliui",
+      "version": "9.0.1",
+      "purl": "pkg:npm/cliui@9.0.1",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/cliui/-/cliui-9.0.1.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        },
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=20"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/string-width@7.2.0",
+      "name": "string-width",
+      "version": "7.2.0",
+      "purl": "pkg:npm/string-width@7.2.0",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/string-width/-/string-width-7.2.0.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        },
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=18"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/content-disposition@0.5.4",
+      "name": "content-disposition",
+      "version": "0.5.4",
+      "purl": "pkg:npm/content-disposition@0.5.4",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/content-disposition/-/content-disposition-0.5.4.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">= 0.6"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/content-type@1.0.5",
+      "name": "content-type",
+      "version": "1.0.5",
+      "purl": "pkg:npm/content-type@1.0.5",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/content-type/-/content-type-1.0.5.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">= 0.6"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/convert-source-map@2.0.0",
+      "name": "convert-source-map",
+      "version": "2.0.0",
+      "purl": "pkg:npm/convert-source-map@2.0.0",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/convert-source-map/-/convert-source-map-2.0.0.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/cookie@0.7.2",
+      "name": "cookie",
+      "version": "0.7.2",
+      "purl": "pkg:npm/cookie@0.7.2",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/cookie/-/cookie-0.7.2.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">= 0.6"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/cookie-signature@1.0.7",
+      "name": "cookie-signature",
+      "version": "1.0.7",
+      "purl": "pkg:npm/cookie-signature@1.0.7",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/cookie-signature/-/cookie-signature-1.0.7.tgz"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/cross-spawn@7.0.6",
+      "name": "cross-spawn",
+      "version": "7.0.6",
+      "purl": "pkg:npm/cross-spawn@7.0.6",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/cross-spawn/-/cross-spawn-7.0.6.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        },
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">= 8"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/csstype@3.2.3",
+      "name": "csstype",
+      "version": "3.2.3",
+      "purl": "pkg:npm/csstype@3.2.3",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/csstype/-/csstype-3.2.3.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/data-uri-to-buffer@4.0.1",
+      "name": "data-uri-to-buffer",
+      "version": "4.0.1",
+      "purl": "pkg:npm/data-uri-to-buffer@4.0.1",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/data-uri-to-buffer/-/data-uri-to-buffer-4.0.1.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">= 12"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/debug@2.6.9",
+      "name": "debug",
+      "version": "2.6.9",
+      "purl": "pkg:npm/debug@2.6.9",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/debug/-/debug-2.6.9.tgz"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/depd@2.0.0",
+      "name": "depd",
+      "version": "2.0.0",
+      "purl": "pkg:npm/depd@2.0.0",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/depd/-/depd-2.0.0.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">= 0.8"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/destroy@1.2.0",
+      "name": "destroy",
+      "version": "1.2.0",
+      "purl": "pkg:npm/destroy@1.2.0",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/destroy/-/destroy-1.2.0.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">= 0.8"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/detect-libc@2.1.2",
+      "name": "detect-libc",
+      "version": "2.1.2",
+      "purl": "pkg:npm/detect-libc@2.1.2",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/detect-libc/-/detect-libc-2.1.2.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=8"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/dotenv@17.4.2",
+      "name": "dotenv",
+      "version": "17.4.2",
+      "purl": "pkg:npm/dotenv@17.4.2",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/dotenv/-/dotenv-17.4.2.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=12"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/dunder-proto@1.0.1",
+      "name": "dunder-proto",
+      "version": "1.0.1",
+      "purl": "pkg:npm/dunder-proto@1.0.1",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/dunder-proto/-/dunder-proto-1.0.1.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">= 0.4"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/ecdsa-sig-formatter@1.0.11",
+      "name": "ecdsa-sig-formatter",
+      "version": "1.0.11",
+      "purl": "pkg:npm/ecdsa-sig-formatter@1.0.11",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/ecdsa-sig-formatter/-/ecdsa-sig-formatter-1.0.11.tgz"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/ee-first@1.1.1",
+      "name": "ee-first",
+      "version": "1.1.1",
+      "purl": "pkg:npm/ee-first@1.1.1",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/ee-first/-/ee-first-1.1.1.tgz"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/electron-to-chromium@1.5.483",
+      "name": "electron-to-chromium",
+      "version": "1.5.483",
+      "purl": "pkg:npm/electron-to-chromium@1.5.483",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/electron-to-chromium/-/electron-to-chromium-1.5.483.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/emoji-regex@10.6.0",
+      "name": "emoji-regex",
+      "version": "10.6.0",
+      "purl": "pkg:npm/emoji-regex@10.6.0",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/emoji-regex/-/emoji-regex-10.6.0.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/encodeurl@2.0.2",
+      "name": "encodeurl",
+      "version": "2.0.2",
+      "purl": "pkg:npm/encodeurl@2.0.2",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/encodeurl/-/encodeurl-2.0.2.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">= 0.8"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/enhanced-resolve@5.26.1",
+      "name": "enhanced-resolve",
+      "version": "5.26.1",
+      "purl": "pkg:npm/enhanced-resolve@5.26.1",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/enhanced-resolve/-/enhanced-resolve-5.26.1.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=10.13.0"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/es-define-property@1.0.1",
+      "name": "es-define-property",
+      "version": "1.0.1",
+      "purl": "pkg:npm/es-define-property@1.0.1",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/es-define-property/-/es-define-property-1.0.1.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">= 0.4"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/es-errors@1.3.0",
+      "name": "es-errors",
+      "version": "1.3.0",
+      "purl": "pkg:npm/es-errors@1.3.0",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/es-errors/-/es-errors-1.3.0.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">= 0.4"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/es-object-atoms@1.1.2",
+      "name": "es-object-atoms",
+      "version": "1.1.2",
+      "purl": "pkg:npm/es-object-atoms@1.1.2",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/es-object-atoms/-/es-object-atoms-1.1.2.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">= 0.4"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/esbuild@0.25.12",
+      "name": "esbuild",
+      "version": "0.25.12",
+      "purl": "pkg:npm/esbuild@0.25.12",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/esbuild/-/esbuild-0.25.12.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        },
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=18"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/escalade@3.2.0",
+      "name": "escalade",
+      "version": "3.2.0",
+      "purl": "pkg:npm/escalade@3.2.0",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/escalade/-/escalade-3.2.0.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        },
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=6"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/escape-html@1.0.3",
+      "name": "escape-html",
+      "version": "1.0.3",
+      "purl": "pkg:npm/escape-html@1.0.3",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/escape-html/-/escape-html-1.0.3.tgz"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/etag@1.8.1",
+      "name": "etag",
+      "version": "1.8.1",
+      "purl": "pkg:npm/etag@1.8.1",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/etag/-/etag-1.8.1.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">= 0.6"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/express@4.22.3",
+      "name": "express",
+      "version": "4.22.3",
+      "purl": "pkg:npm/express@4.22.3",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/express/-/express-4.22.3.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">= 0.10.0"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/extend@3.0.2",
+      "name": "extend",
+      "version": "3.0.2",
+      "purl": "pkg:npm/extend@3.0.2",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/extend/-/extend-3.0.2.tgz"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/fdir@6.5.0",
+      "name": "fdir",
+      "version": "6.5.0",
+      "purl": "pkg:npm/fdir@6.5.0",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/fdir/-/fdir-6.5.0.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=12.0.0"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/fetch-blob@3.2.0",
+      "name": "fetch-blob",
+      "version": "3.2.0",
+      "purl": "pkg:npm/fetch-blob@3.2.0",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/fetch-blob/-/fetch-blob-3.2.0.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": "^12.20 || >= 14.13"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/finalhandler@1.3.2",
+      "name": "finalhandler",
+      "version": "1.3.2",
+      "purl": "pkg:npm/finalhandler@1.3.2",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/finalhandler/-/finalhandler-1.3.2.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">= 0.8"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/find-up@5.0.0",
+      "name": "find-up",
+      "version": "5.0.0",
+      "purl": "pkg:npm/find-up@5.0.0",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/find-up/-/find-up-5.0.0.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        },
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=10"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/foreground-child@3.3.1",
+      "name": "foreground-child",
+      "version": "3.3.1",
+      "purl": "pkg:npm/foreground-child@3.3.1",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/foreground-child/-/foreground-child-3.3.1.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        },
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=14"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/formdata-polyfill@4.0.10",
+      "name": "formdata-polyfill",
+      "version": "4.0.10",
+      "purl": "pkg:npm/formdata-polyfill@4.0.10",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/formdata-polyfill/-/formdata-polyfill-4.0.10.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=12.20.0"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/forwarded@0.2.0",
+      "name": "forwarded",
+      "version": "0.2.0",
+      "purl": "pkg:npm/forwarded@0.2.0",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/forwarded/-/forwarded-0.2.0.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">= 0.6"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/fraction.js@5.3.4",
+      "name": "fraction.js",
+      "version": "5.3.4",
+      "purl": "pkg:npm/fraction.js@5.3.4",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/fraction.js/-/fraction.js-5.3.4.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        },
+        {
+          "name": "cdx:nodeEngine",
+          "value": "*"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/framer-motion@12.43.0",
+      "name": "framer-motion",
+      "version": "12.43.0",
+      "purl": "pkg:npm/framer-motion@12.43.0",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/framer-motion/-/framer-motion-12.43.0.tgz"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/fresh@0.5.2",
+      "name": "fresh",
+      "version": "0.5.2",
+      "purl": "pkg:npm/fresh@0.5.2",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/fresh/-/fresh-0.5.2.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">= 0.6"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/fsevents@2.3.3",
+      "name": "fsevents",
+      "version": "2.3.3",
+      "purl": "pkg:npm/fsevents@2.3.3",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/fsevents/-/fsevents-2.3.3.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": "^8.16.0 || ^10.6.0 || >=11.0.0"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/function-bind@1.1.2",
+      "name": "function-bind",
+      "version": "1.1.2",
+      "purl": "pkg:npm/function-bind@1.1.2",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/function-bind/-/function-bind-1.1.2.tgz"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/gaxios@7.3.1",
+      "name": "gaxios",
+      "version": "7.3.1",
+      "purl": "pkg:npm/gaxios@7.3.1",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/gaxios/-/gaxios-7.3.1.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=18"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/gcp-metadata@8.1.2",
+      "name": "gcp-metadata",
+      "version": "8.1.2",
+      "purl": "pkg:npm/gcp-metadata@8.1.2",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/gcp-metadata/-/gcp-metadata-8.1.2.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=18"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/get-caller-file@2.0.5",
+      "name": "get-caller-file",
+      "version": "2.0.5",
+      "purl": "pkg:npm/get-caller-file@2.0.5",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/get-caller-file/-/get-caller-file-2.0.5.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        },
+        {
+          "name": "cdx:nodeEngine",
+          "value": "6.* || 8.* || >= 10.*"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/get-east-asian-width@1.7.0",
+      "name": "get-east-asian-width",
+      "version": "1.7.0",
+      "purl": "pkg:npm/get-east-asian-width@1.7.0",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/get-east-asian-width/-/get-east-asian-width-1.7.0.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        },
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=18"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/get-intrinsic@1.3.0",
+      "name": "get-intrinsic",
+      "version": "1.3.0",
+      "purl": "pkg:npm/get-intrinsic@1.3.0",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/get-intrinsic/-/get-intrinsic-1.3.0.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">= 0.4"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/get-proto@1.0.1",
+      "name": "get-proto",
+      "version": "1.0.1",
+      "purl": "pkg:npm/get-proto@1.0.1",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/get-proto/-/get-proto-1.0.1.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">= 0.4"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/glob@13.0.7",
+      "name": "glob",
+      "version": "13.0.7",
+      "purl": "pkg:npm/glob@13.0.7",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/glob/-/glob-13.0.7.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        },
+        {
+          "name": "cdx:nodeEngine",
+          "value": "18 || 20 || >=22"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/google-auth-library@10.9.1",
+      "name": "google-auth-library",
+      "version": "10.9.1",
+      "purl": "pkg:npm/google-auth-library@10.9.1",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/google-auth-library/-/google-auth-library-10.9.1.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=18"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/google-logging-utils@1.1.3",
+      "name": "google-logging-utils",
+      "version": "1.1.3",
+      "purl": "pkg:npm/google-logging-utils@1.1.3",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/google-logging-utils/-/google-logging-utils-1.1.3.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=14"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/gopd@1.2.0",
+      "name": "gopd",
+      "version": "1.2.0",
+      "purl": "pkg:npm/gopd@1.2.0",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/gopd/-/gopd-1.2.0.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">= 0.4"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/graceful-fs@4.2.11",
+      "name": "graceful-fs",
+      "version": "4.2.11",
+      "purl": "pkg:npm/graceful-fs@4.2.11",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/graceful-fs/-/graceful-fs-4.2.11.tgz"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/has-flag@4.0.0",
+      "name": "has-flag",
+      "version": "4.0.0",
+      "purl": "pkg:npm/has-flag@4.0.0",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/has-flag/-/has-flag-4.0.0.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        },
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=8"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/has-symbols@1.1.0",
+      "name": "has-symbols",
+      "version": "1.1.0",
+      "purl": "pkg:npm/has-symbols@1.1.0",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/has-symbols/-/has-symbols-1.1.0.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">= 0.4"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/hasown@2.0.4",
+      "name": "hasown",
+      "version": "2.0.4",
+      "purl": "pkg:npm/hasown@2.0.4",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/hasown/-/hasown-2.0.4.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">= 0.4"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/html-escaper@2.0.2",
+      "name": "html-escaper",
+      "version": "2.0.2",
+      "purl": "pkg:npm/html-escaper@2.0.2",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/html-escaper/-/html-escaper-2.0.2.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/http-errors@2.0.1",
+      "name": "http-errors",
+      "version": "2.0.1",
+      "purl": "pkg:npm/http-errors@2.0.1",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/http-errors/-/http-errors-2.0.1.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">= 0.8"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/https-proxy-agent@7.0.6",
+      "name": "https-proxy-agent",
+      "version": "7.0.6",
+      "purl": "pkg:npm/https-proxy-agent@7.0.6",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/https-proxy-agent/-/https-proxy-agent-7.0.6.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">= 14"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/debug@4.4.3",
+      "name": "debug",
+      "version": "4.4.3",
+      "purl": "pkg:npm/debug@4.4.3",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/debug/-/debug-4.4.3.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=6.0"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/ms@2.1.3",
+      "name": "ms",
+      "version": "2.1.3",
+      "purl": "pkg:npm/ms@2.1.3",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/ms/-/ms-2.1.3.tgz"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/iconv-lite@0.4.24",
+      "name": "iconv-lite",
+      "version": "0.4.24",
+      "purl": "pkg:npm/iconv-lite@0.4.24",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/iconv-lite/-/iconv-lite-0.4.24.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=0.10.0"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/inherits@2.0.4",
+      "name": "inherits",
+      "version": "2.0.4",
+      "purl": "pkg:npm/inherits@2.0.4",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/inherits/-/inherits-2.0.4.tgz"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/ipaddr.js@1.9.1",
+      "name": "ipaddr.js",
+      "version": "1.9.1",
+      "purl": "pkg:npm/ipaddr.js@1.9.1",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/ipaddr.js/-/ipaddr.js-1.9.1.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">= 0.10"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/isexe@2.0.0",
+      "name": "isexe",
+      "version": "2.0.0",
+      "purl": "pkg:npm/isexe@2.0.0",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/isexe/-/isexe-2.0.0.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/istanbul-lib-coverage@3.2.2",
+      "name": "istanbul-lib-coverage",
+      "version": "3.2.2",
+      "purl": "pkg:npm/istanbul-lib-coverage@3.2.2",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/istanbul-lib-coverage/-/istanbul-lib-coverage-3.2.2.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        },
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=8"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/istanbul-lib-report@3.0.1",
+      "name": "istanbul-lib-report",
+      "version": "3.0.1",
+      "purl": "pkg:npm/istanbul-lib-report@3.0.1",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/istanbul-lib-report/-/istanbul-lib-report-3.0.1.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        },
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=10"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/istanbul-reports@3.2.0",
+      "name": "istanbul-reports",
+      "version": "3.2.0",
+      "purl": "pkg:npm/istanbul-reports@3.2.0",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/istanbul-reports/-/istanbul-reports-3.2.0.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        },
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=8"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/jiti@2.7.0",
+      "name": "jiti",
+      "version": "2.7.0",
+      "purl": "pkg:npm/jiti@2.7.0",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/jiti/-/jiti-2.7.0.tgz"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/json-bigint@1.0.0",
+      "name": "json-bigint",
+      "version": "1.0.0",
+      "purl": "pkg:npm/json-bigint@1.0.0",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/json-bigint/-/json-bigint-1.0.0.tgz"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/jwa@2.0.1",
+      "name": "jwa",
+      "version": "2.0.1",
+      "purl": "pkg:npm/jwa@2.0.1",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/jwa/-/jwa-2.0.1.tgz"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/jws@4.0.1",
+      "name": "jws",
+      "version": "4.0.1",
+      "purl": "pkg:npm/jws@4.0.1",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/jws/-/jws-4.0.1.tgz"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/lightningcss@1.33.0",
+      "name": "lightningcss",
+      "version": "1.33.0",
+      "purl": "pkg:npm/lightningcss@1.33.0",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/lightningcss/-/lightningcss-1.33.0.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">= 12.0.0"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/lightningcss-android-arm64@1.33.0",
+      "name": "lightningcss-android-arm64",
+      "version": "1.33.0",
+      "purl": "pkg:npm/lightningcss-android-arm64@1.33.0",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/lightningcss-android-arm64/-/lightningcss-android-arm64-1.33.0.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">= 12.0.0"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/lightningcss-darwin-arm64@1.33.0",
+      "name": "lightningcss-darwin-arm64",
+      "version": "1.33.0",
+      "purl": "pkg:npm/lightningcss-darwin-arm64@1.33.0",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/lightningcss-darwin-arm64/-/lightningcss-darwin-arm64-1.33.0.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">= 12.0.0"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/lightningcss-darwin-x64@1.33.0",
+      "name": "lightningcss-darwin-x64",
+      "version": "1.33.0",
+      "purl": "pkg:npm/lightningcss-darwin-x64@1.33.0",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/lightningcss-darwin-x64/-/lightningcss-darwin-x64-1.33.0.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">= 12.0.0"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/lightningcss-freebsd-x64@1.33.0",
+      "name": "lightningcss-freebsd-x64",
+      "version": "1.33.0",
+      "purl": "pkg:npm/lightningcss-freebsd-x64@1.33.0",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/lightningcss-freebsd-x64/-/lightningcss-freebsd-x64-1.33.0.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">= 12.0.0"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/lightningcss-linux-arm-gnueabihf@1.33.0",
+      "name": "lightningcss-linux-arm-gnueabihf",
+      "version": "1.33.0",
+      "purl": "pkg:npm/lightningcss-linux-arm-gnueabihf@1.33.0",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/lightningcss-linux-arm-gnueabihf/-/lightningcss-linux-arm-gnueabihf-1.33.0.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">= 12.0.0"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/lightningcss-linux-arm64-gnu@1.33.0",
+      "name": "lightningcss-linux-arm64-gnu",
+      "version": "1.33.0",
+      "purl": "pkg:npm/lightningcss-linux-arm64-gnu@1.33.0",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/lightningcss-linux-arm64-gnu/-/lightningcss-linux-arm64-gnu-1.33.0.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">= 12.0.0"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/lightningcss-linux-arm64-musl@1.33.0",
+      "name": "lightningcss-linux-arm64-musl",
+      "version": "1.33.0",
+      "purl": "pkg:npm/lightningcss-linux-arm64-musl@1.33.0",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/lightningcss-linux-arm64-musl/-/lightningcss-linux-arm64-musl-1.33.0.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">= 12.0.0"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/lightningcss-linux-x64-gnu@1.33.0",
+      "name": "lightningcss-linux-x64-gnu",
+      "version": "1.33.0",
+      "purl": "pkg:npm/lightningcss-linux-x64-gnu@1.33.0",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/lightningcss-linux-x64-gnu/-/lightningcss-linux-x64-gnu-1.33.0.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">= 12.0.0"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/lightningcss-linux-x64-musl@1.33.0",
+      "name": "lightningcss-linux-x64-musl",
+      "version": "1.33.0",
+      "purl": "pkg:npm/lightningcss-linux-x64-musl@1.33.0",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/lightningcss-linux-x64-musl/-/lightningcss-linux-x64-musl-1.33.0.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">= 12.0.0"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/lightningcss-win32-arm64-msvc@1.33.0",
+      "name": "lightningcss-win32-arm64-msvc",
+      "version": "1.33.0",
+      "purl": "pkg:npm/lightningcss-win32-arm64-msvc@1.33.0",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/lightningcss-win32-arm64-msvc/-/lightningcss-win32-arm64-msvc-1.33.0.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">= 12.0.0"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/lightningcss-win32-x64-msvc@1.33.0",
+      "name": "lightningcss-win32-x64-msvc",
+      "version": "1.33.0",
+      "purl": "pkg:npm/lightningcss-win32-x64-msvc@1.33.0",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/lightningcss-win32-x64-msvc/-/lightningcss-win32-x64-msvc-1.33.0.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">= 12.0.0"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/locate-path@6.0.0",
+      "name": "locate-path",
+      "version": "6.0.0",
+      "purl": "pkg:npm/locate-path@6.0.0",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/locate-path/-/locate-path-6.0.0.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        },
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=10"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/long@5.3.2",
+      "name": "long",
+      "version": "5.3.2",
+      "purl": "pkg:npm/long@5.3.2",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/long/-/long-5.3.2.tgz"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/lru-cache@11.5.3",
+      "name": "lru-cache",
+      "version": "11.5.3",
+      "purl": "pkg:npm/lru-cache@11.5.3",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/lru-cache/-/lru-cache-11.5.3.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        },
+        {
+          "name": "cdx:nodeEngine",
+          "value": "20 || >=22"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/lucide-react@0.546.0",
+      "name": "lucide-react",
+      "version": "0.546.0",
+      "purl": "pkg:npm/lucide-react@0.546.0",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/lucide-react/-/lucide-react-0.546.0.tgz"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/magic-string@1.4.5",
+      "name": "magic-string",
+      "version": "1.4.5",
+      "purl": "pkg:npm/magic-string@1.4.5",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/magic-string/-/magic-string-1.4.5.tgz"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/make-dir@4.0.0",
+      "name": "make-dir",
+      "version": "4.0.0",
+      "purl": "pkg:npm/make-dir@4.0.0",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/make-dir/-/make-dir-4.0.0.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        },
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=10"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/math-intrinsics@1.1.0",
+      "name": "math-intrinsics",
+      "version": "1.1.0",
+      "purl": "pkg:npm/math-intrinsics@1.1.0",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/math-intrinsics/-/math-intrinsics-1.1.0.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">= 0.4"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/media-typer@0.3.0",
+      "name": "media-typer",
+      "version": "0.3.0",
+      "purl": "pkg:npm/media-typer@0.3.0",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/media-typer/-/media-typer-0.3.0.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">= 0.6"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/merge-descriptors@1.0.3",
+      "name": "merge-descriptors",
+      "version": "1.0.3",
+      "purl": "pkg:npm/merge-descriptors@1.0.3",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/merge-descriptors/-/merge-descriptors-1.0.3.tgz"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/methods@1.1.2",
+      "name": "methods",
+      "version": "1.1.2",
+      "purl": "pkg:npm/methods@1.1.2",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/methods/-/methods-1.1.2.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">= 0.6"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/mime@1.6.0",
+      "name": "mime",
+      "version": "1.6.0",
+      "purl": "pkg:npm/mime@1.6.0",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/mime/-/mime-1.6.0.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=4"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/mime-db@1.52.0",
+      "name": "mime-db",
+      "version": "1.52.0",
+      "purl": "pkg:npm/mime-db@1.52.0",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/mime-db/-/mime-db-1.52.0.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">= 0.6"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/mime-types@2.1.35",
+      "name": "mime-types",
+      "version": "2.1.35",
+      "purl": "pkg:npm/mime-types@2.1.35",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/mime-types/-/mime-types-2.1.35.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">= 0.6"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/minimatch@10.2.6",
+      "name": "minimatch",
+      "version": "10.2.6",
+      "purl": "pkg:npm/minimatch@10.2.6",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/minimatch/-/minimatch-10.2.6.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        },
+        {
+          "name": "cdx:nodeEngine",
+          "value": "18 || 20 || >=22"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/minipass@7.1.3",
+      "name": "minipass",
+      "version": "7.1.3",
+      "purl": "pkg:npm/minipass@7.1.3",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/minipass/-/minipass-7.1.3.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        },
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=16 || 14 >=14.17"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/motion@12.43.0",
+      "name": "motion",
+      "version": "12.43.0",
+      "purl": "pkg:npm/motion@12.43.0",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/motion/-/motion-12.43.0.tgz"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/motion-dom@12.43.0",
+      "name": "motion-dom",
+      "version": "12.43.0",
+      "purl": "pkg:npm/motion-dom@12.43.0",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/motion-dom/-/motion-dom-12.43.0.tgz"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/motion-utils@12.39.0",
+      "name": "motion-utils",
+      "version": "12.39.0",
+      "purl": "pkg:npm/motion-utils@12.39.0",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/motion-utils/-/motion-utils-12.39.0.tgz"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/ms@2.0.0",
+      "name": "ms",
+      "version": "2.0.0",
+      "purl": "pkg:npm/ms@2.0.0",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/ms/-/ms-2.0.0.tgz"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/nanoid@3.3.20",
+      "name": "nanoid",
+      "version": "3.3.20",
+      "purl": "pkg:npm/nanoid@3.3.20",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/nanoid/-/nanoid-3.3.20.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": "^10 || ^12 || ^13.7 || ^14 || >=15.0.1"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/negotiator@0.6.3",
+      "name": "negotiator",
+      "version": "0.6.3",
+      "purl": "pkg:npm/negotiator@0.6.3",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/negotiator/-/negotiator-0.6.3.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">= 0.6"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/node-domexception@1.0.0",
+      "name": "node-domexception",
+      "version": "1.0.0",
+      "purl": "pkg:npm/node-domexception@1.0.0",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/node-domexception/-/node-domexception-1.0.0.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=10.5.0"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/node-fetch@3.3.2",
+      "name": "node-fetch",
+      "version": "3.3.2",
+      "purl": "pkg:npm/node-fetch@3.3.2",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/node-fetch/-/node-fetch-3.3.2.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": "^12.20.0 || ^14.13.1 || >=16.0.0"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/node-releases@2.0.63",
+      "name": "node-releases",
+      "version": "2.0.63",
+      "purl": "pkg:npm/node-releases@2.0.63",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/node-releases/-/node-releases-2.0.63.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        },
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=18"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/object-inspect@1.13.4",
+      "name": "object-inspect",
+      "version": "1.13.4",
+      "purl": "pkg:npm/object-inspect@1.13.4",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/object-inspect/-/object-inspect-1.13.4.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">= 0.4"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/on-finished@2.4.2",
+      "name": "on-finished",
+      "version": "2.4.2",
+      "purl": "pkg:npm/on-finished@2.4.2",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/on-finished/-/on-finished-2.4.2.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">= 0.8"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/p-limit@3.1.0",
+      "name": "p-limit",
+      "version": "3.1.0",
+      "purl": "pkg:npm/p-limit@3.1.0",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/p-limit/-/p-limit-3.1.0.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        },
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=10"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/p-locate@5.0.0",
+      "name": "p-locate",
+      "version": "5.0.0",
+      "purl": "pkg:npm/p-locate@5.0.0",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/p-locate/-/p-locate-5.0.0.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        },
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=10"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/p-retry@4.6.2",
+      "name": "p-retry",
+      "version": "4.6.2",
+      "purl": "pkg:npm/p-retry@4.6.2",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/p-retry/-/p-retry-4.6.2.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=8"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/parseurl@1.3.3",
+      "name": "parseurl",
+      "version": "1.3.3",
+      "purl": "pkg:npm/parseurl@1.3.3",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/parseurl/-/parseurl-1.3.3.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">= 0.8"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/path-exists@4.0.0",
+      "name": "path-exists",
+      "version": "4.0.0",
+      "purl": "pkg:npm/path-exists@4.0.0",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/path-exists/-/path-exists-4.0.0.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        },
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=8"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/path-key@3.1.1",
+      "name": "path-key",
+      "version": "3.1.1",
+      "purl": "pkg:npm/path-key@3.1.1",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/path-key/-/path-key-3.1.1.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        },
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=8"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/path-scurry@2.0.2",
+      "name": "path-scurry",
+      "version": "2.0.2",
+      "purl": "pkg:npm/path-scurry@2.0.2",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/path-scurry/-/path-scurry-2.0.2.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        },
+        {
+          "name": "cdx:nodeEngine",
+          "value": "18 || 20 || >=22"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/path-to-regexp@0.1.13",
+      "name": "path-to-regexp",
+      "version": "0.1.13",
+      "purl": "pkg:npm/path-to-regexp@0.1.13",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/path-to-regexp/-/path-to-regexp-0.1.13.tgz"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/picocolors@1.1.1",
+      "name": "picocolors",
+      "version": "1.1.1",
+      "purl": "pkg:npm/picocolors@1.1.1",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/picocolors/-/picocolors-1.1.1.tgz"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/picomatch@4.0.7",
+      "name": "picomatch",
+      "version": "4.0.7",
+      "purl": "pkg:npm/picomatch@4.0.7",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/picomatch/-/picomatch-4.0.7.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=12"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/postcss@8.5.32",
+      "name": "postcss",
+      "version": "8.5.32",
+      "purl": "pkg:npm/postcss@8.5.32",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/postcss/-/postcss-8.5.32.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": "^10 || ^12 || >=14"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/postcss-value-parser@4.2.0",
+      "name": "postcss-value-parser",
+      "version": "4.2.0",
+      "purl": "pkg:npm/postcss-value-parser@4.2.0",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/postcss-value-parser/-/postcss-value-parser-4.2.0.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/protobufjs@7.6.6",
+      "name": "protobufjs",
+      "version": "7.6.6",
+      "purl": "pkg:npm/protobufjs@7.6.6",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/protobufjs/-/protobufjs-7.6.6.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=12.0.0"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/proxy-addr@2.0.8",
+      "name": "proxy-addr",
+      "version": "2.0.8",
+      "purl": "pkg:npm/proxy-addr@2.0.8",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/proxy-addr/-/proxy-addr-2.0.8.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">= 0.10"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/qs@6.16.2",
+      "name": "qs",
+      "version": "6.16.2",
+      "purl": "pkg:npm/qs@6.16.2",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/qs/-/qs-6.16.2.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=0.6"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/range-parser@1.2.1",
+      "name": "range-parser",
+      "version": "1.2.1",
+      "purl": "pkg:npm/range-parser@1.2.1",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/range-parser/-/range-parser-1.2.1.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">= 0.6"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/raw-body@2.5.3",
+      "name": "raw-body",
+      "version": "2.5.3",
+      "purl": "pkg:npm/raw-body@2.5.3",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/raw-body/-/raw-body-2.5.3.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">= 0.8"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/react@19.3.1",
+      "name": "react",
+      "version": "19.3.1",
+      "purl": "pkg:npm/react@19.3.1",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/react/-/react-19.3.1.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=0.10.0"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/react-dom@19.3.1",
+      "name": "react-dom",
+      "version": "19.3.1",
+      "purl": "pkg:npm/react-dom@19.3.1",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/react-dom/-/react-dom-19.3.1.tgz"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/retry@0.13.1",
+      "name": "retry",
+      "version": "0.13.1",
+      "purl": "pkg:npm/retry@0.13.1",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/retry/-/retry-0.13.1.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">= 4"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/rolldown@1.2.19",
+      "name": "rolldown",
+      "version": "1.2.19",
+      "purl": "pkg:npm/rolldown@1.2.19",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/rolldown/-/rolldown-1.2.19.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": "^20.19.0 || >=22.12.0"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/safe-buffer@5.2.1",
+      "name": "safe-buffer",
+      "version": "5.2.1",
+      "purl": "pkg:npm/safe-buffer@5.2.1",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/safe-buffer/-/safe-buffer-5.2.1.tgz"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/safer-buffer@2.1.2",
+      "name": "safer-buffer",
+      "version": "2.1.2",
+      "purl": "pkg:npm/safer-buffer@2.1.2",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/safer-buffer/-/safer-buffer-2.1.2.tgz"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/scheduler@0.28.0",
+      "name": "scheduler",
+      "version": "0.28.0",
+      "purl": "pkg:npm/scheduler@0.28.0",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/scheduler/-/scheduler-0.28.0.tgz"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/semver@7.8.6",
+      "name": "semver",
+      "version": "7.8.6",
+      "purl": "pkg:npm/semver@7.8.6",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/semver/-/semver-7.8.6.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        },
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=10"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/send@0.19.2",
+      "name": "send",
+      "version": "0.19.2",
+      "purl": "pkg:npm/send@0.19.2",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/send/-/send-0.19.2.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">= 0.8.0"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/ms@2.1.3",
+      "name": "ms",
+      "version": "2.1.3",
+      "purl": "pkg:npm/ms@2.1.3",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/ms/-/ms-2.1.3.tgz"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/serve-static@1.16.3",
+      "name": "serve-static",
+      "version": "1.16.3",
+      "purl": "pkg:npm/serve-static@1.16.3",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/serve-static/-/serve-static-1.16.3.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">= 0.8.0"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/setprototypeof@1.2.0",
+      "name": "setprototypeof",
+      "version": "1.2.0",
+      "purl": "pkg:npm/setprototypeof@1.2.0",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/setprototypeof/-/setprototypeof-1.2.0.tgz"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/shebang-command@2.0.0",
+      "name": "shebang-command",
+      "version": "2.0.0",
+      "purl": "pkg:npm/shebang-command@2.0.0",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/shebang-command/-/shebang-command-2.0.0.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        },
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=8"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/shebang-regex@3.0.0",
+      "name": "shebang-regex",
+      "version": "3.0.0",
+      "purl": "pkg:npm/shebang-regex@3.0.0",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/shebang-regex/-/shebang-regex-3.0.0.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        },
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=8"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/side-channel@1.1.1",
+      "name": "side-channel",
+      "version": "1.1.1",
+      "purl": "pkg:npm/side-channel@1.1.1",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/side-channel/-/side-channel-1.1.1.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">= 0.4"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/side-channel-list@1.0.1",
+      "name": "side-channel-list",
+      "version": "1.0.1",
+      "purl": "pkg:npm/side-channel-list@1.0.1",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/side-channel-list/-/side-channel-list-1.0.1.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">= 0.4"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/side-channel-map@1.0.1",
+      "name": "side-channel-map",
+      "version": "1.0.1",
+      "purl": "pkg:npm/side-channel-map@1.0.1",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/side-channel-map/-/side-channel-map-1.0.1.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">= 0.4"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/side-channel-weakmap@1.0.2",
+      "name": "side-channel-weakmap",
+      "version": "1.0.2",
+      "purl": "pkg:npm/side-channel-weakmap@1.0.2",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/side-channel-weakmap/-/side-channel-weakmap-1.0.2.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">= 0.4"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/signal-exit@4.1.0",
+      "name": "signal-exit",
+      "version": "4.1.0",
+      "purl": "pkg:npm/signal-exit@4.1.0",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/signal-exit/-/signal-exit-4.1.0.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        },
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=14"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/source-map-js@1.2.2",
+      "name": "source-map-js",
+      "version": "1.2.2",
+      "purl": "pkg:npm/source-map-js@1.2.2",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/source-map-js/-/source-map-js-1.2.2.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=0.10.0"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/statuses@2.0.2",
+      "name": "statuses",
+      "version": "2.0.2",
+      "purl": "pkg:npm/statuses@2.0.2",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/statuses/-/statuses-2.0.2.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">= 0.8"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/string-width@8.3.0",
+      "name": "string-width",
+      "version": "8.3.0",
+      "purl": "pkg:npm/string-width@8.3.0",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/string-width/-/string-width-8.3.0.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        },
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=20"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/strip-ansi@7.2.0",
+      "name": "strip-ansi",
+      "version": "7.2.0",
+      "purl": "pkg:npm/strip-ansi@7.2.0",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/strip-ansi/-/strip-ansi-7.2.0.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        },
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=12"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/supports-color@7.2.0",
+      "name": "supports-color",
+      "version": "7.2.0",
+      "purl": "pkg:npm/supports-color@7.2.0",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/supports-color/-/supports-color-7.2.0.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        },
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=8"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/tailwindcss@4.3.5",
+      "name": "tailwindcss",
+      "version": "4.3.5",
+      "purl": "pkg:npm/tailwindcss@4.3.5",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/tailwindcss/-/tailwindcss-4.3.5.tgz"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/tapable@2.3.3",
+      "name": "tapable",
+      "version": "2.3.3",
+      "purl": "pkg:npm/tapable@2.3.3",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/tapable/-/tapable-2.3.3.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=6"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/test-exclude@8.0.0",
+      "name": "test-exclude",
+      "version": "8.0.0",
+      "purl": "pkg:npm/test-exclude@8.0.0",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/test-exclude/-/test-exclude-8.0.0.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        },
+        {
+          "name": "cdx:nodeEngine",
+          "value": "20 || >=22"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/tinyglobby@0.2.17",
+      "name": "tinyglobby",
+      "version": "0.2.17",
+      "purl": "pkg:npm/tinyglobby@0.2.17",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/tinyglobby/-/tinyglobby-0.2.17.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=12.0.0"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/toidentifier@1.0.1",
+      "name": "toidentifier",
+      "version": "1.0.1",
+      "purl": "pkg:npm/toidentifier@1.0.1",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/toidentifier/-/toidentifier-1.0.1.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=0.6"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/tslib@2.9.1",
+      "name": "tslib",
+      "version": "2.9.1",
+      "purl": "pkg:npm/tslib@2.9.1",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/tslib/-/tslib-2.9.1.tgz"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/tsx@4.23.15",
+      "name": "tsx",
+      "version": "4.23.15",
+      "purl": "pkg:npm/tsx@4.23.15",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/tsx/-/tsx-4.23.15.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        },
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=18.0.0"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@esbuild/aix-ppc64@0.28.2",
+      "name": "@esbuild/aix-ppc64",
+      "version": "0.28.2",
+      "purl": "pkg:npm/@esbuild/aix-ppc64@0.28.2",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@esbuild/aix-ppc64/-/aix-ppc64-0.28.2.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        },
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=18"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@esbuild/android-arm@0.28.2",
+      "name": "@esbuild/android-arm",
+      "version": "0.28.2",
+      "purl": "pkg:npm/@esbuild/android-arm@0.28.2",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@esbuild/android-arm/-/android-arm-0.28.2.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        },
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=18"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@esbuild/android-arm64@0.28.2",
+      "name": "@esbuild/android-arm64",
+      "version": "0.28.2",
+      "purl": "pkg:npm/@esbuild/android-arm64@0.28.2",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@esbuild/android-arm64/-/android-arm64-0.28.2.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        },
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=18"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@esbuild/android-x64@0.28.2",
+      "name": "@esbuild/android-x64",
+      "version": "0.28.2",
+      "purl": "pkg:npm/@esbuild/android-x64@0.28.2",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@esbuild/android-x64/-/android-x64-0.28.2.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        },
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=18"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@esbuild/darwin-arm64@0.28.2",
+      "name": "@esbuild/darwin-arm64",
+      "version": "0.28.2",
+      "purl": "pkg:npm/@esbuild/darwin-arm64@0.28.2",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@esbuild/darwin-arm64/-/darwin-arm64-0.28.2.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        },
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=18"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@esbuild/darwin-x64@0.28.2",
+      "name": "@esbuild/darwin-x64",
+      "version": "0.28.2",
+      "purl": "pkg:npm/@esbuild/darwin-x64@0.28.2",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@esbuild/darwin-x64/-/darwin-x64-0.28.2.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        },
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=18"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@esbuild/freebsd-arm64@0.28.2",
+      "name": "@esbuild/freebsd-arm64",
+      "version": "0.28.2",
+      "purl": "pkg:npm/@esbuild/freebsd-arm64@0.28.2",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@esbuild/freebsd-arm64/-/freebsd-arm64-0.28.2.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        },
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=18"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@esbuild/freebsd-x64@0.28.2",
+      "name": "@esbuild/freebsd-x64",
+      "version": "0.28.2",
+      "purl": "pkg:npm/@esbuild/freebsd-x64@0.28.2",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@esbuild/freebsd-x64/-/freebsd-x64-0.28.2.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        },
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=18"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@esbuild/linux-arm@0.28.2",
+      "name": "@esbuild/linux-arm",
+      "version": "0.28.2",
+      "purl": "pkg:npm/@esbuild/linux-arm@0.28.2",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@esbuild/linux-arm/-/linux-arm-0.28.2.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        },
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=18"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@esbuild/linux-arm64@0.28.2",
+      "name": "@esbuild/linux-arm64",
+      "version": "0.28.2",
+      "purl": "pkg:npm/@esbuild/linux-arm64@0.28.2",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@esbuild/linux-arm64/-/linux-arm64-0.28.2.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        },
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=18"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@esbuild/linux-ia32@0.28.2",
+      "name": "@esbuild/linux-ia32",
+      "version": "0.28.2",
+      "purl": "pkg:npm/@esbuild/linux-ia32@0.28.2",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@esbuild/linux-ia32/-/linux-ia32-0.28.2.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        },
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=18"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@esbuild/linux-loong64@0.28.2",
+      "name": "@esbuild/linux-loong64",
+      "version": "0.28.2",
+      "purl": "pkg:npm/@esbuild/linux-loong64@0.28.2",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@esbuild/linux-loong64/-/linux-loong64-0.28.2.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        },
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=18"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@esbuild/linux-mips64el@0.28.2",
+      "name": "@esbuild/linux-mips64el",
+      "version": "0.28.2",
+      "purl": "pkg:npm/@esbuild/linux-mips64el@0.28.2",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@esbuild/linux-mips64el/-/linux-mips64el-0.28.2.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        },
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=18"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@esbuild/linux-ppc64@0.28.2",
+      "name": "@esbuild/linux-ppc64",
+      "version": "0.28.2",
+      "purl": "pkg:npm/@esbuild/linux-ppc64@0.28.2",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@esbuild/linux-ppc64/-/linux-ppc64-0.28.2.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        },
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=18"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@esbuild/linux-riscv64@0.28.2",
+      "name": "@esbuild/linux-riscv64",
+      "version": "0.28.2",
+      "purl": "pkg:npm/@esbuild/linux-riscv64@0.28.2",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@esbuild/linux-riscv64/-/linux-riscv64-0.28.2.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        },
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=18"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@esbuild/linux-s390x@0.28.2",
+      "name": "@esbuild/linux-s390x",
+      "version": "0.28.2",
+      "purl": "pkg:npm/@esbuild/linux-s390x@0.28.2",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@esbuild/linux-s390x/-/linux-s390x-0.28.2.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        },
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=18"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@esbuild/linux-x64@0.28.2",
+      "name": "@esbuild/linux-x64",
+      "version": "0.28.2",
+      "purl": "pkg:npm/@esbuild/linux-x64@0.28.2",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@esbuild/linux-x64/-/linux-x64-0.28.2.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        },
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=18"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@esbuild/netbsd-arm64@0.28.2",
+      "name": "@esbuild/netbsd-arm64",
+      "version": "0.28.2",
+      "purl": "pkg:npm/@esbuild/netbsd-arm64@0.28.2",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@esbuild/netbsd-arm64/-/netbsd-arm64-0.28.2.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        },
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=18"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@esbuild/netbsd-x64@0.28.2",
+      "name": "@esbuild/netbsd-x64",
+      "version": "0.28.2",
+      "purl": "pkg:npm/@esbuild/netbsd-x64@0.28.2",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@esbuild/netbsd-x64/-/netbsd-x64-0.28.2.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        },
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=18"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@esbuild/openbsd-arm64@0.28.2",
+      "name": "@esbuild/openbsd-arm64",
+      "version": "0.28.2",
+      "purl": "pkg:npm/@esbuild/openbsd-arm64@0.28.2",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@esbuild/openbsd-arm64/-/openbsd-arm64-0.28.2.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        },
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=18"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@esbuild/openbsd-x64@0.28.2",
+      "name": "@esbuild/openbsd-x64",
+      "version": "0.28.2",
+      "purl": "pkg:npm/@esbuild/openbsd-x64@0.28.2",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@esbuild/openbsd-x64/-/openbsd-x64-0.28.2.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        },
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=18"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@esbuild/openharmony-arm64@0.28.2",
+      "name": "@esbuild/openharmony-arm64",
+      "version": "0.28.2",
+      "purl": "pkg:npm/@esbuild/openharmony-arm64@0.28.2",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@esbuild/openharmony-arm64/-/openharmony-arm64-0.28.2.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        },
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=18"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@esbuild/sunos-x64@0.28.2",
+      "name": "@esbuild/sunos-x64",
+      "version": "0.28.2",
+      "purl": "pkg:npm/@esbuild/sunos-x64@0.28.2",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@esbuild/sunos-x64/-/sunos-x64-0.28.2.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        },
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=18"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@esbuild/win32-arm64@0.28.2",
+      "name": "@esbuild/win32-arm64",
+      "version": "0.28.2",
+      "purl": "pkg:npm/@esbuild/win32-arm64@0.28.2",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@esbuild/win32-arm64/-/win32-arm64-0.28.2.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        },
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=18"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@esbuild/win32-ia32@0.28.2",
+      "name": "@esbuild/win32-ia32",
+      "version": "0.28.2",
+      "purl": "pkg:npm/@esbuild/win32-ia32@0.28.2",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@esbuild/win32-ia32/-/win32-ia32-0.28.2.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        },
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=18"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/@esbuild/win32-x64@0.28.2",
+      "name": "@esbuild/win32-x64",
+      "version": "0.28.2",
+      "purl": "pkg:npm/@esbuild/win32-x64@0.28.2",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/@esbuild/win32-x64/-/win32-x64-0.28.2.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        },
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=18"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/esbuild@0.28.2",
+      "name": "esbuild",
+      "version": "0.28.2",
+      "purl": "pkg:npm/esbuild@0.28.2",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/esbuild/-/esbuild-0.28.2.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        },
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=18"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/type-is@1.6.18",
+      "name": "type-is",
+      "version": "1.6.18",
+      "purl": "pkg:npm/type-is@1.6.18",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/type-is/-/type-is-1.6.18.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">= 0.6"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/typescript@7.0.2",
+      "name": "typescript",
+      "version": "7.0.2",
+      "purl": "pkg:npm/typescript@7.0.2",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/typescript/-/typescript-7.0.2.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        },
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=16.20.0"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/undici-types@6.21.0",
+      "name": "undici-types",
+      "version": "6.21.0",
+      "purl": "pkg:npm/undici-types@6.21.0",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/undici-types/-/undici-types-6.21.0.tgz"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/unpipe@1.0.0",
+      "name": "unpipe",
+      "version": "1.0.0",
+      "purl": "pkg:npm/unpipe@1.0.0",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/unpipe/-/unpipe-1.0.0.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">= 0.8"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/update-browserslist-db@1.3.4",
+      "name": "update-browserslist-db",
+      "version": "1.3.4",
+      "purl": "pkg:npm/update-browserslist-db@1.3.4",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/update-browserslist-db/-/update-browserslist-db-1.3.4.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/utils-merge@1.0.1",
+      "name": "utils-merge",
+      "version": "1.0.1",
+      "purl": "pkg:npm/utils-merge@1.0.1",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/utils-merge/-/utils-merge-1.0.1.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">= 0.4.0"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/v8-to-istanbul@9.3.0",
+      "name": "v8-to-istanbul",
+      "version": "9.3.0",
+      "purl": "pkg:npm/v8-to-istanbul@9.3.0",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/v8-to-istanbul/-/v8-to-istanbul-9.3.0.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        },
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=10.12.0"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/vary@1.1.2",
+      "name": "vary",
+      "version": "1.1.2",
+      "purl": "pkg:npm/vary@1.1.2",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/vary/-/vary-1.1.2.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">= 0.8"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/vite@8.3.8",
+      "name": "vite",
+      "version": "8.3.8",
+      "purl": "pkg:npm/vite@8.3.8",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/vite/-/vite-8.3.8.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": "^20.19.0 || >=22.12.0"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/web-streams-polyfill@3.3.3",
+      "name": "web-streams-polyfill",
+      "version": "3.3.3",
+      "purl": "pkg:npm/web-streams-polyfill@3.3.3",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/web-streams-polyfill/-/web-streams-polyfill-3.3.3.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">= 8"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/which@2.0.2",
+      "name": "which",
+      "version": "2.0.2",
+      "purl": "pkg:npm/which@2.0.2",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/which/-/which-2.0.2.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        },
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">= 8"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/wrap-ansi@9.0.2",
+      "name": "wrap-ansi",
+      "version": "9.0.2",
+      "purl": "pkg:npm/wrap-ansi@9.0.2",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/wrap-ansi/-/wrap-ansi-9.0.2.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        },
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=18"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/string-width@7.2.0",
+      "name": "string-width",
+      "version": "7.2.0",
+      "purl": "pkg:npm/string-width@7.2.0",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/string-width/-/string-width-7.2.0.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        },
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=18"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/ws@8.22.2",
+      "name": "ws",
+      "version": "8.22.2",
+      "purl": "pkg:npm/ws@8.22.2",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/ws/-/ws-8.22.2.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=10.0.0"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/y18n@5.0.8",
+      "name": "y18n",
+      "version": "5.0.8",
+      "purl": "pkg:npm/y18n@5.0.8",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/y18n/-/y18n-5.0.8.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        },
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=10"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/yargs@18.2.0",
+      "name": "yargs",
+      "version": "18.2.0",
+      "purl": "pkg:npm/yargs@18.2.0",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/yargs/-/yargs-18.2.0.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        },
+        {
+          "name": "cdx:nodeEngine",
+          "value": "^20.19.0 || ^22.12.0 || >=23"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/yargs-parser@21.1.1",
+      "name": "yargs-parser",
+      "version": "21.1.1",
+      "purl": "pkg:npm/yargs-parser@21.1.1",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/yargs-parser/-/yargs-parser-21.1.1.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        },
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=12"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/yargs-parser@22.0.0",
+      "name": "yargs-parser",
+      "version": "22.0.0",
+      "purl": "pkg:npm/yargs-parser@22.0.0",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/yargs-parser/-/yargs-parser-22.0.0.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        },
+        {
+          "name": "cdx:nodeEngine",
+          "value": "^20.19.0 || ^22.12.0 || >=23"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bomRef": "pkg:npm/yocto-queue@0.1.0",
+      "name": "yocto-queue",
+      "version": "0.1.0",
+      "purl": "pkg:npm/yocto-queue@0.1.0",
+      "hashes": [
+        {
+          "alg": "url",
+          "content": "https://registry.npmjs.org/yocto-queue/-/yocto-queue-0.1.0.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "cdx:devOnly",
+          "value": "true"
+        },
+        {
+          "name": "cdx:nodeEngine",
+          "value": ">=10"
+        }
+      ]
+    }
+  ]
+}

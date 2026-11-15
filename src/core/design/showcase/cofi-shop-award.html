@@ -1,0 +1,255 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cofi — Specialty Coffee, Slow Brewed</title>
+<style>
+  :root {
+    --ink: #2b1d12;
+    --paper: #f3ead9;
+    --accent: #c17a3d;
+    --accent-2: #8a4a22;
+    --muted: #4a3526;
+    --muted-2: #e7d7bd;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    font-family: "Iowan Old Style", Georgia, "Times New Roman", serif;
+    background: var(--paper);
+    color: var(--ink);
+  }
+  h1, h2, h3 { font-weight: 800; line-height: 1.05; margin: 0 0 0.35em; }
+  p { font-weight: 400; line-height: 1.6; color: var(--muted); }
+
+  /* asymmetric editorial grid: 12 columns, features break the rhythm */
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 0 24px; }
+  .grid12 { display: grid; grid-template-columns: repeat(12, 1fr); gap: 20px; }
+
+  header {
+    border-bottom: 1px solid var(--muted-2);
+  }
+  .masthead {
+    display: flex; align-items: baseline; justify-content: space-between;
+    padding: 22px 0;
+    flex-wrap: wrap;
+  }
+  .brand {
+    font-size: 2.1rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+  }
+  .brand em { color: var(--accent); font-style: normal; }
+  nav a {
+    color: var(--muted);
+    text-decoration: none;
+    font-weight: 400;
+    font-size: 0.95rem;
+    margin-left: 22px;
+    border-bottom: 2px solid transparent;
+  }
+  nav a:hover { color: var(--ink); border-bottom-color: var(--accent); }
+  nav a:focus-visible { outline: 3px solid var(--accent-2); outline-offset: 3px; }
+
+  .hero { padding: 72px 0 48px; }
+  .hero h1 {
+    font-size: clamp(3rem, 7vw, 5.4rem);
+    letter-spacing: -0.02em;
+  }
+  .hero h1 span { color: var(--accent); display: block; }
+  .hero .lede { max-width: 46ch; font-size: 1.1rem; }
+  .hero-rule {
+    height: 5px; width: 160px; background: var(--accent); margin-top: 26px;
+    border-radius: 3px;
+  }
+
+  .feature-band { padding: 40px 0; }
+  .feature-band h2 { font-size: clamp(1.6rem, 3.4vw, 2.4rem); }
+
+  /* product cards: signature interaction = hover-lift with caramel sweep */
+  .products { display: grid; grid-template-columns: repeat(12, 1fr); gap: 22px; padding-bottom: 12px; }
+  .card {
+    grid-column: span 4;
+    background: var(--muted-2);
+    border-radius: 14px;
+    padding: 22px;
+    position: relative;
+    overflow: hidden;
+    transition: transform 200ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 200ms cubic-bezier(0.22, 1, 0.36, 1), opacity 300ms ease;
+  }
+  .card:nth-child(1) { grid-column: span 5; margin-top: 26px; }
+  .card:nth-child(3) { grid-column: span 4; margin-top: -18px; }
+  .card::after {
+    content: "";
+    position: absolute; inset: auto 0 0 0; height: 4px;
+    background: var(--accent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 240ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .card:hover { transform: translateY(-6px) rotate(-0.4deg); box-shadow: 0 18px 34px -18px rgba(43, 29, 18, 0.45); }
+  .card:hover::after { transform: scaleX(1); }
+  .card h3 { font-size: 1.25rem; color: var(--ink); }
+  .card .price { font-weight: 400; font-size: 0.95rem; color: var(--accent-2); }
+  .card button {
+    margin-top: 14px;
+    background: var(--accent);
+    color: var(--paper);
+    border: 0;
+    border-radius: 8px;
+    padding: 9px 16px;
+    font: inherit;
+    font-weight: 700;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: transform 120ms ease;
+  }
+  .card button:hover { transform: translateY(-1px); }
+  .card button:active { transform: scale(0.96); }
+  .card button:focus-visible { outline: 3px solid var(--ink); outline-offset: 2px; }
+
+  /* cart: sticky side panel, bento of the hero row */
+  .shoprow { display: grid; grid-template-columns: 3fr 1fr; gap: 26px; padding: 26px 0 52px; }
+  .cart {
+    background: var(--ink);
+    color: var(--paper);
+    border-radius: 16px;
+    padding: 22px;
+    align-self: start;
+  }
+  .cart h2 { font-size: 1.15rem; color: var(--paper); }
+  .cart .line { display: flex; justify-content: space-between; font-size: 0.9rem; padding: 5px 0; color: var(--muted-2); }
+  .cart .total {
+    border-top: 1px solid var(--muted);
+    margin-top: 10px; padding-top: 10px;
+    font-size: 1.2rem; font-weight: 800; color: var(--accent);
+    display: flex; justify-content: space-between;
+  }
+
+  footer {
+    border-top: 1px solid var(--muted-2);
+    padding: 26px 0 40px;
+    font-size: 0.85rem;
+  }
+  footer p { color: var(--muted); }
+
+  /* scroll-reveal stagger (signature #2, progressive enhancement) */
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(18px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .reveal { animation: rise 500ms cubic-bezier(0.22, 1, 0.36, 1) both; }
+  .reveal:nth-child(2) { animation-delay: 40ms; }
+  .reveal:nth-child(3) { animation-delay: 80ms; }
+  .reveal:nth-child(4) { animation-delay: 120ms; }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation: none !important;
+      transition: none !important;
+    }
+    html { scroll-behavior: auto; }
+  }
+  @media (max-width: 820px) {
+    .shoprow { grid-template-columns: 1fr; }
+    .card, .card:nth-child(1), .card:nth-child(3) { grid-column: span 12; margin-top: 0; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap masthead">
+    <div class="brand">COFI<em>.</em></div>
+    <nav aria-label="Primary">
+      <a href="#menu">Menu</a>
+      <a href="#story">Story</a>
+      <a href="#visit">Visit</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="hero reveal" id="menu" aria-label="Cofi introduction">
+    <h1>Slow-brewed,<span>seriously.</span></h1>
+    <p class="lede">Single-origin beans, roasted in-house every Tuesday.
+    We pull every shot to the gram and write the number on the cup — so you
+    know exactly what you just drank.</p>
+    <div class="hero-rule" aria-hidden="true"></div>
+  </section>
+
+  <section class="feature-band" id="story" aria-label="Why Cofi">
+    <h2>Three things we will not fake.</h2>
+    <p>Origin transparency down to the farm. A roasting curve logged per batch.
+    And a barista who will tell you if your order is wrong — before you take a sip.</p>
+  </section>
+
+  <div class="shoprow">
+    <section class="products" aria-label="Coffee menu">
+      <article class="card reveal">
+        <h3>Espresso, 18&nbsp;g</h3>
+        <p>Dark cherry, cacao nib. Our Tuesday roast.</p>
+        <p class="price">$4.00</p>
+        <button type="button" data-product="espresso" data-price="4.00" data-name="Espresso">Add to cart</button>
+      </article>
+      <article class="card reveal">
+        <h3>Flat White</h3>
+        <p>Double ristretto, micro-foam to 1&nbsp;mm.</p>
+        <p class="price">$5.50</p>
+        <button type="button" data-product="flatwhite" data-price="5.50" data-name="Flat White">Add to cart</button>
+      </article>
+      <article class="card reveal">
+        <h3>Cold Brew, 12&nbsp;h</h3>
+        <p>Steeped 12 hours, poured over a single cube.</p>
+        <p class="price">$6.00</p>
+        <button type="button" data-product="coldbrew" data-price="6.00" data-name="Cold Brew">Add to cart</button>
+      </article>
+    </section>
+
+    <aside class="cart" aria-label="Shopping cart">
+      <h2>Your cart</h2>
+      <div id="cart-lines"><p>No items yet — fix that.</p></div>
+      <div class="total"><span>Total</span><span id="cart-total" aria-live="polite">$0.00</span></div>
+    </aside>
+  </div>
+</main>
+
+<footer id="visit">
+  <div class="wrap">
+    <p>COFI. — 14 Kiln Lane · Open 7a–7p · Roasts log out every Tuesday.</p>
+  </div>
+</footer>
+
+<script>
+(function () {
+  var lines = document.getElementById("cart-lines");
+  var totalEl = document.getElementById("cart-total");
+  var cart = {};
+  function money(n) { return "$" + n.toFixed(2); }
+  function render() {
+    var keys = Object.keys(cart);
+    if (!keys.length) {
+      lines.innerHTML = "<p>No items yet — fix that.</p>";
+    } else {
+      lines.innerHTML = keys.map(function (id) {
+        var c = cart[id];
+        return '<div class="line"><span>' + c.name + " × " + c.qty + "</span><span>" + money(c.price * c.qty) + "</span></div>";
+      }).join("");
+    }
+    var total = keys.reduce(function (s, id) { return s + cart[id].price * cart[id].qty; }, 0);
+    totalEl.textContent = money(total);
+  }
+  document.querySelectorAll("button[data-product]").forEach(function (b) {
+    b.addEventListener("click", function () {
+      var id = b.getAttribute("data-product");
+      if (!cart[id]) cart[id] = { name: b.getAttribute("data-name"), price: parseFloat(b.getAttribute("data-price")), qty: 0 };
+      cart[id].qty += 1;
+      render();
+    });
+  });
+  render();
+})();
+</script>
+</body>
+</html>

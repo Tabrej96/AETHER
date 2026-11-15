@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>AETHER 1.0 — Getting Started</title>
+<link rel="stylesheet" href="style.css" />
+<script>
+/* Minimal inline helpers (copy buttons, tabs, search filter) */
+document.addEventListener('DOMContentLoaded', function() {
+  // Copy buttons
+  document.querySelectorAll('.code-block .copy-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var code = btn.parentElement.querySelector('code').textContent;
+      navigator.clipboard.writeText(code).then(function() {
+        btn.textContent = 'Copied!';
+        btn.classList.add('copied');
+        setTimeout(function() { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000);
+      }).catch(function() {
+        btn.textContent = 'Error';
+        setTimeout(function() { btn.textContent = 'Copy'; }, 2000);
+      });
+    });
+  });
+
+  // Search filter
+  var searchInput = document.getElementById('doc-search');
+  if (searchInput) {
+    searchInput.addEventListener('input', function() {
+      var q = searchInput.value.toLowerCase();
+      document.querySelectorAll('.filterable').forEach(function(el) {
+        var text = el.textContent.toLowerCase();
+        el.style.display = text.includes(q) ? '' : 'none';
+      });
+    });
+  }
+});
+</script>
+</head>
+<body>
+<header class="topbar">
+  <div class="wrap">
+    <div class="brand"><a href="index.html" style="color:inherit;text-decoration:none">AETHER <span class="vtag">v1.0</span></a></div>
+    <nav>
+      <a href="index.html#why">Home</a>
+      <a href="programs.html">Programs</a>
+      <a href="deep.html">P10 Deep</a>
+      <a href="fullstack.html">P11 Full-Stack</a>
+      <a href="evolution.html">Evolution</a>
+      <a href="benchmarks.html">Benchmarks</a>
+      <a href="compare.html">Compare</a>
+      <a href="showcase.html">Showcase</a>
+      <a href="getting-started.html" class="active">Guide</a>
+      <a href="api-reference.html">API</a>
+      <a href="contributing.html">Contributing</a>
+      <a href="https://github.com/Tabrej96/anythingwithaether" target="_blank" rel="noopener" title="GitHub"><img src="assets/github-mark.svg" alt="GitHub" style="filter:invert(1);width:16px;height:16px" /></a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- Breadcrumb -->
+  <div class="breadcrumb" style="margin-top:16px">
+    <a href="index.html">Home</a> <span class="sep">/</span> <span>Getting Started</span>
+  </div>
+
+  <!-- Hero -->
+  <section class="hero">
+    <h1>Get started with <em>AETHER</em></h1>
+    <p class="lede">
+      From clone to running all 21 capability engines in under 2 minutes. No build tools,
+      no global installs, no mandatory API keys. AETHER's core runs entirely on
+      <strong>zero runtime npm dependencies</strong>.
+    </p>
+    <p class="credit">
+      <span class="badge">Node 18+</span>
+      <span class="badge">Zero runtime deps</span>
+      <span class="badge">~5 min full setup</span>
+    </p>
+  </section>
+
+  <!-- Quick start -->
+  <section class="card animate-in">
+    <h2>Quick start — 60 seconds</h2>
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <p><strong>Clone the repo</strong></p>
+        <div class="code-block"><button class="copy-btn">Copy</button><pre><code>git clone https://github.com/Tabrej96/anythingwithaether.git && cd AETHER</code></pre></div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <p><strong>Verify everything works</strong> (no npm install needed)</p>
+        <div class="code-block"><button class="copy-btn">Copy</button><pre><code>npx tsx bin/aether.ts validate</code></pre></div>
+        <p class="muted" style="margin-top:6px">Expected: prints "OK" with the 711-component audit. ~5 seconds.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <p><strong>See it work</strong></p>
+        <div class="code-block"><button class="copy-btn">Copy</button><pre><code>npx tsx bin/aether.ts programs</code></pre></div>
+        <p class="muted" style="margin-top:6px">Runs all 21 capability engines. ~10 seconds. No API keys needed.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-body">
+        <p><strong>Install into your editor</strong> (optional)</p>
+        <div class="code-block"><button class="copy-btn">Copy</button><pre><code>./install.sh --all --target all-harnesses --write .
+# or, on Windows / without bash:
+npx tsx bin/aether.ts install --all --target all-harnesses --write .</code></pre></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Prerequisites -->
+  <section class="card animate-in">
+    <h2>Prerequisites</h2>
+    <table>
+      <thead><tr><th>Requirement</th><th>Why</th><th>How to check</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Node.js &ge; 18</strong> (LTS recommended; verified on Node 24)</td><td>The compiled bins target node18</td><td><code>node --version</code></td></tr>
+        <tr><td><strong>npm</strong> (recent)</td><td>Installs optional workbench packages</td><td><code>npm --version</code></td></tr>
+        <tr><td><strong>Git</strong></td><td>Clone the repo</td><td><code>git --version</code></td></tr>
+        <tr><td><strong>Optional: browser</strong> (Chrome/Chromium)</td><td>P05/P06/P07 live browser tasks</td><td><code>google-chrome --version</code></td></tr>
+        <tr><td><strong>Optional: API key</strong></td><td>Live model execution (<code>AETHER_LIVE_PROVIDER_*</code>)</td><td>Set in <code>.env</code></td></tr>
+      </tbody>
+    </table>
+    <div class="callout info" style="margin-top:16px">
+      <strong>Tip:</strong> The entire AETHER engine runs fully offline after clone.
+      <code>npm install</code> is only needed for the optional React workbench UI.
+      Every engine, test, and benchmark path runs via <code>npx tsx</code> without any install.
+    </div>
+  </section>
+
+  <!-- Installation methods -->
+  <section class="card animate-in">
+    <h2>Installation methods</h2>
+
+    <h3>Method A: From GitHub (development / first release)</h3>
+    <div class="code-block"><button class="copy-btn">Copy</button><pre><code>git clone https://github.com/Tabrej96/anythingwithaether.git && cd AETHER
+npx tsx bin/aether.ts programs</code></pre></div>
+
+    <h3>Method B: Published npm package</h3>
+    <div class="code-block"><button class="copy-btn">Copy</button><pre><code>npm install aether-harness
+npx aether programs</code></pre></div>
+
+    <h3>Method C: Unix one-liner</h3>
+    <div class="code-block"><button class="copy-btn">Copy</button><pre><code>curl -fsSL https://raw.githubusercontent.com/Tabrej96/anythingwithaether/main/install.sh | bash -s -- --all</code></pre></div>
+
+    <h3>Method D: Selective domain pack</h3>
+    <div class="code-block"><button class="copy-btn">Copy</button><pre><code>npx tsx bin/aether.ts install --target cursor --packs aws-cloud-vps,design-ui --mcp --write .</code></pre></div>
+  </section>
+
+  <!-- Configuration -->
+  <section class="card animate-in">
+    <h2>Configuration</h2>
+    <p>AETHER has <strong>three configuration surfaces</strong>, all file-based and fully offline:</p>
+    <table>
+      <thead><tr><th>Surface</th><th>File</th><th>Purpose</th></tr></thead>
+      <tbody>
+        <tr><td>Provider credentials</td><td><code>.env</code></td><td>Live model endpoint for the GATE-01 end-to-end check</td></tr>
+        <tr><td>MCP permission policy</td><td><code>.env</code></td><td>Least-privilege tool allow/deny for the MCP server</td></tr>
+        <tr><td>Harness install manifest</td><td><code>.aether/manifest.json</code></td><td>What <code>install</code> wrote, so <code>uninstall</code> removes exactly that</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Optional: .env for live model</h3>
+    <p>Copy the template and fill in the block you need:</p>
+    <div class="code-block"><button class="copy-btn">Copy</button><pre><code>cp .env.example .env</code></pre></div>
+    <p>Then edit <code>.env</code> with your provider settings:</p>
+    <div class="code-block"><button class="copy-btn">Copy</button><pre><code># Live model endpoint (optional — all engines run without it)
+AETHER_LIVE_PROVIDER_URL="https://api.example.com/v1"
+AETHER_LIVE_PROVIDER_KEY="your-key"
+AETHER_LIVE_PROVIDER_MODEL="your-model-id"
+AETHER_LIVE_PROVIDER_VENDOR="anthropic"  # or "openai-compatible"
+AETHER_LIVE_PROVIDER_IN_USD_PER_M="0"
+AETHER_LIVE_PROVIDER_OUT_USD_PER_M="0"
+
+# MCP permission policy (optional, least-privilege)
+AETHER_MCP_PERMISSION_POLICY='{"deniedTools":[],"requireApprovalFor":[],"approvedTools":[]}'</code></pre></div>
+    <div class="callout warn">
+      <strong>Never commit a real API key.</strong> <code>.env</code> is gitignored.
+      <code>.env.example</code> is committed with placeholder values only.
+    </div>
+  </section>
+
+  <!-- First project tutorial -->
+  <section class="card animate-in">
+    <h2>Your first project</h2>
+    <p class="muted">Let's walk through a real workflow: building a product strategy using AETHER's P12 Project Intelligence engine.</p>
+
+    <h3>Step 1: Run the classifier</h3>
+    <div class="code-block"><button class="copy-btn">Copy</button><pre><code>npx tsx bin/aether.ts strategy "Build a dental clinic booking platform"</code></pre></div>
+    <p class="muted">Output: multi-label classification (e.g. <code>BOOKING</code> primary, <code>SAAS</code> secondary) + effort policy + <code>PROJECT_STRATEGY.md</code>.</p>
+
+    <h3>Step 2: Run the business-logic planner</h3>
+    <div class="code-block"><button class="copy-btn">Copy</button><pre><code>npx tsx bin/aether.ts business "Build a multi-tenant SaaS billing platform with checkout and subscriptions"</code></pre></div>
+    <p class="muted">Output: domain model, lifecycle state machines, edge-case catalog, possibility engine, and metric discipline audit.</p>
+
+    <h3>Step 3: Run the quality panel</h3>
+    <div class="code-block"><button class="copy-btn">Copy</button><pre><code>npx tsx bin/aether.ts panel "Build a multi-tenant SaaS billing platform"</code></pre></div>
+    <p class="muted">Output: nine-reviewer verdict (business analyst, domain specialist, financial-logic, security, QA, etc.) with evidence-gated findings.</p>
+
+    <h3>Step 4: Run the evolution suite</h3>
+    <div class="code-block"><button class="copy-btn">Copy</button><pre><code>npx tsx bin/aether.ts evolve</code></pre></div>
+    <p class="muted">Output: regression suite run + measured promote/hold/reject demonstration. Mean score and no-op handling verified.</p>
+  </section>
+
+  <!-- Common workflows -->
+  <section class="card animate-in">
+    <h2>Common workflows</h2>
+
+    <h3>Run all capability engines</h3>
+    <div class="code-block"><button class="copy-btn">Copy</button><pre><code>npx tsx bin/aether.ts programs</code></pre></div>
+
+    <h3>Run the benchmark suite</h3>
+    <div class="code-block"><button class="copy-btn">Copy</button><pre><code>npx tsx bin/aether.ts benchmark</code></pre></div>
+
+    <h3>Validate all components</h3>
+    <div class="code-block"><button class="copy-btn">Copy</button><pre><code>npx tsx bin/aether.ts validate</code></pre></div>
+
+    <h3>Live model execution (requires .env)</h3>
+    <div class="code-block"><button class="copy-btn">Copy</button><pre><code>npx tsx bin/aether.ts runtime --live</code></pre></div>
+
+    <h3>P10 Deep Intelligence (GST invoice demo)</h3>
+    <div class="code-block"><button class="copy-btn">Copy</button><pre><code>npx tsx bin/aether.ts deep            # with live browser
+npx tsx bin/aether.ts deep --no-browser # without browser</code></pre></div>
+
+    <h3>P11 Full-Stack Engineering Intelligence</h3>
+    <div class="code-block"><button class="copy-btn">Copy</button><pre><code>npx tsx bin/aether.ts fullstack</code></pre></div>
+
+    <h3>Design taste (P19)</h3>
+    <div class="code-block"><button class="copy-btn">Copy</button><pre><code>npx tsx bin/aether.ts design</code></pre></div>
+
+    <h3>Design system generator (P21)</h3>
+    <div class="code-block"><button class="copy-btn">Copy</button><pre><code>npx tsx bin/aether.ts design-system
+npx tsx bin/aether.ts design-system FINANCIAL ENTERPRISE_PRECISION</code></pre></div>
+
+    <h3>Orchestration planner (P20)</h3>
+    <div class="code-block"><button class="copy-btn">Copy</button><pre><code>npx tsx bin/aether.ts plan "Build a marketplace"</code></pre></div>
+
+    <h3>Paise-exact calculations (P16)</h3>
+    <div class="code-block"><button class="copy-btn">Copy</button><pre><code>npx tsx bin/aether.ts calc</code></pre></div>
+
+    <h3>Workflow patterns (P17)</h3>
+    <div class="code-block"><button class="copy-btn">Copy</button><pre><code>npx tsx bin/aether.ts wf</code></pre></div>
+
+    <h3>Run the tests</h3>
+    <div class="code-block"><button class="copy-btn">Copy</button><pre><code>npx tsx --test src/core/aether.test.ts</code></pre></div>
+  </section>
+
+  <!-- Troubleshooting -->
+  <section class="card animate-in">
+    <h2>Troubleshooting</h2>
+    <p class="muted">Every AETHER failure state is designed, labeled, and reported. The system never fails silently. See <code>docs/TROUBLESHOOTING.md</code> for the full table.</p>
+
+    <h3>Common issues</h3>
+    <table>
+      <thead><tr><th>Symptom</th><th>Cause</th><th>Fix</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><code>npm install</code> fails on peer-dep conflict</td>
+          <td>First install needs the legacy flag</td>
+          <td><code>npm install --legacy-peer-deps</code> (one-time)</td>
+        </tr>
+        <tr>
+          <td><code>install.sh</code> syntax errors</td>
+          <td>On Windows without bash/WSL</td>
+          <td>Use <code>npx tsx bin/aether.ts install ...</code> instead</td>
+        </tr>
+        <tr>
+          <td><code>UNAVAILABLE_NO_CREDENTIALS</code></td>
+          <td><code>.env</code> missing or incomplete</td>
+          <td>Copy <code>.env.example</code> and fill in your keys. Expected on a clean clone.</td>
+        </tr>
+        <tr>
+          <td>Harness says <code>UNAVAILABLE</code></td>
+          <td>Needs a host daemon (OpenHands, Browser Use, Skyvern)</td>
+          <td>Run the listed external command, then re-run the benchmark</td>
+        </tr>
+        <tr>
+          <td>Task stays <code>QUEUED</code> after a crash</td>
+          <td>Expected — <code>PersistentTaskQueue.recover()</code> demotes in-flight tasks on restart</td>
+          <td>Re-run and they drain automatically</td>
+        </tr>
+        <tr>
+          <td>MCP tool returns <code>BLOCKED_BY_SECURITY_GATE</code></td>
+          <td>A built-in gate denied the call</td>
+          <td>Review the result payload for the reason. This is the safe path.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Health check</h3>
+    <p>Both commands are deterministic and offline:</p>
+    <div class="code-block"><button class="copy-btn">Copy</button><pre><code>npx tsx bin/aether.ts programs    # registry + provenance audit -> "OK"
+npx tsx bin/aether.ts validate    # all 711 components validated</code></pre></div>
+    <p class="muted">If either exits non-zero, the failure message names the exact component or gate.</p>
+  </section>
+
+  <!-- What's next -->
+  <section class="card animate-in">
+    <h2>What's next?</h2>
+    <div class="grid3">
+      <div class="tile">
+        <h3>Explore the 21 engines</h3>
+        <p>Run <code>npx tsx bin/aether.ts programs</code> to see the full capability registry with measured results.</p>
+        <a href="programs.html" style="margin-top:8px;display:inline-block;font-size:13px">View all programs →</a>
+      </div>
+      <div class="tile">
+        <h3>Read the benchmarks</h3>
+        <p>See AETHER's measured numbers vs upstream tools — all honest, all reproducible.</p>
+        <a href="benchmarks.html" style="margin-top:8px;display:inline-block;font-size:13px">View benchmarks →</a>
+      </div>
+      <div class="tile">
+        <h3>Try the live comparison</h3>
+        <p>Same 3 real builds, 3 harnesses. Actual code, screenshots, colors, and cost breakdown.</p>
+        <a href="compare.html" style="margin-top:8px;display:inline-block;font-size:13px">View comparison →</a>
+      </div>
+      <div class="tile">
+        <h3>API reference</h3>
+        <p>Complete API documentation with code examples, TypeScript types, and integration patterns.</p>
+        <a href="api-reference.html" style="margin-top:8px;display:inline-block;font-size:13px">View API →</a>
+      </div>
+      <div class="tile">
+        <h3>Contribute</h3>
+        <p>Development setup, code standards, testing requirements, and the PR process.</p>
+        <a href="contributing.html" style="margin-top:8px;display:inline-block;font-size:13px">View guide →</a>
+      </div>
+      <div class="tile">
+        <h3>Join the community</h3>
+        <p>Ask questions, share projects, and collaborate on GitHub Discussions.</p>
+        <a href="https://github.com/Tabrej96/anythingwithaether/discussions" target="_blank" rel="noopener" style="margin-top:8px;display:inline-block;font-size:13px">GitHub Discussions →</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="wrap">
+  <div class="footer-links">
+    <span>AETHER v1.0 · Created by <a href="https://github.com/Tabrej96">Tabrej</a> · License: <span class="license-badge">Apache-2.0</span></span>
+    <span><a href="https://github.com/Tabrej96/anythingwithaether" target="_blank" rel="noopener"><img src="assets/github-mark.svg" alt="" style="filter:invert(1);width:14px;vertical-align:-2px" /> github.com/Tabrej96/anythingwithaether</a></span>
+  </div>
+  <p class="muted">Need help? See <code>docs/TROUBLESHOOTING.md</code> or open an issue on GitHub.</p>
+</footer>
+</body>
+</html>

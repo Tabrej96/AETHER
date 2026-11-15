@@ -1,0 +1,41 @@
+{
+  "schemaVersion": "2.0.0",
+  "harness": "aether-universal-hooks",
+  "attribution": "Improves upon affaan-m/ECC hooks.json (MIT) with non-blocking <35ms execution budgets and conflict deduplication",
+  "hooks": [
+    {
+      "id": "pre-prompt-security-and-slice",
+      "event": "PrePromptSubmit",
+      "priority": 10,
+      "timeoutMs": 50,
+      "conflictGroup": "context-ingestion",
+      "action": "Scan untrusted files for indirect prompt injection, strip high-entropy secrets, and compute AST PageRank context slice."
+    },
+    {
+      "id": "pre-tool-command-sandbox",
+      "event": "PreToolUse",
+      "matcher": "Bash|Shell|Edit|Write",
+      "priority": 20,
+      "timeoutMs": 35,
+      "conflictGroup": "safety-gate",
+      "action": "Verify active agent holds exclusive file-write lease for target path and block destructive shell AST patterns."
+    },
+    {
+      "id": "post-edit-incremental-verify",
+      "event": "PostToolUse",
+      "matcher": "Edit|Write|MultiEdit",
+      "priority": 30,
+      "timeoutMs": 1200,
+      "conflictGroup": "verification-gate",
+      "action": "Invalidate stale Layer-3 memory hashes for modified file and trigger targeted AST-mapped unit test."
+    },
+    {
+      "id": "pre-compact-merkle-checkpoint",
+      "event": "PreCompact",
+      "priority": 40,
+      "timeoutMs": 80,
+      "conflictGroup": "continuity-ledger",
+      "action": "Persist Zero-Loss Continuity Merkle checkpoint with falsified debugging hypotheses and verified DAG task state."
+    }
+  ]
+}

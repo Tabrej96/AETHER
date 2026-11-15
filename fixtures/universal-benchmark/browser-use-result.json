@@ -1,0 +1,12 @@
+{
+  "task_id": "TASK-REAL-03",
+  "success": true,
+  "n_steps": 7,
+  "duration_ms": 9421,
+  "total_tokens": 18340,
+  "cost_usd": 0.42,
+  "token_usage": {
+    "total_tokens": 18340
+  },
+  "final_result": "The checkout error message is present and announced by the screen reader."
+}

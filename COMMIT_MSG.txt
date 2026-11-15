@@ -1,0 +1,61 @@
+AETHER 1.0 — Nine Advanced Capability Research Programs
+
+AETHER is an autonomous AI engineering platform that transforms
+AI-generated prototypes into complete, market-competitive,
+production-ready products.
+
+One prompt = one complete product. No exceptions.
+
+WHAT AETHER DOES:
+- Researches market and identifies industry leaders
+- Expands prompt into complete project plan
+- Deploys specialized agents in parallel
+- Generates backend API, database, frontend, tests, and deployment
+- Verifies EVERY requirement independently
+- Retries until 10/10 or genuine external blocker
+- Delivers production-ready project with docker-compose up -d
+
+THE CONTROL ENGINE:
+- PromptExpander: Expands one-line prompts into complete project plans
+- AgentSwarmOrchestrator: Deploys specialized agents in parallel
+- VerificationGate: Independent verification (AI cannot say done)
+- ContextStore: Pause/resume capability across sessions
+- ControlEngine: Main orchestrator with retry loop
+
+SPECIALIZED AGENTS:
+- DatabaseArchitect, BackendEngineer, SecurityEngineer, FrontendEngineer
+- QAEngineer, DevOpsEngineer, DocumentationEngineer
+
+NINE CAPABILITY PROGRAMS:
+1. Development Intelligence — Skills, workflows, TDD, debugging
+2. Reverse Intelligence — Application analysis, architecture extraction
+3. Autonomous Execution — Task execution, workspace isolation, recovery
+4. Multi-Agent Orchestration — Event-driven agents, coordination
+5. Browser Intelligence — AI-driven browser control, DOM interaction
+6. Visual Computer Engine — Screenshot understanding, UI detection
+7. Browser Runtime — Headless browsers, cross-browser automation
+8. Workspace & Knowledge — Workspaces, knowledge graphs, plugins
+9. Creative Intelligence — Node-based workflows, 3D rendering
+
+INSPIRATION CREDITS:
+- ECC: affaan-m/ECC
+- Superpowers: obra/superpowers
+- REA: morluto/rea
+- OpenHands: All-Hands-AI/OpenHands
+- OpenManus: FoundationAgents/OpenManus
+- AutoGen: microsoft/autogen
+- browser-use: browser-use/browser-use
+- agent-browser: vercel-labs/agent-browser
+- Skyvern: Skyvern-AI/skyvern
+- OmniParser: microsoft/OmniParser
+- Lightpanda: lightpanda-io/browser
+- Playwright: microsoft/playwright
+- Puter: HeyPuter/puter
+- ComfyUI: Comfy-Org/ComfyUI
+- Three.js: mrdoob/three.js
+
+Built by Tabrej
+https://github.com/Tabrej96/anythingwithaether
+Apache-2.0
+
+Co-Authored-By: Claude Fable 5.2 <noreply@anthropic.com>
