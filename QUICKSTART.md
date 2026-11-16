@@ -66,7 +66,13 @@ What you get (driven by the industry domain pack, not a generic template):
   (React + React Router — Subscriptions is its own page, not a modal.)
 - **Real backend** — Express + SQLite: a real schema, seed data, JWT auth
   (register/login/me), REST routes for every entity, auth-gated endpoints,
-  and input validation. `npm test` exercises it.
+  and input validation. `npm test` exercises it over real HTTP.
+- **Real business logic, not CRUD** — order domains get a generated
+  commerce service: server-side pricing (never trusts client totals),
+  integer minor-unit tax, coupon discounts, idempotent order creation,
+  and an order state machine (illegal transitions → 409). The generated
+  test suite proves all of it against a running app on an ephemeral port
+  with an isolated test DB.
 - **Deployment + ops** — `Dockerfile`, `docker-compose.yml`, `.env.example`,
   and a `README.md` explaining how to run/configure/deploy.
 
