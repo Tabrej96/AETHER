@@ -25,6 +25,7 @@ API keys are optional: without them every engine is deterministic and free; with
 
 | Command | What it does | Time |
 | :--- | :--- | :--- |
+| `npx tsx bin/aether.ts build "<prompt>" --out <dir>` | **Build a complete product** — one short prompt → a standalone, multi-page, full-stack app (Express+SQLite backend, one route per page, JWT auth, schema+seed, Docker, tests). See the "Build a real product" section below. | ~5 s |
 | `npx tsx bin/aether.ts validate` | verify 117 agents + 540 skills + 54 workflows | ~5 s |
 | `npx tsx bin/aether.ts programs` | run all 21 capability engines live | ~10 s |
 | `npx tsx bin/aether.ts deep` | P10: exact GST invoice + tamper guard + live Chrome recompute proof | ~15 s |
@@ -44,6 +45,38 @@ API keys are optional: without them every engine is deterministic and free; with
 | `npx tsx bin/aether.ts install --all --target claude-code --mcp --write .` | write clean Claude-Code-native files (`.claude/agents/*.md`, AGENTS.md, `.mcp.json`) | ~10 s |
 | `npx tsx bin/aether.ts install --all --target all-harnesses --mcp --write .` | every harness target at once (claude/codex/cursor/opencode/kimi) | ~15 s |
 | `npx tsx bin/aether.ts compare` | the full ECC/AETHER/raw-model head-to-head (needs a provider in `.env`) | ~2 min |
+
+## Build a real product (not a prototype)
+
+`aether build` is the flagship command. One short prompt produces a **standalone,
+professional, multi-page, full-stack product** — the opposite of a single-page
+modal app or a bare frontend:
+
+```bash
+npx tsx bin/aether.ts build "Build a coffee shop website with subscriptions" --out ./cofi-shop
+cd ./cofi-shop
+npm install && cp .env.example .env && npm run dev
+```
+
+What you get (driven by the industry domain pack, not a generic template):
+
+- **Real frontend, one route per page** — e.g. a coffee shop yields
+  `/`, `/menu`, `/cart`, `/checkout`, `/customer/subscriptions`,
+  `/admin/dashboard`, `/admin/inventory`, `/staff/order-display`, …
+  (React + React Router — Subscriptions is its own page, not a modal.)
+- **Real backend** — Express + SQLite: a real schema, seed data, JWT auth
+  (register/login/me), REST routes for every entity, auth-gated endpoints,
+  and input validation. `npm test` exercises it.
+- **Deployment + ops** — `Dockerfile`, `docker-compose.yml`, `.env.example`,
+  and a `README.md` explaining how to run/configure/deploy.
+
+The domain is inferred from concrete keywords first (coffee → coffee-shop) so a
+capability word like "subscriptions" doesn't hijack the industry. Verify any
+generation: `npx tsx --test src/core/scaffolding/productScaffolder.test.ts`.
+
+> **Why this exists:** earlier "build" runs emitted the AETHER harness itself
+> with a single-page frontend and no backend. `build` now materializes a
+> runnable product instead.
 
 ## Why no `npm install`?
 

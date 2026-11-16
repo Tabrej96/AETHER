@@ -678,14 +678,48 @@ export function getIndustryByPrompt(prompt: string): IndustryDefinition | undefi
     'netsuite': 'enterprise', 'dynamics': 'enterprise', 'workday': 'enterprise',
   };
 
-  let bestMatch: { industry: Industry; score: number } | null = null;
+  // Two-tier scoring. Concrete domain ANCHORS (coffee, clinic, game, hotel…)
+  // dominate generic CAPABILITY MODIFIERS (subscription, dashboard, admin,
+  // billing…). Without this split, a prompt like "a coffee shop with
+  // subscriptions and admin" resolves to SaaS, because "subscription" is a
+  // longer keyword than "coffee" — a feature word was steering the domain.
+  // Within a tier, longer (more specific) keywords outweigh shorter ones.
+  const GENERIC_MODIFIERS = new Set<string>([
+    // commerce capabilities
+    'product', 'cart', 'checkout',
+    // fulfillment
+    'delivery', 'shipping', 'tracking', 'fulfillment', 'warehouse', 'courier',
+    // money
+    'payment', 'billing', 'invoice', 'payout',
+    // medical ops
+    'appointment',
+    // media
+    'stream', 'video', 'audio', 'content', 'podcast',
+    // social
+    'social', 'feed', 'post', 'follower', 'community', 'creator',
+    // saas
+    'saas', 'subscription', 'dashboard', 'crm', 'workflow', 'api',
+    // productivity
+    'productivity', 'task', 'project', 'todo', 'kanban', 'notes',
+  ]);
+
+  const scoreByIndustry = new Map<Industry, number>();
+  const bump = (industry: Industry, points: number) => {
+    scoreByIndustry.set(industry, (scoreByIndustry.get(industry) ?? 0) + points);
+  };
 
   for (const [keyword, mappedIndustry] of Object.entries(keywordMap)) {
     if (lower.includes(keyword)) {
-      const score = keyword.length; // Longer keywords get priority
-      if (!bestMatch || score > bestMatch.score) {
-        bestMatch = { industry: mappedIndustry, score };
-      }
+      const isAnchor = !GENERIC_MODIFIERS.has(keyword);
+      // Anchors (concrete nouns) outweigh modifiers; longer keywords win in-tie.
+      bump(mappedIndustry, isAnchor ? keyword.length * 100 : keyword.length);
+    }
+  }
+
+  let bestMatch: { industry: Industry; score: number } | null = null;
+  for (const [industry, score] of scoreByIndustry) {
+    if (!bestMatch || score > bestMatch.score) {
+      bestMatch = { industry, score };
     }
   }
 

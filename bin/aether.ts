@@ -618,6 +618,43 @@ if (command === 'audit') {
       `  [PASS] ${tool.name} (${res.executionLatencyMs}ms, saved ${res.tokensSavedVsStatic.toLocaleString()} tokens) -> ${tool.upstreamCredit}`
     );
   }
+} else if (command === 'build' || command === 'scaffold') {
+  // Build a standalone, professional, multi-page, full-stack product from a
+  // short prompt. Writes a runnable project (server + web + docker + tests) to
+  // disk — NOT the AETHER monorepo, NOT a single-page modal app.
+  const { scaffoldProduct } = await import('../src/core/scaffolding/productScaffolder');
+  const promptIdx = args.indexOf('--prompt');
+  const prompt =
+    promptIdx !== -1 && args[promptIdx + 1]
+      ? args[promptIdx + 1]
+      : args.filter((a, i) => !a.startsWith('--') && args[i - 1] !== '--prompt' && args[i - 1] !== '--out' && args[i - 1] !== '--name').join(' ').trim();
+  const outIdx = args.indexOf('--out');
+  const nameIdx = args.indexOf('--name');
+  const outDir = outIdx !== -1 && args[outIdx + 1] ? path.resolve(process.cwd(), args[outIdx + 1]) : path.resolve(process.cwd());
+  const nameArg = nameIdx !== -1 && args[nameIdx + 1] ? args[nameIdx + 1] : undefined;
+  if (!prompt) {
+    console.error('Usage: aether build "<prompt>" [--out <dir>] [--name <project>]\nExample: aether build "Build a coffee shop website" --out ./cofi-shop');
+    process.exit(1);
+  }
+
+  const result = scaffoldProduct({ prompt, projectName: nameArg, generateDeployment: !args.includes('--no-deployment') });
+
+  // Write all files to disk (creating directories as needed).
+  let written = 0;
+  for (const f of result.files) {
+    const full = path.join(outDir, f.path);
+    fs.mkdirSync(path.dirname(full), { recursive: true });
+    fs.writeFileSync(full, f.content, 'utf8');
+    written += 1;
+  }
+
+  console.log(`=== AETHER BUILD — ${result.projectName} (${result.domain} / ${result.industry}) ===`);
+  console.log(`Wrote ${written} files to ${outDir}`);
+  console.log(`\nFrontend routes (${result.pages.length}): ${result.pages.join(', ')}`);
+  console.log(`Backend API (${result.apiRoutes.length}): ${result.apiRoutes.join(', ')}`);
+  console.log(`Database tables (${result.dbTables.length}): ${result.dbTables.join(', ')}`);
+  console.log(`\nNext steps:\n  cd ${result.projectName === outDir ? '.' : path.relative(process.cwd(), outDir) || '.'}`);
+  console.log(`  npm install && cp .env.example .env && npm run dev`);
 } else if (command === 'install') {
   const isInstallAll = args.includes('--all');
   const targetIdx = args.indexOf('--target');
