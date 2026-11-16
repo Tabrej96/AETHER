@@ -270,6 +270,12 @@ function generateRootFiles(name: string, pack: DomainPack, pages: PagePlan[], ap
           'typecheck': 'npm run build -w frontend && tsc -w backend --noEmit',
         },
         workspaces: ['backend', 'frontend'],
+        // `concurrently` is referenced by the dev script — it MUST be declared
+        // here, or `npm run dev` fails (the demo-3 D5 defect class: an
+        // emitted script depending on an undeclared binary).
+        devDependencies: {
+          concurrently: '^9.1.0',
+        },
       },
       null,
       2
@@ -318,7 +324,7 @@ STRIPE_WEBHOOK_SECRET=
   });
 
   const apiLines = apis
-    .map((a) => `  - \`${a.resource}\` → table \`${a.table}\` (\${a.auth})`)
+    .map((a) => `  - \`${a.resource}\` → table \`${a.table}\` (${a.auth})`)
     .join('\n');
   files.push({
     path: 'README.md',
@@ -1350,7 +1356,10 @@ function generateWeb(name: string, pack: DomainPack, pages: PagePlan[], apis: Ap
     ``,
     `// Per-resource endpoints (generated from the ${pack.name} API surface)`,
     ...apis.map((a) => {
-      const listExport = `export const ${pascal(a.resource)}s = () => api('/${a.resource}');`;
+      // English plural, not a blind "s" (demo-3 D7: "Orderss", "Subscriptionss").
+      const IRREGULAR: Record<string, string> = { staff: 'staff', inventory: 'inventories', series: 'series', index: 'indexes' };
+      const plural = IRREGULAR[a.resource] ?? (a.resource.endsWith('s') ? a.resource : `${a.resource}s`);
+      const listExport = `export const list${pascal(plural)} = () => api('/${a.resource}');`;
       const create = a.verbs.includes('create')
         ? `export const create${pascal(a.resource)} = (b: unknown) => api('/${a.resource}', { method: 'POST', body: JSON.stringify(b) });`
         : '';
@@ -1410,7 +1419,6 @@ function generateWeb(name: string, pack: DomainPack, pages: PagePlan[], apis: Ap
     content: [
       `import { Routes, Route } from 'react-router-dom';`,
       `import Layout from './components/Layout';`,
-      `import { publicPages } from './routes';`,
       ...importLines(pages),
       ``,
       `export default function App() {`,
@@ -1423,20 +1431,6 @@ function generateWeb(name: string, pack: DomainPack, pages: PagePlan[], apis: Ap
       `    </Layout>`,
       `  );`,
       `}`,
-    ].join('\n'),
-  });
-
-  // routes index (registry of page components + data)
-  out.push({
-    path: 'frontend/src/routes.ts',
-    kind: 'frontend',
-    content: [
-      `// Page registry generated from the ${pack.name} domain pack.`,
-      `export const publicPages = ${JSON.stringify(
-        publicPages.map((p) => ({ key: p.key, path: p.path, title: p.title })),
-        null,
-        2
-      )};`,
     ].join('\n'),
   });
 
@@ -1926,23 +1920,86 @@ function generateDeployment(name: string, pack: DomainPack): ScaffoldedFile[] {
   return [
     // Root Dockerfile — one image that serves API + built frontend (SPA).
     {
+      path: '.dockerignore',
+      kind: 'deployment',
+      content: `# Never copy local dev state into the image (demo-3 D9/D14: the built
+# image carried 180MB of node_modules and live SQLite WAL files).
+node_modules
+**/node_modules
+data
+**/data
+*.sqlite
+*.sqlite-wal
+*.sqlite-shm
+.env
+.env.*
+dist
+backend/dist
+frontend/dist
+.git
+coverage
+*.log
+`,
+    },
+    {
       path: 'Dockerfile',
       kind: 'deployment',
       content: `# ${pack.name} — single image: API + built frontend (SPA fallback)
+# better-sqlite3 is a native module: the builder stage needs a C++ toolchain
+# to compile it for musl (the prebuilt .node binary is then carried into the
+# runtime stage, so runtime stays toolchain-free and small-ish).
 FROM node:20-alpine AS builder
+RUN apk add --no-cache python3 make g++
 WORKDIR /app
 COPY package*.json ./
 COPY backend ./backend
 COPY frontend ./frontend
 RUN npm install
 RUN npm run build -w frontend && npm run build -w backend
+# Runtime stage: only production deps + build outputs. The backend serves
+# the built frontend from ../frontend/dist (SPA fallback in index.ts).
 FROM node:20-alpine
 WORKDIR /app
-COPY --from=builder /app /app
+COPY package*.json ./
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/backend ./backend
+COPY --from=builder /app/frontend ./frontend
 ENV NODE_ENV=production
 EXPOSE 4000
 # frontend/ is inside /app, so index.ts finds the built SPA at ../frontend/dist
 CMD ["npm", "start", "-w", "backend"]
+`,
+    },
+    {
+      path: '.github/workflows/ci.yml',
+      kind: 'deployment',
+      content: `# CI for the generated product itself (demo-3 D10: no CI shipped before).
+# install → backend tests (real HTTP, isolated test DB) → frontend production
+# build. A red build means the product does not ship.
+name: ci
+on:
+  push:
+  pull_request:
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - name: Install
+        # switch to 'npm ci' once package-lock.json is committed
+        run: npm install
+      - name: Native module (better-sqlite3 prebuild)
+        run: npm rebuild better-sqlite3 || npx --yes node-gyp rebuild --directory=node_modules/better-sqlite3
+      - name: Backend integration tests
+        run: npm test
+      - name: Frontend production build
+        run: npm run build -w frontend
+      - name: Backend typecheck + build
+        run: npm run build -w backend
 `,
     },
     {

@@ -256,6 +256,96 @@ export function verifyScaffoldStatic(result: ScaffoldResult, files: ScaffoldedFi
       : 'no deploy/ directory — product has no real deployment path'
   );
 
+  // 13. Manifest consistency (demo-3 D5): every binary a root script invokes
+  //     must be a declared dependency somewhere in the tree — an undeclared
+  //     `concurrently` makes `npm run dev` fail out of the box. (npm
+  //     workspaces hoist, so a binary declared in ANY workspace manifest is
+  //     resolvable at the root.)
+  const typePkg = () => ({ scripts: {}, dependencies: {}, devDependencies: {} } as {
+    scripts: Record<string, string>;
+    dependencies: Record<string, string>;
+    devDependencies: Record<string, string>;
+  });
+  const rootPkg = JSON.parse(fileOf(files, 'package.json') || '{}') as ReturnType<typeof typePkg>;
+  const declared = new Set<string>();
+  for (const f of files.filter((x) => x.path.endsWith('package.json'))) {
+    try {
+      const p = JSON.parse(f.content) as ReturnType<typeof typePkg>;
+      for (const k of [...Object.keys(p.dependencies ?? {}), ...Object.keys(p.devDependencies ?? {})]) declared.add(k);
+    } catch {
+      /* malformed manifest is caught by the syntax check */
+    }
+  }
+  // External binaries our scripts may invoke (npm/node built-ins are free).
+  const BIN_IN_SCRIPTS: Record<string, string[]> = { concurrently: ['concurrently'], tsc: ['typescript'], vite: ['vite'] };
+  const undeclared = Object.values(rootPkg.scripts ?? {})
+    .flatMap((s) => Object.keys(BIN_IN_SCRIPTS).filter((bin) => s.includes(bin)))
+    .filter((bin) => BIN_IN_SCRIPTS[bin].every((depName) => !declared.has(depName)));
+  add(
+    'manifest-consistency',
+    'Every script binary is a declared dependency (npm run dev cannot fail)',
+    undeclared.length === 0,
+    undeclared.length === 0 ? 'all script binaries declared' : `undeclared binaries in scripts: ${[...new Set(undeclared)].join(', ')}`
+  );
+
+  // 14. Docker hygiene (demo-3 D9/D14): the image must not carry local dev
+  //     state — node_modules and live SQLite WAL files would bloat it and leak
+  //     dev data.
+  const dockerignore = fileOf(files, '.dockerignore') ?? '';
+  const dockerClean = /(^|\n)node_modules/m.test(dockerignore) && /sqlite/.test(dockerignore);
+  add(
+    'docker-clean',
+    '.dockerignore excludes node_modules + SQLite data',
+    dockerClean,
+    dockerClean ? 'image stays small, dev state stays out' : dockerignore ? '.dockerignore present but misses node_modules/sqlite' : 'no .dockerignore — image carries 180MB+ dev state'
+  );
+
+  // 15. CI ships with the product (demo-3 D10): a workflow that installs,
+  //     runs the backend tests, and builds the frontend.
+  const ci = fileOf(files, '.github/workflows/ci.yml') ?? '';
+  const ciOk = ci.includes('on:') && /npm (test|run test)/.test(ci) && /build -w frontend/.test(ci);
+  add(
+    'ci-workflow',
+    'Product ships a CI workflow (tests + frontend build)',
+    ciOk,
+    ciOk ? '.github/workflows/ci.yml installs, tests, builds' : 'no usable CI workflow — broken products can ship unnoticed'
+  );
+
+  // 16. Template hygiene (demo-3 D6): emitted docs/config must not leak
+  //     unrendered generator variables (a single-letter id like ${a.auth}
+  //     is always a generator local, never legitimate product code).
+  const leaks: string[] = [];
+  for (const f of files) {
+    if (/\.(md|yml|yaml|json|toml|example)$/.test(f.path)) {
+      const m = f.content.match(/\$\{[a-z]\b/g);
+      if (m) leaks.push(`${f.path} (${m.slice(0, 3).join(', ')})`);
+    }
+  }
+  add(
+    'template-hygiene',
+    'No unrendered generator variables leak into emitted files',
+    leaks.length === 0,
+    leaks.length === 0 ? 'all emitted content fully rendered' : `leak in: ${leaks.slice(0, 3).join('; ')}`
+  );
+
+  // 17. Frontend↔backend consistency (demo-3 D3): every RESOURCE the
+  //     frontend fetches must be a planned API resource (or '/'). A page
+  //     pointing at /products with no products table/route is a dead UI.
+  const plannedResources = new Set([...apis, '']);
+  const dangling: string[] = [];
+  for (const f of files.filter((x) => x.path.startsWith('frontend/src/pages/'))) {
+    for (const m of f.content.matchAll(/const RESOURCE = "([^"]*)"/g)) {
+      const res = m[1].replace(/^\//, '');
+      if (!plannedResources.has(res)) dangling.push(`${f.path.split('/').pop()}: "${m[1]}"`);
+    }
+  }
+  add(
+    'frontend-api-consistency',
+    'Every page fetches a resource that actually exists on the backend',
+    dangling.length === 0,
+    dangling.length === 0 ? 'all page fetch targets resolve to planned resources' : `dangling fetch targets: ${[...new Set(dangling)].slice(0, 4).join('; ')}`
+  );
+
   return checks;
 }
 

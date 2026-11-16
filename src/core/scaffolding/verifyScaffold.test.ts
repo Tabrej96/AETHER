@@ -124,6 +124,60 @@ describe('verifyScaffoldStatic — broken scaffolds must FAIL (engine is not a r
   });
 });
 
+describe('verifyScaffoldStatic — demo-3 defect invariants (D3/D5/D6/D9/D10)', () => {
+  const result = scaffoldProduct({ prompt: 'Build a coffee shop website with subscriptions' });
+  const checks = verifyScaffoldStatic(result, result.files);
+
+  it('passes all five demo-3 invariants on a clean generation', () => {
+    for (const id of ['manifest-consistency', 'docker-clean', 'ci-workflow', 'template-hygiene', 'frontend-api-consistency']) {
+      const c = find(checks, id);
+      assert.equal(c.status, 'pass', `${id}: ${c.evidence}`);
+    }
+  });
+
+  it('D5: catches an undeclared binary in root scripts', () => {
+    const files = result.files.map((f) => ({ ...f }));
+    const pkg = files.find((f) => f.path === 'package.json')!;
+    pkg.content = pkg.content.replace(/"devDependencies":\s*\{\s*"concurrently"[^}]*\}/, '"devDependencies": {}');
+    assert.equal(find(verifyScaffoldStatic(result, files), 'manifest-consistency').status, 'fail');
+  });
+
+  it('D9/D14: catches a missing .dockerignore', () => {
+    const files = result.files.map((f) => ({ ...f })).filter((f) => f.path !== '.dockerignore');
+    assert.equal(find(verifyScaffoldStatic(result, files), 'docker-clean').status, 'fail');
+  });
+
+  it('D10: catches a product with no CI workflow', () => {
+    const files = result.files.map((f) => ({ ...f })).filter((f) => !f.path.startsWith('.github/'));
+    assert.equal(find(verifyScaffoldStatic(result, files), 'ci-workflow').status, 'fail');
+  });
+
+  it('D6: catches unrendered generator variables in emitted docs', () => {
+    const files = result.files.map((f) => ({ ...f }));
+    const read = files.find((f) => f.path === 'README.md')!;
+    read.content += '\nleak: ${a.auth}\n';
+    assert.equal(find(verifyScaffoldStatic(result, files), 'template-hygiene').status, 'fail');
+  });
+
+  it('D3: catches a page fetching a resource the backend never planned', () => {
+    const files = result.files.map((f) => ({ ...f }));
+    const menu = files.find((f) => f.path === 'frontend/src/pages/MenuPage.tsx')!;
+    menu.content = menu.content.replace('"/menu"', '"/products"');
+    const c = find(verifyScaffoldStatic(result, files), 'frontend-api-consistency');
+    assert.equal(c.status, 'fail');
+    assert.match(c.evidence, /products/);
+  });
+
+  it('emits no dead routes.ts and no mangled plural API names', () => {
+    assert.ok(!result.files.some((f) => f.path === 'frontend/src/routes.ts'), 'routes.ts must not exist (dead file)');
+    const api = result.files.find((f) => f.path === 'frontend/src/lib/api.ts')!.content;
+    assert.doesNotMatch(api, /Orderss|Subscriptionss|Reviewss|listStaffs|listInventorys/);
+    assert.match(api, /listOrders/);
+    const pkg = JSON.parse(result.files.find((f) => f.path === 'package.json')!.content) as { devDependencies?: Record<string, string> };
+    assert.ok(pkg.devDependencies?.concurrently, 'concurrently must be a declared devDependency');
+  });
+});
+
 describe('verifyScaffoldStatic — professional structure + css + deploy (§9/§11)', () => {
   const result = scaffoldProduct({ prompt: 'Build a coffee shop website with subscriptions' });
 
