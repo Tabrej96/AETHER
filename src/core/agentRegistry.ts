@@ -33,31 +33,44 @@ export class AgentRegistry {
 
   /**
    * Load all agents from filesystem
+   *
+   * AETHER native agents live in `.claude/agents/*.md` (top level).
+   * ECC-sourced agents are vendored into `.claude/agents/ecc/*.md` and are
+   * loaded with an `ecc/` id prefix so the deployment plan's `ecc/<name>`
+   * references resolve. (Previously this pointed at a dead `.ecc-scout`
+   * git-submodule that never populated — removed.)
    */
   private loadAllAgents(): void {
-    // Load AETHER native agents
+    // Load AETHER native agents (top-level .claude/agents/*.md only; the
+    // `ecc/` subdirectory is handled separately below).
     const aetherAgentsDir = path.join(this.rootDir, '.claude', 'agents');
     this.loadAgentsFromDir(aetherAgentsDir, 'aether-native');
 
-    // Load ECC agents
-    const eccAgentsDir = path.join(this.rootDir, '.ecc-scout', 'agents');
-    if (fs.existsSync(eccAgentsDir)) {
-      this.loadAgentsFromDir(eccAgentsDir, 'ecc');
-    }
+    // Load vendored ECC agents.
+    const eccAgentsDir = path.join(this.rootDir, '.claude', 'agents', 'ecc');
+    this.loadAgentsFromDir(eccAgentsDir, 'ecc', 'ecc/');
   }
 
   /**
    * Load agents from a directory
    */
-  private loadAgentsFromDir(dir: string, source: 'aether-native' | 'ecc' | 'external'): void {
+  private loadAgentsFromDir(
+    dir: string,
+    source: 'aether-native' | 'ecc' | 'external',
+    idPrefix = ''
+  ): void {
     if (!fs.existsSync(dir)) return;
 
-    const files = fs.readdirSync(dir).filter(f => f.endsWith('.md') && f !== 'README.md');
+    // Read only this directory's own .md files (do not recurse into subdirs).
+    const entries = fs.readdirSync(dir, { withFileTypes: true });
+    const files = entries
+      .filter(e => e.isFile() && e.name.endsWith('.md') && e.name !== 'README.md')
+      .map(e => e.name);
 
     for (const file of files) {
       const filePath = path.join(dir, file);
       const content = fs.readFileSync(filePath, 'utf-8');
-      const agent = this.parseAgentFile(file, content, source, filePath);
+      const agent = this.parseAgentFile(file, content, source, filePath, idPrefix);
       if (agent) {
         this.agents.set(agent.id, agent);
       }
@@ -67,8 +80,14 @@ export class AgentRegistry {
   /**
    * Parse agent definition from markdown file
    */
-  private parseAgentFile(fileName: string, content: string, source: string, filePath: string): AgentDefinition | null {
-    const id = fileName.replace('.md', '');
+  private parseAgentFile(
+    fileName: string,
+    content: string,
+    source: string,
+    filePath: string,
+    idPrefix = ''
+  ): AgentDefinition | null {
+    const id = idPrefix + fileName.replace('.md', '');
     const nameMatch = content.match(/name:\s*(.+)/i);
     const descMatch = content.match(/description:\s*(.+)/i);
     const modelMatch = content.match(/model:\s*(\w+)/i);
@@ -109,23 +128,38 @@ export class AgentRegistry {
   }
 
   /**
-   * Extract capabilities from agent content
+   * Extract capabilities from agent content.
+   *
+   * AETHER agent files are markdown with optional YAML frontmatter followed by
+   * a "# Core Capabilities" / "# Capabilities" section of bullet lines.
+   * NOTE: `String.prototype.matchAll` requires a *global* regex; the previous
+   * implementation passed non-global patterns to it and threw a TypeError,
+   * which crashed the whole registry on construction.
    */
   private extractCapabilities(content: string): string[] {
     const capabilities: string[] = [];
 
-    // Look for capability lists
-    const capabilityPatterns = [
-      /# Capabilities\s+([\s\S]+?)(?:\n#|\n---)/i,
-      /capabilities:\s+([\s\S]+?)(?:\n\w+:|$)/i,
-      /- ([A-Z][a-zA-Z\s]+)\n/g,
-    ];
+    // Pull a capability list from a "# Capabilities"-style heading section.
+    const sectionMatch = content.match(/^#{1,6}\s*.*capabilities\b[^\n]*\n+((?:[-*]\s+[^\n]*\n?)+)/i);
+    if (sectionMatch) {
+      const items = sectionMatch[1]
+        .split('\n')
+        .map(line => line.replace(/^[-*]\s*/, '').trim())
+        .filter(Boolean);
+      capabilities.push(...items);
+    }
 
-    for (const pattern of capabilityPatterns) {
-      const matches = content.matchAll(pattern);
-      for (const match of matches) {
-        const items = match[1].split('\n').map(line => line.replace(/^-\s*/, '').trim()).filter(Boolean);
-        capabilities.push(...items);
+    // Fallback: a `capabilities:` frontmatter block (comma or bullet separated).
+    const frontmatterMatch = content.match(/capabilities:\s+([^\n]+)/i);
+    if (frontmatterMatch && capabilities.length === 0) {
+      capabilities.push(...frontmatterMatch[1].split(/[,\n]/).map(s => s.trim()).filter(Boolean));
+    }
+
+    // If nothing matched, derive capability-ish phrases from the description.
+    if (capabilities.length === 0) {
+      const descMatch = content.match(/description:\s*([^\n]+)/i);
+      if (descMatch) {
+        capabilities.push(...descMatch[1].split(/,\s*/).map(s => s.trim()).filter(Boolean));
       }
     }
 
@@ -274,7 +308,7 @@ export class AgentRegistry {
       'P6': ['api-integration', 'backend-engineer'],
       'P7': ['api-integration', 'backend-engineer'],
       'P8': ['frontend-engineer', 'ui-ux-designer'],
-      'P9': ['security-engineer', 'ecc/agent-security-hardening'],
+      'P9': ['security-engineer', 'ecc/security-reviewer'],
       'P10': ['testing-engineer', 'qa-engineer', 'ecc/e2e-runner'],
       'P11': ['devops-engineer', 'deployment-engineer'],
       'P12': ['documentation-engineer', 'ecc/docs-lookup'],

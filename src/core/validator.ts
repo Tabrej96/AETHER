@@ -182,7 +182,7 @@ export function computeBenchmarkSummary(
   };
 }
 
-export type HarnessTarget = 'claude-code' | 'codex' | 'cursor' | 'opencode' | 'mcp-server' | 'all-harnesses';
+export type HarnessTarget = 'claude-code' | 'codex' | 'cursor' | 'opencode' | 'kimi' | 'mcp-server' | 'all-harnesses';
 
 export type InstallDomainPackId = 'core-polyglot' | 'design-ui' | 'video-ffmpeg' | 'aws-cloud-vps' | 'mcp-tools';
 

@@ -1,0 +1,45 @@
+# ==============================================================================
+# AETHER — published npm package excludes (kept lean: consumers get the
+# installable harness, not the development monorepo)
+#
+# The `files` whitelist in package.json is the primary control; this file is
+# explicit intent + defense-in-depth for anything the whitelist still pulls in.
+# ==============================================================================
+
+# Development / UI monorepo — not needed to run or install the harness
+website/
+public/
+docs/
+fixtures/
+expansions/
+release-evidence/
+schema/
+src/**/*.test.ts
+test/
+_debug.ts
+gen_*.cjs
+_bench/
+bench/
+_build/
+
+# Dev-only harness config (installed INTO target projects, not shipped raw)
+.claude/
+
+# Build tooling / source (the published bin is the bundled dist/bins)
+tsconfig.json
+vite.config.ts
+index.html
+assets/
+esbuild*.mjs
+
+# VCS / CI / local
+.git/
+.github/
+.husky/
+.gitmodules
+*.log
+.env
+.env.local
+
+# OS
+.DS_Store

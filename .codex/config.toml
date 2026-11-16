@@ -1,0 +1,37 @@
+#:schema https://developers.openai.com/codex/config-schema.json
+
+# AETHER project-scoped Codex reference.
+# Guidance, features, and local role definitions. Settings inherit from other
+# config layers unless overridden; this file does not certify effective
+# permissions or prevent configured tools from running.
+
+persistent_instructions = "Follow AETHER project rules (see .codex/AGENTS.md). Use the AETHER MCP server when it can help; AETHER independently verifies completion — do not mark work done without the verification gate."
+
+[features]
+# Native multi-agent orchestration (maps to .codex/agents/*.toml).
+multi_agent = true
+
+[agents]
+# Role limits for the local roles below.
+max_threads = 6
+max_depth = 1
+
+[agents.explorer]
+description = "Read-only codebase explorer: gather real evidence before proposing changes."
+config_file = "agents/explorer.toml"
+
+[agents.planner]
+description = "Product & architecture planner: turn a short brief into a complete engineering plan."
+config_file = "agents/planner.toml"
+
+[agents.reviewer]
+description = "Reviewer focused on correctness, security, and missing tests."
+config_file = "agents/reviewer.toml"
+
+# AETHER MCP server. The installer (`aether install --target codex`) merges
+# this block into the project .mcp.json; declared here for reference.
+[mcp_servers.aether]
+command = "npx"
+args = ["tsx", "mcp/aether-mcp-server.ts"]
+enabled = true
+trusted = true

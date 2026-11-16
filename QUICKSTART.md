@@ -40,7 +40,9 @@ API keys are optional: without them every engine is deterministic and free; with
 | `npx tsx bin/aether.ts plan "Build a marketplace"` | P20: the execution plan a prompt OWES — mode, catalog-verified team, waves, §5 requirement tiers, stop condition | ~2 s |
 | `npx tsx bin/aether.ts design-system [CATEGORY] [DIRECTION]` | P21: the §6 design-system generator — 12 creative directions, tokens with measured WCAG contrast, owed interactions, a gate+taste-verified starter; `design-system` alone runs the 28/28 acceptance matrix | ~2 s |
 | `npx tsx bin/aether.ts benchmark` | reproducible benchmark suite | ~15 s |
-| `npx tsx bin/aether.ts install --all --target all-harnesses --write .` | install into your editor(s), zero config | ~10 s |
+| `npx tsx bin/aether.ts install --all --target codex --mcp --write .` | write clean Codex-native files (AGENTS.md, `.codex/agents/*.toml`, `.mcp.json`) | ~10 s |
+| `npx tsx bin/aether.ts install --all --target claude-code --mcp --write .` | write clean Claude-Code-native files (`.claude/agents/*.md`, AGENTS.md, `.mcp.json`) | ~10 s |
+| `npx tsx bin/aether.ts install --all --target all-harnesses --mcp --write .` | every harness target at once (claude/codex/cursor/opencode/kimi) | ~15 s |
 | `npx tsx bin/aether.ts compare` | the full ECC/AETHER/raw-model head-to-head (needs a provider in `.env`) | ~2 min |
 
 ## Why no `npm install`?

@@ -27,14 +27,8 @@ import {
   AETHER_WORKFLOWS,
   OPEN_SOURCE_CREDITS,
 } from '../src/data/repositoryCatalog';
-import {
-  buildSelectiveInstallManifest,
-  HarnessTarget,
-  InstallDomainPackId,
-  validateAgentSpec,
-  validateSkillSpec,
-  validateWorkflowSpec,
-} from '../src/core/validator';
+import { buildSelectiveInstallManifest, HarnessTarget, InstallDomainPackId, validateAgentSpec, validateSkillSpec, validateWorkflowSpec } from '../src/core/validator';
+import { buildHarnessInstall, writeInstall } from '../src/core/harnessInstaller';
 import { scanSecurityAndTrustBoundaries } from '../src/core/securityEngine';
 import { runComponentAuditAndRefinementLoop } from '../src/core/liveBenchmarkRunner';
 import { AETHER_MCP_TOOLS, executeMcpToolCall } from '../src/core/mcpServerEngine';
@@ -682,41 +676,28 @@ if (command === 'audit') {
   const writeIdx = args.indexOf('--write');
   if (writeIdx !== -1 && args[writeIdx + 1]) {
     const outDir = path.resolve(process.cwd(), args[writeIdx + 1]);
+    const projectIdx = args.indexOf('--project');
+    const projectName = projectIdx !== -1 && args[projectIdx + 1] ? args[projectIdx + 1] : undefined;
+
+    // GATE 10 (clean install): write the target-native harness files the harness
+    // actually discovers (agent definitions, AGENTS.md, .codex/*.toml, .mcp.json),
+    // not just a manifest blob. buildHarnessInstall produces the real files; the
+    // owned-files manifest keeps uninstall scoped to AETHER's own files.
+    const harness = buildHarnessInstall({ target, projectName, includeMcp: includeMcp });
+    const written = writeInstall(outDir, harness);
+
+    // Keep the full component manifest alongside for auditability.
     fs.mkdirSync(path.join(outDir, '.aether'), { recursive: true });
     fs.writeFileSync(path.join(outDir, '.aether', 'manifest.json'), manifest.generatedConfigFileContent, 'utf8');
-    const ownedFiles: string[] = [ '.aether/manifest.json' ];
-    if (includeMcp) {
-      fs.writeFileSync(
-        path.join(outDir, '.mcp.json'),
-        JSON.stringify(
-          {
-            mcpServers: {
-              aether: {
-                command: 'npx',
-                args: ['tsx', 'mcp/aether-mcp-server.ts'],
-                author: 'Tabrej',
-                license: 'Apache-2.0',
-              },
-            },
-          },
-          null,
-          2
-        ),
-        'utf8'
-      );
-      ownedFiles.push('.mcp.json');
-    }
-    // GATE 10: record EXACTLY which files AETHER created so `uninstall` is
-    // manifest-scoped and never touches operator files.
     fs.writeFileSync(
       path.join(outDir, '.aether', 'owned-files.json'),
-      JSON.stringify({ ownedFiles, installedAtIso: new Date().toISOString() }, null, 2),
-      'utf8'
+      JSON.stringify({ ownedFiles: [...written, '.aether/manifest.json'], target, installedAtIso: new Date().toISOString() }, null, 2)
     );
-    ownedFiles.push('.aether/owned-files.json');
+
     console.log(
-      `[AETHER INSTALLER] Successfully installed ${manifest.selectedAgents.length} Agents, ${manifest.selectedSkills.length} Skills, ${manifest.selectedRules.length} Rules, and ${manifest.mcpToolsCount} MCP Tools to ${outDir}`
+      `[AETHER INSTALLER] Installed ${harness.files.length} ${target}-native file(s) into ${outDir} (catalog: ${manifest.selectedAgents.length} agents, ${manifest.selectedSkills.length} skills, ${manifest.selectedRules.length} rules, ${manifest.mcpToolsCount} MCP tools)`
     );
+    for (const line of harness.summary) console.log(line);
     console.log(`[AETHER INSTALLER] Owned-files manifest written (.aether/owned-files.json); run \`aether uninstall --write <dir>\` to remove exactly these.`);
   } else {
     console.log(manifest.generatedConfigFileContent);

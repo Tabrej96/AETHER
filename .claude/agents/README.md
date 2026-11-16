@@ -150,5 +150,5 @@ AETHER does not copy proprietary designs or code. It learns from architectural a
 ## License
 
 AETHER: Apache-2.0
-ECC: MIT (see .ecc-scout/LICENSE)
+ECC: MIT (vendored under `.claude/agents/ecc/`, original: https://github.com/affaan-m/everything-claude-code)
 Superpowers: MIT (see https://github.com/obra/superpowers)

@@ -21,9 +21,34 @@ import { SOCIAL_PACK, SOCIAL_DOMAIN } from './social.js';
 import { MEDIA_PACK, MEDIA_DOMAIN } from './media.js';
 
 import type { DomainPack, DomainModel } from './domainPackTypes.js';
-import { toDomainModel } from './domainPackTypes.js';
 
 export type { DomainPack, DomainModel, BusinessRulesSpec, DesignSpec, SecuritySpec, TestingSpec, TechnicalArchitectureDef, RegulatoryComplianceEntry, StateMachineDef } from './domainPackTypes.js';
+
+// The three legacy packs (coffee_shop, ecommerce, saas) export only their
+// *_PACK object, not a *_DOMAIN. The modern packs export both. To keep this
+// barrel's domain registry complete (and to avoid a runtime ReferenceError on
+// the domain-model arrays below), derive a minimal DomainModel for the legacy
+// packs here. DomainModel is an open record type, so a minimal shape is safe.
+//
+// NOTE: `toDomainModel` was previously imported from `./domainPackTypes.js`,
+// where it does not exist (each modern pack file defines its own local copy).
+// That import was unused and is a latent runtime hazard, so it is removed.
+function legacyDomainModel(pack: DomainPack, domainId: string): DomainModel {
+  const catalog = pack.catalog as { categories?: string[] } | undefined;
+  return {
+    id: domainId,
+    domain: domainId,
+    name: pack.name,
+    label: pack.name,
+    category: catalog?.categories?.[0] ?? 'general',
+    description: pack.description,
+    standardFeatures: [],
+  };
+}
+
+export const COFFEE_SHOP_DOMAIN: DomainModel = legacyDomainModel(COFFEE_SHOP_PACK, 'coffee_shop');
+export const ECOMMERCE_DOMAIN: DomainModel = legacyDomainModel(ECOMMERCE_PACK, 'ecommerce');
+export const SAAS_DOMAIN: DomainModel = legacyDomainModel(SAAS_PACK, 'saas');
 
 export const domainPacks: DomainPack[] = [
   COFFEE_SHOP_PACK as DomainPack,
