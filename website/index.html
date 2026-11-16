@@ -1,141 +1,1525 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>AETHER — The open-source AI engineering harness that executes</title>
-<meta name="description" content="AETHER: a free, open-source toolkit that gives AI coding agents real engineering superpowers — autonomous execution, multi-agent teams, crash-proof checkpoints, and a machine-verified catalog. Created by Tabrej." />
-<link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AETHER — The 100x Open-Source AI Engineering Harness</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg-primary: #09090b;
+      --bg-secondary: #111113;
+      --bg-tertiary: #18181b;
+      --bg-elevated: #1c1c1f;
+      --border-subtle: rgba(255,255,255,0.06);
+      --border-medium: rgba(255,255,255,0.1);
+      --border-strong: rgba(255,255,255,0.18);
+      --text-primary: #fafafa;
+      --text-secondary: #a1a1aa;
+      --text-tertiary: #71717a;
+      --accent-cyan: #06b6d4;
+      --accent-cyan-dim: rgba(6,182,212,0.15);
+      --accent-violet: #8b5cf6;
+      --accent-violet-dim: rgba(139,92,246,0.15);
+      --accent-emerald: #10b981;
+      --accent-emerald-dim: rgba(16,185,129,0.12);
+      --accent-amber: #f59e0b;
+      --accent-rose: #f43f5e;
+      --accent-blue: #3b82f6;
+      --accent-blue-dim: rgba(59,130,246,0.12);
+      --accent-orange: #f97316;
+      --accent-teal: #14b8a6;
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --radius-lg: 16px;
+      --radius-xl: 24px;
+      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-display: 'Space Grotesk', 'Inter', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      --transition-fast: 150ms cubic-bezier(0.4,0,0.2,1);
+      --transition-med: 300ms cubic-bezier(0.4,0,0.2,1);
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior: smooth; scrollbar-width: thin; scrollbar-color: #27272a transparent; }
+    body { font-family: var(--font-sans); background: var(--bg-primary); color: var(--text-primary); line-height: 1.6; -webkit-font-smoothing: antialiased; overflow-x: hidden; cursor: none; }
+    ::-webkit-scrollbar { width:6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #27272a; border-radius: 3px; }
+
+    /* Custom Cursor */
+    .cursor-dot { position: fixed; width: 8px; height: 8px; background: var(--accent-cyan); border-radius: 50%; pointer-events: none; z-index: 9999; transition: transform 0.1s ease, opacity 0.3s; mix-blend-mode: difference; transform: translate(-50%,-50%); }
+    .cursor-ring { position: fixed; width: 36px; height: 36px; border: 1.5px solid rgba(139,92,246,0.5); border-radius: 50%; pointer-events: none; z-index: 9998; transition: transform 0.15s ease, width 0.3s, height 0.3s, border-color 0.3s; transform: translate(-50%,-50%); }
+    .cursor-ring.hover { width: 56px; height: 56px; border-color: var(--accent-cyan); }
+
+    /* Particle Canvas */
+    #particleCanvas { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+    .section-label {
+      font-family: var(--font-mono); font-size: 11px; font-weight: 500;
+      text-transform: uppercase; letter-spacing: 0.15em; color: var(--accent-cyan); margin-bottom: 12px;
+    }
+    .section-title {
+      font-family: var(--font-display); font-size: clamp(28px,4vw,42px); font-weight: 700;
+      letter-spacing: -0.02em; line-height: 1.15; margin-bottom: 16px;
+    }
+    .section-subtitle { font-size: 17px; color: var(--text-secondary); line-height: 1.6; max-width: 680px; }
+
+    /* Nav */
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; backdrop-filter: blur(20px) saturate(1.2); background: rgba(9,9,11,0.75); border-bottom: 1px solid var(--border-subtle); }
+    nav .nav-inner { max-width: 1200px; margin: 0 auto; padding: 0 24px; height: 60px; display: flex; align-items: center; justify-content: space-between; }
+    .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--text-primary); }
+    .nav-logo-text { font-family: var(--font-display); font-weight: 700; font-size: 18px; letter-spacing: -0.01em; }
+    .nav-links { display: flex; align-items: center; gap: 4px; list-style: none; }
+    .nav-links a { color: var(--text-secondary); text-decoration: none; font-size: 13.5px; font-weight: 500; padding: 6px 14px; border-radius: var(--radius-sm); transition: var(--transition-fast); }
+    .nav-links a:hover { color: var(--text-primary); background: var(--bg-tertiary); }
+    .nav-cta { display: flex; align-items: center; gap: 10px; }
+    .btn-github { display: inline-flex; align-items: center; gap: 8px; padding: 7px 16px; border-radius: var(--radius-sm); background: var(--bg-tertiary); border: 1px solid var(--border-medium); color: var(--text-primary); font-size: 13px; font-weight: 500; text-decoration: none; transition: var(--transition-fast); }
+    .btn-github:hover { background: var(--bg-elevated); border-color: var(--border-strong); transform: translateY(-1px); }
+
+    /* Hero */
+    .hero { min-height: 100vh; display: flex; align-items: center; position: relative; overflow: hidden; padding-top: 60px; }
+    .hero-bg { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+    .hero-bg .orb { position: absolute; border-radius: 50%; filter: blur(100px); }
+    .hero-bg .orb-1 { width: 600px; height: 600px; background: var(--accent-cyan); top: -200px; right: -100px; opacity: 0.12; animation: orbFloat 12s ease-in-out infinite; }
+    .hero-bg .orb-2 { width: 400px; height: 400px; background: var(--accent-violet); bottom: -100px; left: -100px; opacity: 0.1; animation: orbFloat 15s ease-in-out infinite reverse; }
+    .hero-bg .orb-3 { width: 300px; height: 300px; background: var(--accent-emerald); top: 40%; left: 50%; opacity: 0.07; animation: orbFloat 18s ease-in-out infinite 3s; }
+    @keyframes orbFloat { 0%,100%{transform:translate(0,0) scale(1)} 33%{transform:translate(30px,-40px) scale(1.05)} 66%{transform:translate(-20px,20px) scale(0.95)} }
+    .hero-grid { position: absolute; inset: 0; background-image: linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px); background-size: 64px 64px; mask-image: radial-gradient(ellipse at center, black 30%, transparent 70%); -webkit-mask-image: radial-gradient(ellipse at center, black 30%, transparent 70%); }
+    .hero-split { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; padding-top: 40px; padding-bottom: 40px; }
+    .hero-left { position: relative; z-index: 2; }
+    .hero-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; border-radius: 100px; background: var(--accent-cyan-dim); border: 1px solid rgba(6,182,212,0.2); font-family: var(--font-mono); font-size: 12px; font-weight: 500; color: var(--accent-cyan); margin-bottom: 28px; }
+    .hero-badge .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent-cyan); animation: pulse 2s ease-in-out infinite; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+    .hero-title { font-family: var(--font-display); font-size: clamp(40px,5.5vw,68px); font-weight: 800; letter-spacing: -0.03em; line-height: 1.05; margin-bottom: 22px; }
+    .gradient-text { background: linear-gradient(135deg, var(--accent-cyan), var(--accent-violet)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .hero-desc { font-size: 16.5px; color: var(--text-secondary); line-height: 1.7; margin-bottom: 36px; max-width: 520px; }
+    .hero-actions { display: flex; gap: 12px; margin-bottom: 52px; flex-wrap: wrap; }
+    .btn-primary { display: inline-flex; align-items: center; gap: 8px; padding: 12px 22px; border-radius: var(--radius-sm); background: var(--accent-cyan); color: #000; font-weight: 600; font-size: 14px; text-decoration: none; transition: var(--transition-fast); border: none; }
+    .btn-primary:hover { filter: brightness(1.1); transform: translateY(-1px); box-shadow: 0 8px 30px rgba(6,182,212,0.3); }
+    .btn-secondary { display: inline-flex; align-items: center; gap: 8px; padding: 12px 22px; border-radius: var(--radius-sm); background: transparent; border: 1px solid var(--border-medium); color: var(--text-primary); font-weight: 500; font-size: 14px; text-decoration: none; transition: var(--transition-fast); }
+    .btn-secondary:hover { border-color: var(--text-tertiary); background: var(--bg-tertiary); }
+    .hero-metrics { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+    .hero-metric-val { font-family: var(--font-display); font-size: 28px; font-weight: 700; letter-spacing: -0.02em; color: var(--text-primary); display: block; }
+    .hero-metric-lbl { font-size: 11.5px; color: var(--text-tertiary); margin-top: 2px; display: block; }
+    .hero-right { position: relative; z-index: 2; display: flex; align-items: center; justify-content: center; }
+    .hero-visual { position: relative; width: 100%; max-width: 520px; }
+    .hero-terminal { border-radius: var(--radius-lg); background: #0c0c10; border: 1px solid var(--border-medium); overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.04); transform: perspective(800px) rotateY(-4deg) rotateX(2deg); transition: transform 0.5s ease; }
+    .hero-terminal:hover { transform: perspective(800px) rotateY(0deg) rotateX(0deg); }
+    .terminal-bar { display: flex; align-items: center; gap: 7px; padding: 13px 16px; background: #131318; border-bottom: 1px solid var(--border-subtle); }
+    .terminal-dot { width: 11px; height: 11px; border-radius: 50%; }
+    .terminal-dot.t-red { background: #ff5f57; }
+    .terminal-dot.t-yellow { background: #ffbd2e; }
+    .terminal-dot.t-green { background: #28c840; }
+    .terminal-title { margin-left: 10px; font-family: var(--font-mono); font-size: 11px; color: var(--text-tertiary); }
+    .terminal-body { padding: 18px 20px; font-family: var(--font-mono); font-size: 12.5px; line-height: 1.8; }
+    .terminal-line { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .prompt { color: var(--accent-emerald); margin-right: 8px; }
+    .term-muted { color: var(--text-tertiary); }
+    .term-success { color: var(--accent-emerald); }
+    .term-info { color: var(--accent-cyan); }
+    .cursor-blink { animation: blink 1s step-end infinite; color: var(--accent-cyan); }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+    .hero-float { position: absolute; display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-radius: var(--radius-md); background: rgba(15,15,18,0.9); border: 1px solid var(--border-medium); backdrop-filter: blur(12px); box-shadow: 0 8px 32px rgba(0,0,0,0.4); animation: floatBadge 6s ease-in-out infinite; }
+    .hero-float--1 { top: -10px; right: -20px; animation-delay: 0s; }
+    .hero-float--2 { bottom: 30px; left: -30px; animation-delay: 2s; }
+    .hero-float--3 { bottom: -10px; right: 20px; animation-delay: 4s; }
+    @keyframes floatBadge { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+    .hero-float-title { font-size: 12px; font-weight: 600; white-space: nowrap; }
+    .hero-float-sub { font-size: 10.5px; color: var(--text-tertiary); white-space: nowrap; }
+    @media (max-width: 1024px) { .hero-split { grid-template-columns: 1fr; gap: 40px; } .hero-right { display: none; } .hero-metrics { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 640px) { .hero-title { font-size: 36px; } .hero-metrics { grid-template-columns: 1fr 1fr; } }
+
+    /* Card Glow Effect */
+    .arch-card, .engine-card, .agent-chip, .skill-domain-card, .model-card, .security-card, .program-card, .harness-card, .hook-card, .eco-card { position: relative; overflow: hidden; }
+    .arch-card::after, .engine-card::after, .skill-domain-card::after, .model-card::after, .security-card::after, .program-card::after, .harness-card::after, .hook-card::after, .eco-card::after { content: ''; position: absolute; inset: -1px; border-radius: inherit; opacity: 0; transition: opacity 0.4s ease; pointer-events: none; z-index: -1; }
+    .arch-card:hover::after { opacity: 1; box-shadow: 0 0 30px -10px var(--card-accent, var(--accent-cyan)); }
+    .engine-card:hover::after { opacity: 1; box-shadow: 0 0 30px -10px var(--accent-cyan); }
+    .skill-domain-card:hover::after { opacity: 1; box-shadow: 0 0 30px -10px var(--accent-violet); }
+    .model-card:hover::after { opacity: 1; box-shadow: 0 0 30px -10px var(--accent-indigo); }
+    .security-card:hover::after { opacity: 1; box-shadow: 0 0 30px -10px var(--accent-blue); }
+    .program-card:hover::after { opacity: 1; box-shadow: 0 0 30px -10px var(--accent-emerald); }
+    .harness-card:hover::after { opacity: 1; box-shadow: 0 0 30px -10px var(--accent-amber); }
+    .hook-card:hover::after { opacity: 1; box-shadow: 0 0 30px -10px var(--accent-rose); }
+    .eco-card:hover::after { opacity: 1; box-shadow: 0 0 30px -10px var(--accent-cyan); }
+
+    /* Agent chip glow */
+    .agent-chip { position: relative; overflow: hidden; }
+    .agent-chip::before { content: ''; position: absolute; inset: 0; border-radius: inherit; opacity: 0; transition: opacity 0.3s ease; }
+    .agent-chip:hover::before { opacity: 1; background: linear-gradient(135deg, rgba(139,92,246,0.05), rgba(6,182,212,0.03)); }
+
+    /* Section header animation */
+    .section-label { display: inline-flex; align-items: center; gap: 8px; }
+    .section-label::before { content: ''; width: 16px; height: 1.5px; background: var(--accent-cyan); border-radius: 1px; }
+
+    /* 3D Tilt */
+    .tilt-card { transition: transform 0.1s ease, box-shadow 0.3s ease; transform-style: preserve-3d; }
+
+    /* Stagger delays */
+    .stagger-1 { animation-delay: 0.05s; } .stagger-2 { animation-delay: 0.1s; } .stagger-3 { animation-delay: 0.15s; } .stagger-4 { animation-delay: 0.2s; } .stagger-5 { animation-delay: 0.25s; } .stagger-6 { animation-delay: 0.3s; } .stagger-7 { animation-delay: 0.35s; } .stagger-8 { animation-delay: 0.4s; } .stagger-9 { animation-delay: 0.45s; } .stagger-10 { animation-delay: 0.5s; }
+
+    /* Pipeline animation */
+    .pipeline-track { position: relative; height: 80px; display: flex; align-items: center; justify-content: space-between; margin-top: 48px; padding: 0 12px; }
+    .pipeline-node { position: relative; z-index: 2; display: flex; flex-direction: column; align-items: center; gap: 10px; }
+    .pipeline-icon { width: 52px; height: 52px; border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; border: 1px solid var(--border-medium); background: var(--bg-secondary); transition: var(--transition-med); }
+    .pipeline-node:hover .pipeline-icon { border-color: var(--accent-cyan); box-shadow: 0 0 24px rgba(6,182,212,0.25); transform: scale(1.1); }
+    .pipeline-label { font-size: 11px; color: var(--text-tertiary); font-weight: 500; text-align: center; white-space: nowrap; }
+    .pipeline-connector { flex: 1; height: 1px; background: var(--border-subtle); position: relative; margin: 0 4px; overflow: hidden; }
+    .pipeline-connector::after { content: ''; position: absolute; top: 0; left: -100%; height: 100%; width: 100%; background: linear-gradient(90deg, transparent, var(--accent-cyan), var(--accent-violet), transparent); animation: flowLine 3s linear infinite; }
+    .pipeline-connector:nth-child(2)::after { animation-delay: 0.5s; }
+    .pipeline-connector:nth-child(4)::after { animation-delay: 1s; }
+    .pipeline-connector:nth-child(6)::after { animation-delay: 1.5s; }
+    @keyframes flowLine { 0%{left:-100%} 100%{left:100%} }
+
+    /* Sections */
+    section { padding: 120px 0; position: relative; }
+    section.divider-top { border-top: 1px solid var(--border-subtle); }
+    .scroll-progress { position: fixed; top: 0; left: 0; height: 2px; background: linear-gradient(90deg, var(--accent-cyan), var(--accent-violet)); z-index: 200; }
+    .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* Arch Cards */
+    .arch-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 64px; }
+    .arch-card { padding: 28px; border-radius: var(--radius-lg); background: var(--bg-secondary); border: 1px solid var(--border-subtle); transition: var(--transition-med); position: relative; overflow: hidden; }
+    .arch-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: var(--card-accent, var(--accent-cyan)); opacity: 0; transition: var(--transition-med); }
+    .arch-card:hover { border-color: var(--border-medium); transform: translateY(-4px); }
+    .arch-card:hover::before { opacity: 1; }
+    .arch-card-icon { width: 44px; height: 44px; border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; margin-bottom: 20px; }
+    .arch-card-title { font-family: var(--font-display); font-size: 17px; font-weight: 600; margin-bottom: 8px; }
+    .arch-card-desc { font-size: 14px; color: var(--text-secondary); line-height: 1.6; }
+    .arch-card-module { display: inline-block; font-family: var(--font-mono); font-size: 11px; color: var(--text-tertiary); margin-top: 16px; padding: 3px 8px; background: var(--bg-tertiary); border-radius: var(--radius-sm); }
+
+    /* Engine Cards */
+    .engines-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 16px; margin-top: 64px; }
+    .engine-card { padding: 24px; border-radius: var(--radius-lg); background: var(--bg-secondary); border: 1px solid var(--border-subtle); transition: var(--transition-med); }
+    .engine-card:hover { border-color: var(--border-medium); transform: translateY(-3px); }
+    .engine-card-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 14px; }
+    .engine-card-icon { width: 38px; height: 38px; border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; }
+    .engine-card-badge { font-family: var(--font-mono); font-size: 10px; font-weight: 500; padding: 3px 8px; border-radius: 100px; text-transform: uppercase; letter-spacing: 0.05em; }
+    .engine-card-title { font-family: var(--font-display); font-size: 15px; font-weight: 600; margin-bottom: 6px; }
+    .engine-card-desc { font-size: 13.5px; color: var(--text-secondary); line-height: 1.55; }
+
+    /* Agents */
+    .agent-category { margin-bottom: 48px; }
+    .agent-category-header { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1px solid var(--border-subtle); }
+    .agent-category-icon { width: 36px; height: 36px; border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; }
+    .agent-category-name { font-family: var(--font-display); font-size: 20px; font-weight: 600; }
+    .agent-category-count { font-family: var(--font-mono); font-size: 12px; color: var(--text-tertiary); margin-left: 4px; }
+    .agents-row { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 12px; }
+    .agent-chip { display: flex; align-items: center; gap: 12px; padding: 14px 18px; border-radius: var(--radius-md); background: var(--bg-secondary); border: 1px solid var(--border-subtle); transition: var(--transition-fast); }
+    .agent-chip:hover { border-color: var(--border-medium); background: var(--bg-tertiary); }
+    .agent-chip-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+    .agent-chip-name { font-size: 13.5px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .agent-chip-role { font-size: 12px; color: var(--text-tertiary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+    /* Skills */
+    .skills-overview { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: 64px; }
+    .skill-domain-card { padding: 28px 24px; border-radius: var(--radius-lg); background: var(--bg-secondary); border: 1px solid var(--border-subtle); transition: var(--transition-med); }
+    .skill-domain-card:hover { border-color: var(--border-medium); transform: translateY(-4px); }
+    .skill-domain-icon { width: 42px; height: 42px; border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; margin-bottom: 18px; }
+    .skill-domain-name { font-family: var(--font-display); font-size: 16px; font-weight: 600; margin-bottom: 6px; }
+    .skill-domain-count { font-family: var(--font-display); font-size: 36px; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 4px; }
+    .skill-domain-label { font-size: 13px; color: var(--text-tertiary); }
+    .skill-domain-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 16px; }
+    .skill-tag { font-size: 11px; font-weight: 500; padding: 3px 8px; border-radius: 100px; background: var(--bg-tertiary); color: var(--text-secondary); }
+
+    /* Programs */
+    .programs-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; margin-top: 64px; }
+    .program-card { padding: 28px; border-radius: var(--radius-lg); background: var(--bg-secondary); border: 1px solid var(--border-subtle); transition: var(--transition-med); }
+    .program-card:hover { border-color: var(--border-medium); transform: translateY(-3px); }
+    .program-card-header { display: flex; align-items: center; gap: 14px; margin-bottom: 16px; }
+    .program-number { font-family: var(--font-mono); font-size: 11px; font-weight: 500; color: var(--text-tertiary); padding: 2px 8px; border: 1px solid var(--border-medium); border-radius: var(--radius-sm); }
+    .program-card-title { font-family: var(--font-display); font-size: 16px; font-weight: 600; }
+    .program-card-desc { font-size: 13.5px; color: var(--text-secondary); line-height: 1.6; margin-bottom: 16px; }
+    .program-card-source { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text-tertiary); }
+
+    /* Harnesses */
+    .harness-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; margin-top: 64px; }
+    .harness-card { display: flex; align-items: center; gap: 16px; padding: 20px 22px; border-radius: var(--radius-lg); background: var(--bg-secondary); border: 1px solid var(--border-subtle); transition: var(--transition-fast); }
+    .harness-card:hover { border-color: var(--border-medium); background: var(--bg-tertiary); }
+    .harness-icon { width: 40px; height: 40px; border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .harness-name { font-weight: 600; font-size: 14px; margin-bottom: 2px; }
+    .harness-type { font-size: 12px; color: var(--text-tertiary); }
+    .harness-status { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+
+    /* Workflow */
+    .workflow-visual { margin-top: 64px; padding: 40px; border-radius: var(--radius-xl); background: var(--bg-secondary); border: 1px solid var(--border-subtle); }
+    .workflow-steps { display: flex; align-items: flex-start; gap: 0; }
+    .workflow-step { flex: 1; display: flex; flex-direction: column; align-items: center; text-align: center; position: relative; }
+    .workflow-step:not(:last-child)::after { content: ''; position: absolute; top: 20px; left: calc(50% + 28px); right: calc(-50% + 28px); height: 2px; background: linear-gradient(90deg, var(--border-medium), var(--border-subtle)); }
+    .workflow-step-circle { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: var(--font-mono); font-size: 13px; font-weight: 600; border: 2px solid var(--border-strong); background: var(--bg-primary); margin-bottom: 14px; position: relative; z-index: 2; flex-shrink: 0; }
+    .workflow-step-title { font-size: 13.5px; font-weight: 600; margin-bottom: 4px; }
+    .workflow-step-desc { font-size: 12px; color: var(--text-tertiary); line-height: 1.5; max-width: 160px; }
+
+    /* Ecosystem */
+    .ecosystem-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; margin-top: 64px; }
+    .eco-card { display: flex; align-items: center; gap: 14px; padding: 18px 20px; border-radius: var(--radius-md); background: var(--bg-secondary); border: 1px solid var(--border-subtle); transition: var(--transition-fast); text-decoration: none; color: var(--text-primary); }
+    .eco-card:hover { border-color: var(--border-medium); transform: translateY(-2px); }
+    .eco-card-icon { width: 36px; height: 36px; border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 18px; }
+    .eco-card-name { font-size: 13.5px; font-weight: 600; }
+    .eco-card-cat { font-size: 11.5px; color: var(--text-tertiary); }
+    .eco-card-license { margin-left: auto; font-family: var(--font-mono); font-size: 10px; padding: 2px 6px; border-radius: 4px; background: var(--bg-tertiary); color: var(--text-tertiary); flex-shrink: 0; }
+
+    /* Security */
+    .security-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 64px; }
+    .security-card { padding: 28px; border-radius: var(--radius-lg); background: var(--bg-secondary); border: 1px solid var(--border-subtle); transition: var(--transition-med); }
+    .security-card:hover { border-color: var(--border-medium); transform: translateY(-3px); }
+    .security-card-icon { width: 42px; height: 42px; border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; margin-bottom: 18px; }
+    .security-card-title { font-family: var(--font-display); font-size: 16px; font-weight: 600; margin-bottom: 8px; }
+    .security-card-desc { font-size: 13.5px; color: var(--text-secondary); line-height: 1.6; }
+
+    /* Architecture */
+    .arch-diagram { display: flex; flex-direction: column; align-items: center; gap: 0; margin-top: 72px; }
+    .arch-layer { display: flex; flex-direction: column; align-items: center; width: 100%; max-width: 900px; }
+    .arch-layer-label { font-family: var(--font-mono); font-size: 10px; letter-spacing: 1.8px; text-transform: uppercase; color: var(--text-tertiary); margin-bottom: 14px; padding: 4px 12px; border-radius: 100px; border: 1px solid var(--border-subtle); background: var(--bg-secondary); }
+    .arch-nodes { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
+    .arch-node { padding: 12px 20px; border-radius: var(--radius-md); background: var(--bg-secondary); border: 1px solid var(--border-medium); font-size: 13px; font-weight: 500; color: var(--text-secondary); transition: var(--transition-fast); }
+    .arch-node:hover { border-color: var(--accent-cyan); color: var(--text-primary); }
+    .arch-node--highlight { background: var(--accent-violet-dim); border-color: rgba(139,92,246,0.2); color: var(--accent-violet); font-weight: 600; }
+    .arch-connector { color: var(--text-tertiary); padding: 10px 0; display: flex; align-items: center; justify-content: center; }
+    .arch-legend { display: flex; gap: 32px; justify-content: center; margin-top: 40px; flex-wrap: wrap; }
+    .arch-legend-item { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--text-tertiary); }
+    @media (max-width: 768px) { .arch-nodes { gap: 8px; } .arch-node { padding: 8px 14px; font-size: 12px; } }
+
+    /* Models */
+    .models-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: 64px; }
+    .model-card { padding: 24px; border-radius: var(--radius-lg); background: var(--bg-secondary); border: 1px solid var(--border-subtle); transition: var(--transition-med); display: flex; flex-direction: column; gap: 14px; }
+    .model-card:hover { border-color: var(--border-medium); transform: translateY(-3px); }
+    .model-card-header { display: flex; align-items: center; gap: 14px; }
+    .model-provider-icon { width: 44px; height: 44px; border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .model-name { font-family: var(--font-display); font-size: 15px; font-weight: 600; }
+    .model-badge { font-size: 10px; font-family: var(--font-mono); letter-spacing: 0.8px; text-transform: uppercase; color: var(--accent-cyan); margin-top: 2px; }
+    .model-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+    .model-tag { font-size: 11px; font-family: var(--font-mono); padding: 3px 9px; border-radius: 6px; background: var(--bg-tertiary); color: var(--text-secondary); border: 1px solid var(--border-subtle); }
+    .model-card-desc { font-size: 12.5px; color: var(--text-secondary); line-height: 1.65; }
+    @media (max-width: 1200px) { .models-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 640px) { .models-grid { grid-template-columns: 1fr; } }
+
+
+    /* Credits */
+    .credits-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 12px; margin-top: 64px; }
+    .credit-card { display: flex; align-items: center; gap: 16px; padding: 20px 22px; border-radius: var(--radius-md); background: var(--bg-secondary); border: 1px solid var(--border-subtle); transition: var(--transition-fast); }
+    .credit-card:hover { border-color: var(--border-medium); }
+    .credit-icon { width: 38px; height: 38px; border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 18px; }
+    .credit-name { font-size: 13.5px; font-weight: 600; margin-bottom: 2px; }
+    .credit-author { font-size: 12px; color: var(--text-tertiary); }
+    .credit-link { color: var(--accent-cyan); text-decoration: none; font-size: 12px; flex-shrink: 0; }
+    .credit-link:hover { color: #22d3ee; }
+
+    /* Hooks */
+    .hooks-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px; margin-top: 64px; }
+    .hook-card { padding: 22px 24px; border-radius: var(--radius-lg); background: var(--bg-secondary); border: 1px solid var(--border-subtle); border-left: 3px solid var(--accent-violet); transition: var(--transition-fast); }
+    .hook-card:hover { border-color: var(--border-medium); }
+    .hook-card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+    .hook-card-name { font-family: var(--font-mono); font-size: 13px; font-weight: 500; }
+    .hook-card-event { font-family: var(--font-mono); font-size: 10.5px; padding: 2px 8px; border-radius: 100px; background: var(--accent-violet-dim); color: var(--accent-violet); font-weight: 500; }
+    .hook-card-desc { font-size: 13px; color: var(--text-secondary); line-height: 1.55; }
+    .hook-card-meta { display: flex; gap: 16px; margin-top: 12px; font-size: 11.5px; color: var(--text-tertiary); font-family: var(--font-mono); }
+
+    /* CTA */
+    .cta-section { padding: 120px 0; text-align: center; position: relative; }
+    .cta-section .cta-bg { position: absolute; inset: 0; background: radial-gradient(ellipse at center, var(--accent-cyan-dim) 0%, transparent 60%); pointer-events: none; }
+    .cta-content { position: relative; z-index: 2; }
+    .cta-title { font-family: var(--font-display); font-size: clamp(32px,4.5vw,52px); font-weight: 700; letter-spacing: -0.02em; margin-bottom: 20px; }
+    .cta-desc { font-size: 18px; color: var(--text-secondary); margin-bottom: 36px; max-width: 500px; margin-left: auto; margin-right: auto; }
+    .cta-actions { display: flex; justify-content: center; gap: 14px; flex-wrap: wrap; }
+
+    /* Footer */
+    footer { border-top: 1px solid var(--border-subtle); padding: 40px 0; }
+    .footer-inner { max-width: 1200px; margin: 0 auto; padding: 0 24px; display: flex; align-items: center; justify-content: space-between; }
+    .footer-left { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--text-tertiary); }
+    .footer-right { display: flex; align-items: center; gap: 20px; }
+    .footer-right a { font-size: 13px; color: var(--text-tertiary); text-decoration: none; }
+    .footer-right a:hover { color: var(--text-primary); }
+
+    /* Tabs */
+    .tab-bar { display: flex; gap: 2px; padding: 4px; background: var(--bg-tertiary); border-radius: var(--radius-md); width: fit-content; margin: 40px auto 0; border: 1px solid var(--border-subtle); }
+    .tab-bar button { padding: 8px 18px; border-radius: var(--radius-sm); border: none; background: transparent; color: var(--text-secondary); font-size: 13px; font-weight: 500; cursor: pointer; transition: var(--transition-fast); font-family: var(--font-sans); }
+    .tab-bar button.active { background: var(--bg-elevated); color: var(--text-primary); box-shadow: 0 1px 3px rgba(0,0,0,0.3); }
+    .tab-bar button:hover:not(.active) { color: var(--text-primary); }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; animation: fadeIn 0.3s ease; }
+    @keyframes fadeIn { from{opacity:0} to{opacity:1} }
+
+    /* Install cmd */
+    .install-cmd { font-family: var(--font-mono); font-size: 13px; padding: 14px 18px; border-radius: var(--radius-md); background: var(--bg-primary); border: 1px solid var(--border-subtle); color: var(--text-secondary); margin-top: 16px; }
+
+    @media (max-width: 1024px) { .arch-grid { grid-template-columns: 1fr; } .skills-overview { grid-template-columns: repeat(2, 1fr); } .security-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .hero-stats { gap: 28px; flex-wrap: wrap; }
+      .skills-overview { grid-template-columns: 1fr; }
+      .security-grid { grid-template-columns: 1fr; }
+      .workflow-steps { flex-direction: column; gap: 24px; }
+      .workflow-step:not(:last-child)::after { display: none; }
+      .engines-grid { grid-template-columns: 1fr; }
+      .agents-row { grid-template-columns: 1fr; }
+      .credits-grid { grid-template-columns: 1fr; }
+      section { padding: 80px 0; }
+    }
+  </style>
 </head>
 <body>
-<header class="topbar">
-  <div class="wrap">
-    <div class="brand">AETHER <span class="vtag">v1.0</span></div>
-    <nav>
-      <a href="programs.html">9 Programs</a>
-      <a href="getting-started.html">Getting Started</a>
-      <a href="api-reference.html">API Reference</a>
-      <a href="contributing.html">Contributing</a>
-      <a href="#install">Install</a>
-      <a href="https://github.com/Tabrej96/AETHER" target="_blank" rel="noopener" class="gh-link" title="Open the GitHub repository">
-        <img src="assets/github-mark.svg" alt="GitHub" style="filter: invert(1);" width="18" height="18" />
-        GitHub
-      </a>
-    </nav>
-  </div>
-</header>
+  <div class="scroll-progress" id="scrollProgress"></div>
 
-<main class="wrap">
-  <section class="hero">
-    <h1>The open-source AI engineering harness that <em>executes</em>, not just explains.</h1>
-    <p class="lede">
-      AETHER gives your coding agent <strong>real engineering superpowers</strong>: it plans the task,
-      splits it across agent teams, runs the code, checks the result, and remembers long jobs even if
-      the machine crashes. Instead of <em>describing</em> a fix, it <em>does</em> the work and
-      <em>proves</em> it.
-    </p>
-    <p class="credit">Created by <strong>Tabrej</strong> · Apache-2.0 · 711 verified components · zero new runtime dependencies</p>
-  </section>
-
-  <section id="goal" class="card">
-    <h2>Our goal — and what we've already achieved</h2>
-    <table>
-      <thead><tr><th>The goal</th><th>Achieved so far (measured, not claimed)</th></tr></thead>
-      <tbody>
-        <tr><td><strong>A harness that finishes real tasks</strong></td><td>The autonomous runtime runs real file + shell work in an isolated sandbox, verifies it with SHA-256 Merkle checkpoints, and <strong>resumes a crashed job from the exact step it stopped at</strong>.</td></tr>
-        <tr><td><strong>Multi-agent teams without chaos</strong></td><td>Agent teams run in parallel waves with exclusive file locks — proven by real parallel-work tests, not a simulation.</td></tr>
-        <tr><td><strong>Safety you can audit</strong></td><td><strong>119 automated tests</strong> across 14 suites, every critical module ≥88% covered, and a 12-stage release certification that blocks the build when anything regresses.</td></tr>
-        <tr><td><strong>Legendary components, not filler</strong></td><td>All 657 agents/skills now score the maximum on our deterministic quality gate (floor raised 72/82 → 100/100), re-checked on every release.</td></tr>
-      </tbody>
-    </table>
-  </section>
-
-  <section id="why" class="card">
-    <h2>Why use AETHER</h2>
-    <div class="grid3">
-      <div class="tile"><h3>It verifies, it doesn't guess</h3><p>Every capability ships with a deterministic verifier: adversarial gates, per-step checks, and honest UNMEASURED markers instead of fabricated numbers.</p></div>
-      <div class="tile"><h3>It's model-driven when you say so</h3><p>Point it at a real model and the autonomous loop asks the model to plan the change — then verifies that plan against invariants and security gates before applying it. A failed plan falls back honestly; it's never faked.</p></div>
-      <div class="tile"><h3>It's license-clean by construction</h3><p>AGPL/GPL tools (Skyvern, Lightpanda, Puter, ComfyUI) are integrated strictly out-of-process. The core stays Apache-2.0 — safe to ship anywhere.</p></div>
-      <div class="tile"><h3>It resumes, it doesn't restart</h3><p>Long tasks checkpoint at step granularity; sessions are journaled to disk, so a restart recovers the task, the leases, and the pending approvals.</p></div>
-      <div class="tile"><h3>It's isolated, not pretend-isolated</h3><p>Shell execution is default-deny (an empty allowlist disables it), and a container backend runs commands with no network and all capabilities dropped.</p></div>
-      <div class="tile"><h3>It's installable, not aspirational</h3><p>One command installs the whole platform into Claude Code, Cursor, Codex, OpenCode, or MCP — or just the domain pack you need.</p></div>
-    </div>
-  </section>
-
-  <section class="card" id="numbers">
-    <h2>The numbers, in plain sight</h2>
-    <p class="muted">Three charts, all generated from the release evidence in this repo — no decoration.</p>
-    <figure class="chart"><img src="assets/charts-dark/task-pass-rate.svg" alt="Task completion: AETHER 3/3, Superpowers 2/3, Playwright 1/3, Agent-Browser 1/3, ECC 0/3, daemon tools UNMEASURED" /></figure>
-    <figure class="chart"><img src="assets/charts-dark/quality-floor.svg" alt="Catalog quality floor raised from 72/82 to 100/100" /></figure>
-    <figure class="chart"><img src="assets/charts-dark/test-matrix.svg" alt="119 tests across 14 flake-free suites" /></figure>
-    <p class="muted"><strong>Read the first chart the right way:</strong> the gray bars aren't failures — OpenHands, OpenManus, Browser-Use and Skyvern need their own daemons to run, so AETHER records them as <em>UNMEASURED</em> instead of inventing a number. What the chart proves: AETHER's engine passed 3/3 on every task; the closest competitor adapter passed 2/3; a popular static-skill harness (ECC) passed 0/3 on real execution.</p>
-  </section>
-
-  <section id="nine" class="card">
-    <h2>The nine capability programs</h2>
-    <p class="muted">Deep-dive each one (with upstream comparisons) in <a href="programs.html">programs.html</a>.</p>
-    <ol class="progs">
-      <li><strong>Development Intelligence</strong> — research-first + TDD gates on top of the skill catalog. <span class="measured">measured: 3 skills discovered, gates enforced</span></li>
-      <li><strong>Reverse Intelligence</strong> — permission-gated application architecture reconstruction. <span class="measured">measured: 4 modules, 2 external deps</span></li>
-      <li><strong>Autonomous Execution</strong> — crash-resumable, step-verified task execution, now driven by real model turns. <span class="measured">measured: 2/4 → 4/4 after resume</span></li>
-      <li><strong>Multi-Agent Orchestration</strong> — event-bus waves with retry-once fail-fast, with genuine per-agent model calls. <span class="measured">measured: 2 parallel waves</span></li>
-      <li><strong>Browser Intelligence</strong> — unified engine, ranked strategies, compact a11y snapshots. <span class="measured">measured: 92% token savings vs raw DOM</span></li>
-      <li><strong>Visual Computer</strong> — perception → reasoning → action → verification loop. <span class="measured">measured: verified goal in 1 step</span></li>
-      <li><strong>Browser Runtime</strong> — provider abstraction with honest capability-gap detection. <span class="measured">measured: 4 task profiles verified</span></li>
-      <li><strong>Workspace &amp; Knowledge</strong> — markdown vault → knowledge graph + plugin discovery. <span class="measured">measured: 4 edges, orphans detected</span></li>
-      <li><strong>Creative &amp; Visual</strong> — node-graph generation backend + separate 3D scene model. <span class="measured">measured: 4 topological layers</span></li>
-    </ol>
-  </section>
-
-  <section id="install" class="card">
-    <h2>Get started in 60 seconds</h2>
-<pre><code>git clone https://github.com/Tabrej96/anythingwithaether.git &amp;&amp; cd AETHER
-npm install --legacy-peer-deps
-
-# 1. See it work (no API keys needed for the deterministic engines)
-npx tsx bin/aether.ts programs
-
-# 2. Prove every component validates
-npx tsx bin/aether.ts validate
-
-# 3. Install AETHER into your editor of choice (all, or just a domain pack)
-./install.sh --all --target all-harnesses --write .</code></pre>
-    <p>That's it. You now have <strong>711 validated components</strong> + the 20-tool MCP server in your project.</p>
-
-    <h3>Optional: drive it with a real model</h3>
-    <p>Set an <code>AETHER_LIVE_PROVIDER_*</code> key in <code>.env</code> and run <code>npx tsx bin/aether.ts runtime --live</code>.
-    AETHER asks the model to plan the change, then verifies that plan against the repository's invariants
-    and its security gates <strong>before</strong> applying it. If the model's patch fails a check, AETHER
-    says so and falls back to the verified patch — it never fakes a success.</p>
-
-    <h3>Requirements</h3>
-    <ul>
-      <li><strong>Node.js ≥ 18</strong> (LTS recommended; verified on Node 24) and <strong>npm</strong> with network access on first install.</li>
-      <li>Works fully offline after <code>npm install</code> — every in-process capability is deterministic TypeScript with no API keys.</li>
-      <li>Optional: a browser process (Playwright) for live P05/P06/P07 tasks; optional: out-of-process AGPL/GPL engines.</li>
-    </ul>
-  </section>
-
-  <section class="card" id="docs">
-    <h2>Documentation &amp; provenance</h2>
-    <ul>
-      <li><code>docs/INSTALLATION.md</code> · <code>docs/CONFIGURATION.md</code> · <code>docs/PROVIDERS.md</code> — operator-facing how-tos (including live-provider setup).</li>
-      <li><code>docs/AGENTS.md</code> (117) · <code>docs/SKILLS.md</code> (540) · <code>docs/MCP.md</code> (8 tools) — what ships and how to use it.</li>
-      <li><code>docs/TROUBLESHOOTING.md</code> · <code>docs/CHANGELOG.md</code> · <code>docs/SBOM.md</code> — every failure state mapped, and the bill of materials.</li>
-      <li><code>docs/UNIVERSAL_BENCHMARK_FORMAT.md</code> — the universal benchmark format + 5 real-format adapters (<code>npx tsx bin/aether.ts universal</code>).</li>
-      <li><code>NOTICE.md</code> — upstream open-source inspiration credits.</li>
-    </ul>
-  </section>
-</main>
-
-<footer class="wrap">
-  <p>AETHER v1.0 · Created by <a href="https://github.com/Tabrej96">Tabrej</a> · Apache-2.0 ·
-    <a href="https://github.com/Tabrej96/AETHER" target="_blank" rel="noopener">
-      <img src="assets/github-mark.svg" alt="" style="filter: invert(1); width:14px; vertical-align:-2px;" />
-      github.com/Tabrej96/AETHER
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a href="#" class="nav-logo">
+      <svg width="30" height="30" viewBox="0 0 30 30" fill="none" style="flex-shrink:0">
+        <path d="M15 2L27 9V21L15 28L3 21V9L15 2Z" stroke="url(#navGrad)" stroke-width="1.8" fill="none"/>
+        <path d="M15 8L22 12.5V19.5L15 24L8 19.5V12.5L15 8Z" fill="url(#navGrad)" opacity="0.3"/>
+        <circle cx="15" cy="16" r="3" fill="url(#navGrad)"/>
+        <defs><linearGradient id="navGrad" x1="3" y1="2" x2="27" y2="28"><stop stop-color="#06b6d4"/><stop offset="1" stop-color="#8b5cf6"/></linearGradient></defs>
+      </svg>
+      <span class="nav-logo-text">AETHER</span>
     </a>
-  </p>
-  <p class="muted">Upstream inspiration credits: Model Context Protocol · Tree-sitter · FFmpeg · Remotion · whisper.cpp · Three.js · D3.js · OpenTofu · Kubernetes · PostgreSQL · Everything Claude Code (see NOTICE.md).</p>
+    <ul class="nav-links">
+      <li><a href="#architecture">Architecture</a></li>
+      <li><a href="#engines">Engines</a></li>
+      <li><a href="#agents">Agents</a></li>
+      <li><a href="#models">Models</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#programs">Programs</a></li>
+      <li><a href="#harnesses">Harnesses</a></li>
+      <li><a href="#workflows">Workflows</a></li>
+      <li><a href="#ecosystem">Ecosystem</a></li>
+    </ul>
+    <div class="nav-cta">
+      <a href="https://github.com/Tabrej96/AETHER" target="_blank" rel="noopener" class="btn-github">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+        Star
+      </a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg">
+    <div class="orb orb-1"></div><div class="orb orb-2"></div><div class="orb orb-3"></div><div class="hero-grid"></div>
+    <canvas id="particleCanvas"></canvas>
+  </div>
+  <div class="container hero-split">
+    <div class="hero-left reveal">
+      <div class="hero-badge"><span class="dot"></span> Apache-2.0 — Open Source</div>
+      <h1 class="hero-title">The <span class="gradient-text">100x</span><br>AI Engineering<br>Harness</h1>
+      <p class="hero-desc">A sovereign, deterministic AI coding harness with neural context intelligence, dynamic agent swarms, adversarial verification gates, and a 7-layer provenance memory system — for engineering at scale.</p>
+      <div class="hero-actions">
+        <a href="https://github.com/Tabrej96/AETHER" target="_blank" rel="noopener" class="btn-primary">
+          <svg width="18" height="18" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+          View on GitHub
+        </a>
+        <a href="#architecture" class="btn-secondary">Explore the system <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
+      </div>
+      <div class="hero-metrics">
+        <div class="hero-metric">
+          <span class="hero-metric-val" data-target="117">0</span>
+          <span class="hero-metric-lbl">Specialized Agents</span>
+        </div>
+        <div class="hero-metric">
+          <span class="hero-metric-val" data-target="540">0</span>
+          <span class="hero-metric-lbl">Validated Skills</span>
+        </div>
+        <div class="hero-metric">
+          <span class="hero-metric-val" data-target="54">0</span>
+          <span class="hero-metric-lbl">End-to-End Workflows</span>
+        </div>
+        <div class="hero-metric">
+          <span class="hero-metric-val" data-target="12">0</span>
+          <span class="hero-metric-lbl">Language Ecosystems</span>
+        </div>
+      </div>
+    </div>
+    <div class="hero-right reveal">
+      <div class="hero-visual">
+        <!-- Terminal window -->
+        <div class="hero-terminal">
+          <div class="terminal-bar">
+            <div class="terminal-dot t-red"></div><div class="terminal-dot t-yellow"></div><div class="terminal-dot t-green"></div>
+            <span class="terminal-title">aether-swarm — zsh</span>
+          </div>
+          <div class="terminal-body">
+            <div class="terminal-line"><span class="prompt">$</span> <span id="typedText"></span><span class="cursor-blink">_</span></div>
+            <div id="typedOutput"></div>
+          </div>
+          </div>
+        </div>
+        <!-- Floating badge 1 -->
+        <div class="hero-float hero-float--1">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent-emerald)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          <div><div class="hero-float-title">Lease Acquired</div><div class="hero-float-sub">src/auth/middleware.ts</div></div>
+        </div>
+        <!-- Floating badge 2 -->
+        <div class="hero-float hero-float--2">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent-violet)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          <div><div class="hero-float-title">6 Gate Passed</div><div class="hero-float-sub">Adversarial Verification</div></div>
+        </div>
+        <!-- Floating badge 3 -->
+        <div class="hero-float hero-float--3">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent-cyan)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+          <div><div class="hero-float-title">Memory Provenance</div><div class="hero-float-sub">SHA-256 Merkle Root</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ARCHITECTURE -->
+<section id="architecture" class="divider-top">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-label">System Architecture</div>
+      <h2 class="section-title">Built for deterministic<br>engineering intelligence</h2>
+      <p class="section-subtitle">Every module in AETHER is purpose-built. From neural context slicing to adversarial falsification gates — no hollow abstractions, every engine is deterministic and verified.</p>
+    </div>
+    <div class="arch-grid reveal">
+      <div class="arch-card" style="--card-accent:var(--accent-cyan)">
+        <div class="arch-card-icon" style="background:var(--accent-cyan-dim)">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--accent-cyan)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        </div>
+        <h3 class="arch-card-title">Neural Context Intelligence</h3>
+        <p class="arch-card-desc">Personalized PageRank over AST symbol graphs ranks every file by relevance. 0/1 Knapsack allocates tokens — full source, skeleton, or evicted.</p>
+        <span class="arch-card-module">src/core/contextEngine.ts</span>
+      </div>
+      <div class="arch-card" style="--card-accent:var(--accent-violet)">
+        <div class="arch-card-icon" style="background:var(--accent-violet-dim)">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--accent-violet)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+        </div>
+        <h3 class="arch-card-title">Dynamic Agent Swarm</h3>
+        <p class="arch-card-desc">TCCI score routes tasks to 1 engineer or a DAG swarm. Exclusive file-write lease locks prevent parallel edit collisions across 117 specialists.</p>
+        <span class="arch-card-module">src/core/swarmEngine.ts</span>
+      </div>
+      <div class="arch-card" style="--card-accent:var(--accent-emerald)">
+        <div class="arch-card-icon" style="background:var(--accent-emerald-dim)">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--accent-emerald)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <h3 class="arch-card-title">Adversarial Verification Gate</h3>
+        <p class="arch-card-desc">Six hostile challengers — Architecture, Code Breaker, Security Attacker, Performance Critic, Regression Investigator, Judge — require executable reproducers.</p>
+        <span class="arch-card-module">src/core/adversarialEngine.ts</span>
+      </div>
+      <div class="arch-card" style="--card-accent:var(--accent-amber)">
+        <div class="arch-card-icon" style="background:rgba(245,158,11,0.15)">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--accent-amber)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/><circle cx="6" cy="6" r="1"/><circle cx="6" cy="18" r="1"/></svg>
+        </div>
+        <h3 class="arch-card-title">7-Layer SHA-256 Memory</h3>
+        <p class="arch-card-desc">Provenance-bound memory from Session through Verified Knowledge to Failure Memory. Auto STALE_REVALIDATION_REQUIRED on file mutation.</p>
+        <span class="arch-card-module">src/core/memoryEngine.ts</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 10 ENGINES -->
+<section id="engines" class="divider-top">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-label">Core Intelligence</div>
+      <h2 class="section-title">Ten deterministic engines</h2>
+      <p class="section-subtitle">Each engine is a self-contained, testable module — no cross-contamination, no magic. Together they form the complete AETHER reasoning pipeline.</p>
+    </div>
+    <div class="engines-grid reveal">
+      <div class="engine-card">
+        <div class="engine-card-header">
+          <div class="engine-card-icon" style="background:var(--accent-cyan-dim)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent-cyan)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></div>
+          <span class="engine-card-badge" style="background:var(--accent-cyan-dim);color:var(--accent-cyan)">Context</span>
+        </div>
+        <h4 class="engine-card-title">Context Intelligence</h4>
+        <p class="engine-card-desc">AST-aware symbol graph ranking with Personalized PageRank and token budget knapsack compression.</p>
+      </div>
+      <div class="engine-card">
+        <div class="engine-card-header">
+          <div class="engine-card-icon" style="background:var(--accent-violet-dim)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent-violet)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+          <span class="engine-card-badge" style="background:var(--accent-violet-dim);color:var(--accent-violet)">Swarm</span>
+        </div>
+        <h4 class="engine-card-title">Swarm Orchestration</h4>
+        <p class="engine-card-desc">Dynamic DAG swarm topology with Task Complexity &amp; Coupling Index, exclusive file-lease locks, and conflict resolution.</p>
+      </div>
+      <div class="engine-card">
+        <div class="engine-card-header">
+          <div class="engine-card-icon" style="background:var(--accent-emerald-dim)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent-emerald)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+          <span class="engine-card-badge" style="background:var(--accent-emerald-dim);color:var(--accent-emerald)">Predictive</span>
+        </div>
+        <h4 class="engine-card-title">Predictive Impact</h4>
+        <p class="engine-card-desc">Deterministic AST call-graph traversal + git co-change coupling with automatic Targeted Verification Plan synthesis.</p>
+      </div>
+      <div class="engine-card">
+        <div class="engine-card-header">
+          <div class="engine-card-icon" style="background:rgba(245,158,11,0.15)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent-amber)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0zM12 9v4m0 4h.01"/></svg></div>
+          <span class="engine-card-badge" style="background:rgba(245,158,11,0.15);color:var(--accent-amber)">Adversarial</span>
+        </div>
+        <h4 class="engine-card-title">Adversarial Engine</h4>
+        <p class="engine-card-desc">Six hostile challengers testing architecture, security, performance, concurrency, and regression boundaries with executable reproducers.</p>
+      </div>
+      <div class="engine-card">
+        <div class="engine-card-header">
+          <div class="engine-card-icon" style="background:var(--accent-blue-dim)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
+          <span class="engine-card-badge" style="background:var(--accent-blue-dim);color:var(--accent-blue)">Security</span>
+        </div>
+        <h4 class="engine-card-title">Security Suite</h4>
+        <p class="engine-card-desc">Shannon entropy secret scanning, prompt-injection spotlighting, MCP tool manifest guard, egress policy, and integrity-chained audit log.</p>
+      </div>
+      <div class="engine-card">
+        <div class="engine-card-header">
+          <div class="engine-card-icon" style="background:var(--accent-emerald-dim)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent-emerald)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 1 0 10 10H12V2z"/><path d="M20 12a8 8 0 1 1-16 0"/></svg></div>
+          <span class="engine-card-badge" style="background:var(--accent-emerald-dim);color:var(--accent-emerald)">Memory</span>
+        </div>
+        <h4 class="engine-card-title">Memory Engine</h4>
+        <p class="engine-card-desc">7-layer store bound to SHA-256 file hashes with automatic staleness downgrade on mutation. Session through Verified Knowledge.</p>
+      </div>
+      <div class="engine-card">
+        <div class="engine-card-header">
+          <div class="engine-card-icon" style="background:rgba(249,115,22,0.12)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent-orange)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg></div>
+          <span class="engine-card-badge" style="background:rgba(249,115,22,0.12);color:var(--accent-orange)">Debug</span>
+        </div>
+        <h4 class="engine-card-title">Debug Engine</h4>
+        <p class="engine-card-desc">Scientific hypothesis debugging state machine. Hard gate requiring non-zero failing reproducer exit code and Bayesian falsification before minimal fix.</p>
+      </div>
+      <div class="engine-card">
+        <div class="engine-card-header">
+          <div class="engine-card-icon" style="background:var(--accent-violet-dim)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent-violet)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+          <span class="engine-card-badge" style="background:var(--accent-violet-dim);color:var(--accent-violet)">Benchmark</span>
+        </div>
+        <h4 class="engine-card-title">Benchmark Engine</h4>
+        <p class="engine-card-desc">Multi-trial benchmarking with mean, standard deviation, 95% CI, and regression tracking across all 711 components.</p>
+      </div>
+      <div class="engine-card">
+        <div class="engine-card-header">
+          <div class="engine-card-icon" style="background:var(--accent-cyan-dim)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent-cyan)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+          <span class="engine-card-badge" style="background:var(--accent-cyan-dim);color:var(--accent-cyan)">Audit</span>
+        </div>
+        <h4 class="engine-card-title">Audit Engine</h4>
+        <p class="engine-card-desc">Continuous quality scoring across 5 deterministic rubrics. Auto-refines weak specs and re-tests to 99.6+/100 quality gate.</p>
+      </div>
+      <div class="engine-card">
+        <div class="engine-card-header">
+          <div class="engine-card-icon" style="background:rgba(244,63,94,0.12)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent-rose)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
+          <span class="engine-card-badge" style="background:rgba(244,63,94,0.12);color:var(--accent-rose)">Self-Improve</span>
+        </div>
+        <h4 class="engine-card-title">Self-Improvement Engine</h4>
+        <p class="engine-card-desc">Closed-loop test-score-refine cycle. Evaluates all agents and skills deterministically, auto-refines weak specifications to target score.</p>
+      </div>
+      <div class="engine-card">
+        <div class="engine-card-header">
+          <div class="engine-card-icon" style="background:var(--accent-teal);background:rgba(20,184,166,0.12)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent-teal)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></div>
+          <span class="engine-card-badge" style="background:rgba(20,184,166,0.12);color:var(--accent-teal)">Registry</span>
+        </div>
+        <h4 class="engine-card-title">Ecosystem Registry 2.0</h4>
+        <p class="engine-card-desc">Dynamic agent creation, skill composition pipelines, MCP server lifecycle, SemVer plugin resolution with topological sort &amp; cycle detection.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- AGENTS -->
+<section id="agents" class="divider-top">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-label">117 Specialized Agents</div>
+      <h2 class="section-title">Every role covered.</h2>
+      <p class="section-subtitle">From Principal Systems Architect to Security Attacker — each agent has a strict role, scope, responsibility list, handoff rules, and verification gate.</p>
+    </div>
+    <div class="reveal">
+      <div class="agent-category">
+        <div class="agent-category-header">
+          <div class="agent-category-icon" style="background:var(--accent-cyan-dim)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent-cyan)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div>
+          <h4 class="agent-category-name">Architecture <span class="agent-category-count">(8)</span></h4>
+        </div>
+        <div class="agents-row">
+          <div class="agent-chip"><div class="agent-chip-dot" style="background:var(--accent-cyan)"></div><div><div class="agent-chip-name">systems-architect-prime</div><div class="agent-chip-role">Principal Blast-Radius Architect</div></div></div>
+          <div class="agent-chip"><div class="agent-chip-dot" style="background:var(--accent-cyan)"></div><div><div class="agent-chip-name">api-contract-architect</div><div class="agent-chip-role">Interface Contract Designer</div></div></div>
+          <div class="agent-chip"><div class="agent-chip-dot" style="background:var(--accent-cyan)"></div><div><div class="agent-chip-name">data-model-architect</div><div class="agent-chip-role">Database Schema Evolution</div></div></div>
+          <div class="agent-chip"><div class="agent-chip-dot" style="background:var(--accent-cyan)"></div><div><div class="agent-chip-name">microservice-boundary-architect</div><div class="agent-chip-role">Service Mesh Partitioning</div></div></div>
+          <div class="agent-chip"><div class="agent-chip-dot" style="background:var(--accent-cyan)"></div><div><div class="agent-chip-name">performance-architect</div><div class="agent-chip-role">Throughput &amp; Latency Modeling</div></div></div>
+          <div class="agent-chip"><div class="agent-chip-dot" style="background:var(--accent-cyan)"></div><div><div class="agent-chip-name">observability-architect</div><div class="agent-chip-role">Telemetry &amp; Tracing Design</div></div></div>
+          <div class="agent-chip"><div class="agent-chip-dot" style="background:var(--accent-cyan)"></div><div><div class="agent-chip-name">sre-platform-architect</div><div class="agent-chip-role">Reliability Engineering</div></div></div>
+          <div class="agent-chip"><div class="agent-chip-dot" style="background:var(--accent-cyan)"></div><div><div class="agent-chip-name">auth-security-architect</div><div class="agent-chip-role">IAM &amp; Zero-Trust Design</div></div></div>
+        </div>
+      </div>
+
+      <div class="agent-category">
+        <div class="agent-category-header">
+          <div class="agent-category-icon" style="background:var(--accent-violet-dim)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent-violet)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></div>
+          <h4 class="agent-category-name">Implementation <span class="agent-category-count">(24)</span></h4>
+        </div>
+        <div class="agents-row">
+          <div class="agent-chip"><div class="agent-chip-dot" style="background:var(--accent-violet)"></div><div><div class="agent-chip-name">domain-implementer-ts</div><div class="agent-chip-role">TypeScript Core Engineer</div></div></div>
+          <div class="agent-chip"><div class="agent-chip-dot" style="background:var(--accent-violet)"></div><div><div class="agent-chip-name">domain-implementer-py</div><div class="agent-chip-role">Python Core Engineer</div></div></div>
+          <div class="agent-chip"><div class="agent-chip-dot" style="background:var(--accent-violet)"></div><div><div class="agent-chip-name">domain-implementer-go</div><div class="agent-chip-role">Go Core Engineer</div></div></div>
+          <div class="agent-chip"><div class="agent-chip-dot" style="background:var(--accent-violet)"></div><div><div class="agent-chip-name">domain-implementer-rust</div><div class="agent-chip-role">Rust Systems Engineer</div></div></div>
+          <div class="agent-chip"><div class="agent-chip-dot" style="background:var(--accent-violet)"></div><div><div class="agent-chip-name">frontend-crafter</div><div class="agent-chip-role">React / UI Engineering</div></div></div>
+          <div class="agent-chip"><div class="agent-chip-dot" style="background:var(--accent-violet)"></div><div><div class="agent-chip-name">db-migration-surgeon</div><div class="agent-chip-role">Schema Migration &amp; Data</div></div></div>
+          <div class="agent-chip"><div class="agent-chip-dot" style="background:var(--accent-violet)"></div><div><div class="agent-chip-name">infra-provisioner</div><div class="agent-chip-role">Terraform / OpenTofu IaC</div></div></div>
+          <div class="agent-chip"><div class="agent-chip-dot" style="background:var(--accent-violet)"></div><div><div class="agent-chip-name">api-gateway-engineer</div><div class="agent-chip-role">API Gateway &amp; Routing</div></div></div>
+        </div>
+      </div>
+
+      <div class="agent-category">
+        <div class="agent-category-header">
+          <div class="agent-category-icon" style="background:rgba(244,63,94,0.12)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent-rose)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+          <h4 class="agent-category-name">Adversarial <span class="agent-category-count">(6)</span></h4>
+        </div>
+        <div class="agents-row">
+          <div class="agent-chip"><div class="agent-chip-dot" style="background:var(--accent-rose)"></div><div><div class="agent-chip-name">adversarial-arch-challenger</div><div class="agent-chip-role">Architecture Falsification</div></div></div>
+          <div class="agent-chip"><div class="agent-chip-dot" style="background:var(--accent-rose)"></div><div><div class="agent-chip-name">adversarial-code-breaker</div><div class="agent-chip-role">Edge Case &amp; Logic Breaking</div></div></div>
+          <div class="agent-chip"><div class="agent-chip-dot" style="background:var(--accent-rose)"></div><div><div class="agent-chip-name">adversarial-security-attacker</div><div class="agent-chip-role">Injection &amp; Auth Boundary Testing</div></div></div>
+          <div class="agent-chip"><div class="agent-chip-dot" style="background:var(--accent-rose)"></div><div><div class="agent-chip-name">adversarial-perf-critic</div><div class="agent-chip-role">Algorithmic Complexity Attack</div></div></div>
+          <div class="agent-chip"><div class="agent-chip-dot" style="background:var(--accent-rose)"></div><div><div class="agent-chip-name">adversarial-regression-investigator</div><div class="agent-chip-role">PASS_TO_PASS Baseline Breaker</div></div></div>
+          <div class="agent-chip"><div class="agent-chip-dot" style="background:var(--accent-rose)"></div><div><div class="agent-chip-name">adversarial-judge</div><div class="agent-chip-role">Final Consensus Verdict</div></div></div>
+        </div>
+      </div>
+
+      <div class="agent-category">
+        <div class="agent-category-header">
+          <div class="agent-category-icon" style="background:rgba(245,158,11,0.15)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent-amber)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg></div>
+          <h4 class="agent-category-name">Debugging <span class="agent-category-count">(4)</span></h4>
+        </div>
+        <div class="agents-row">
+          <div class="agent-chip"><div class="agent-chip-dot" style="background:var(--accent-amber)"></div><div><div class="agent-chip-name">tdd-verification-engineer</div><div class="agent-chip-role">Red-Green-Refactor Gate</div></div></div>
+          <div class="agent-chip"><div class="agent-chip-dot" style="background:var(--accent-amber)"></div><div><div class="agent-chip-name">build-failure-localizer</div><div class="agent-chip-role">Compiler Error Root Cause</div></div></div>
+          <div class="agent-chip"><div class="agent-chip-dot" style="background:var(--accent-amber)"></div><div><div class="agent-chip-name">runtime-debugger</div><div class="agent-chip-role">Multi-Hop Runtime Analysis</div></div></div>
+          <div class="agent-chip"><div class="agent-chip-dot" style="background:var(--accent-amber)"></div><div><div class="agent-chip-name">test-flakiness-hunter</div><div class="agent-chip-role">Flaky Test Detection &amp; Fix</div></div></div>
+        </div>
+      </div>
+
+      <div class="agent-category">
+        <div class="agent-category-header">
+          <div class="agent-category-icon" style="background:var(--accent-blue-dim)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
+          <h4 class="agent-category-name">Security <span class="agent-category-count">(5)</span></h4>
+        </div>
+        <div class="agents-row">
+          <div class="agent-chip"><div class="agent-chip-dot" style="background:var(--accent-blue)"></div><div><div class="agent-chip-name">secret-scanner</div><div class="agent-chip-role">Shannon Entropy Detection</div></div></div>
+          <div class="agent-chip"><div class="agent-chip-dot" style="background:var(--accent-blue)"></div><div><div class="agent-chip-name">injection-guardian</div><div class="agent-chip-role">Prompt Injection Defense</div></div></div>
+          <div class="agent-chip"><div class="agent-chip-dot" style="background:var(--accent-blue)"></div><div><div class="agent-chip-name">auth-boundary-enforcer</div><div class="agent-chip-role">IAM &amp; OAuth2 Validation</div></div></div>
+          <div class="agent-chip"><div class="agent-chip-dot" style="background:var(--accent-blue)"></div><div><div class="agent-chip-name">supply-chain-auditor</div><div class="agent-chip-role">Dependency &amp; License Audit</div></div></div>
+          <div class="agent-chip"><div class="agent-chip-dot" style="background:var(--accent-blue)"></div><div><div class="agent-chip-name">vps-hardening-specialist</div><div class="agent-chip-role">WireGuard, nftables, systemd</div></div></div>
+        </div>
+      </div>
+
+      <div class="agent-category">
+        <div class="agent-category-header">
+          <div class="agent-category-icon" style="background:var(--accent-emerald-dim)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent-emerald)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 1 0 10 10H12V2z"/><path d="M20 12a8 8 0 1 1-16 0"/></svg></div>
+          <h4 class="agent-category-name">Memory &amp; Verification <span class="agent-category-count">(4)</span></h4>
+        </div>
+        <div class="agents-row">
+          <div class="agent-chip"><div class="agent-chip-dot" style="background:var(--accent-emerald)"></div><div><div class="agent-chip-name">memory-curator</div><div class="agent-chip-role">SHA-256 Provenance Memory</div></div></div>
+          <div class="agent-chip"><div class="agent-chip-dot" style="background:var(--accent-emerald)"></div><div><div class="agent-chip-name">continuity-engineer</div><div class="agent-chip-role">Merkle Session Checkpoints</div></div></div>
+          <div class="agent-chip"><div class="agent-chip-dot" style="background:var(--accent-emerald)"></div><div><div class="agent-chip-name">independent-reviewer</div><div class="agent-chip-role">Final Quality Gate</div></div></div>
+          <div class="agent-chip"><div class="agent-chip-dot" style="background:var(--accent-emerald)"></div><div><div class="agent-chip-name">benchmark-verifier</div><div class="agent-chip-role">Regression Benchmark Runner</div></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills" class="divider-top">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-label">540 Validated Skills</div>
+      <h2 class="section-title">Lazy-loaded domain packs</h2>
+      <p class="section-subtitle">Skills activate via 28-token AST predicates. Zero tokens consumed until the activation predicate matches the active file graph.</p>
+    </div>
+    <div class="skills-overview reveal">
+      <div class="skill-domain-card">
+        <div class="skill-domain-icon" style="background:var(--accent-cyan-dim)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent-cyan)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><path d="M2 2l7.586 7.586"/><circle cx="11" cy="11" r="2"/></svg></div>
+        <h4 class="skill-domain-name">Design Craft</h4>
+        <div class="skill-domain-count" style="color:var(--accent-cyan)">105</div>
+        <div class="skill-domain-label">Design Skills</div>
+        <div class="skill-domain-tags"><span class="skill-tag">OKLCH</span><span class="skill-tag">APCA</span><span class="skill-tag">WCAG AAA</span><span class="skill-tag">Subgrid</span><span class="skill-tag">Three.js</span><span class="skill-tag">D3.js</span></div>
+      </div>
+      <div class="skill-domain-card">
+        <div class="skill-domain-icon" style="background:var(--accent-violet-dim)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent-violet)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="2.18"/><path d="M7 2v20M17 2v20M2 12h20M2 7h5M2 17h5M17 17h5M17 7h5"/></svg></div>
+        <h4 class="skill-domain-name">Polyglot Core</h4>
+        <div class="skill-domain-count" style="color:var(--accent-violet)">332</div>
+        <div class="skill-domain-label">Core Engineering Skills</div>
+        <div class="skill-domain-tags"><span class="skill-tag">TypeScript</span><span class="skill-tag">Python</span><span class="skill-tag">Go</span><span class="skill-tag">Rust</span><span class="skill-tag">SQL</span></div>
+      </div>
+      <div class="skill-domain-card">
+        <div class="skill-domain-icon" style="background:var(--accent-emerald-dim)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent-emerald)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg></div>
+        <h4 class="skill-domain-name">Cloud / AWS / VPS</h4>
+        <div class="skill-domain-count" style="color:var(--accent-emerald)">85</div>
+        <div class="skill-domain-label">Infrastructure Skills</div>
+        <div class="skill-domain-tags"><span class="skill-tag">EKS</span><span class="skill-tag">IAM</span><span class="skill-tag">WireGuard</span><span class="skill-tag">Patroni</span><span class="skill-tag">Caddy</span></div>
+      </div>
+      <div class="skill-domain-card">
+        <div class="skill-domain-icon" style="background:rgba(245,158,11,0.15)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent-amber)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg></div>
+        <h4 class="skill-domain-name">Video / Media NLE</h4>
+        <div class="skill-domain-count" style="color:var(--accent-amber)">18</div>
+        <div class="skill-domain-label">Media Editing Skills</div>
+        <div class="skill-domain-tags"><span class="skill-tag">FFmpeg</span><span class="skill-tag">EBU R128</span><span class="skill-tag">Whisper</span><span class="skill-tag">HLS</span><span class="skill-tag">AV1</span></div>
+      </div>
+    </div>
+    <div style="margin-top:40px" class="reveal">
+      <div class="tab-bar">
+        <button class="active" onclick="switchTab(this,'tab-skills')">All Skills</button>
+        <button onclick="switchTab(this,'tab-lazy')">Lazy Loading</button>
+        <button onclick="switchTab(this,'tab-skills-compose')">Composition</button>
+      </div>
+    </div>
+    <div id="tab-skills" class="tab-panel active">
+      <p style="margin-top:28px;color:var(--text-secondary);font-size:14px;line-height:1.7">Every skill carries a deterministic activation predicate, required information list, execution steps, useful tools, expected outputs, verification criteria, and failure-case handling — all defined in structured frontmatter. Skills are verified against AETHER's 0-filler quality gate before entering the registry.</p>
+    </div>
+    <div id="tab-lazy" class="tab-panel">
+      <p style="margin-top:28px;color:var(--text-secondary);font-size:14px;line-height:1.7">Domain packs (<code style="font-family:var(--font-mono);font-size:12px;background:var(--bg-tertiary);padding:2px 6px;border-radius:4px">core-architecture</code>, <code style="font-family:var(--font-mono);font-size:12px;background:var(--bg-tertiary);padding:2px 6px;border-radius:4px">distributed-systems</code>, <code style="font-family:var(--font-mono);font-size:12px;background:var(--bg-tertiary);padding:2px 6px;border-radius:4px">cloud-native</code>, etc.) are loaded on demand. Installing 500 skills adds <strong style="color:var(--text-primary)">0 tokens</strong> to the base prompt until an activation predicate matches the active AST/file graph.</p>
+    </div>
+    <div id="tab-skills-compose" class="tab-panel">
+      <p style="margin-top:28px;color:var(--text-secondary);font-size:14px;line-height:1.7"><code style="font-family:var(--font-mono);font-size:12px;background:var(--bg-tertiary);padding:2px 6px;border-radius:4px">DynamicEcosystemRegistry.composeSkills()</code> chains existing skills into higher-order composite pipelines with deterministic scoring, combined trigger keywords, and required permission enforcement.</p>
+    </div>
+  </div>
+</section>
+
+<!-- PROGRAMS -->
+<section id="programs" class="divider-top">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-label">9 Research Programs</div>
+      <h2 class="section-title">Intelligence layered by domain</h2>
+      <p class="section-subtitle">Each program composes existing AETHER engines rather than reimplementing them — adding the specialized reasoning layer each domain demands.</p>
+    </div>
+    <div class="programs-grid reveal">
+      <div class="program-card">
+        <div class="program-card-header"><span class="program-number">P01</span><h4 class="program-card-title">Development Intelligence</h4></div>
+        <p class="program-card-desc">Research-first TDD gate with deterministic AST skill discovery, Red-Green-Refactor enforcement, and debugging hypothesis ledger.</p>
+        <div class="program-card-source">Informed by ECC &amp; Superpowers</div>
+      </div>
+      <div class="program-card">
+        <div class="program-card-header"><span class="program-number">P02</span><h4 class="program-card-title">Reverse Intelligence</h4></div>
+        <p class="program-card-desc">Isolated, permission-controlled reverse-engineering. Application architecture extraction, dependency discovery, and automated technical reporting.</p>
+        <div class="program-card-source">Informed by REA (morluto)</div>
+      </div>
+      <div class="program-card">
+        <div class="program-card-header"><span class="program-number">P03</span><h4 class="program-card-title">Autonomous Execution</h4></div>
+        <p class="program-card-desc">Goal-to-plan resumable execution layer. Dependency-structured action plans with deterministic verification predicates per step and crash recovery.</p>
+        <div class="program-card-source">Informed by OpenHands &amp; OpenManus</div>
+      </div>
+      <div class="program-card">
+        <div class="program-card-header"><span class="program-number">P05</span><h4 class="program-card-title">Browser Intelligence</h4></div>
+        <p class="program-card-desc">Unified browser engine with A11y ref snapshots, deterministic CSS/ARIA DOM locators, and vision coordinate fallback — ranked by determinism.</p>
+        <div class="program-card-source">Informed by Playwright, Agent Browser, Browser Use</div>
+      </div>
+      <div class="program-card">
+        <div class="program-card-header"><span class="program-number">P06</span><h4 class="program-card-title">Visual Computer Intelligence</h4></div>
+        <p class="program-card-desc">Perception → Reasoning → Action → Verification loop. OmniParser-style UI element grounding with confidence-floor abort guarantees.</p>
+        <div class="program-card-source">Informed by OmniParser &amp; Skyvern</div>
+      </div>
+      <div class="program-card">
+        <div class="program-card-header"><span class="program-number">P07</span><h4 class="program-card-title">Browser Runtime</h4></div>
+        <p class="program-card-desc">Provider abstraction for Playwright cross-browser, Lightpanda CDP (BSL-1.1, out-of-process only), and bare Chromium backends.</p>
+        <div class="program-card-source">Informed by Playwright &amp; Lightpanda</div>
+      </div>
+      <div class="program-card">
+        <div class="program-card-header"><span class="program-number">P09</span><h4 class="program-card-title">Creative Visual Intelligence</h4></div>
+        <p class="program-card-desc">ComfyUI-style node graph (clean-room data model) + Three.js-style 3D scene graph. Topological scheduling with cycle detection.</p>
+        <div class="program-card-source">Informed by ComfyUI (out-of-process) &amp; Three.js</div>
+      </div>
+      <div class="program-card">
+        <div class="program-card-header"><span class="program-number">P10</span><h4 class="program-card-title">Crypto &amp; Integrity</h4></div>
+        <p class="program-card-desc">SHA-256 content-addressed hashing, Merkle tree continuity checkpoints, FNV-1a fast hashing, and integrity-chained audit logs.</p>
+        <div class="program-card-source">Standard cryptographic primitives</div>
+      </div>
+      <div class="program-card">
+        <div class="program-card-header"><span class="program-number">MCP</span><h4 class="program-card-title">Model Context Protocol</h4></div>
+        <p class="program-card-desc">Full JSON-RPC 2.0 MCP server engine. 8 AETHER tools, capability negotiation, permission enforcement, and structured error codes.</p>
+        <div class="program-card-source">Anthropic MCP Specification</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HARNESSES -->
+<section id="harnesses" class="divider-top">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-label">Cross-Harness Support</div>
+      <h2 class="section-title">Install anywhere. Run everywhere.</h2>
+      <p class="section-subtitle">The selective installer deploys agents, skills, hooks, and workflows to 5 major AI coding harnesses — and the MCP server. Under 650 idle tokens.</p>
+    </div>
+    <div class="reveal">
+      <div class="harness-grid">
+        <a href="https://docs.anthropic.com/en/docs/claude-code" target="_blank" rel="noopener" class="harness-card">
+          <div class="harness-icon" style="background:var(--accent-cyan-dim)"><svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="20" height="20"><title>Claude</title><path d="m4.7144 15.9555 4.7174-2.6471.079-.2307-.079-.1275h-.2307l-.7893-.0486-2.6956-.0729-2.3375-.0971-2.2646-.1214-.5707-.1215-.5343-.7042.0546-.3522.4797-.3218.686.0608 1.5179.1032 2.2767.1578 1.6514.0972 2.4468.255h.3886l.0546-.1579-.1336-.0971-.1032-.0972L6.973 9.8356l-2.55-1.6879-1.3356-.9714-.7225-.4918-.3643-.4614-.1578-1.0078.6557-.7225.8803.0607.2246.0607.8925.686 1.9064 1.4754 2.4893 1.8336.3643.3035.1457-.1032.0182-.0728-.164-.2733-1.3539-2.4467-1.445-2.4893-.6435-1.032-.17-.6194c-.0607-.255-.1032-.4674-.1032-.7285L6.287.1335 6.6997 0l.9957.1336.419.3642.6192 1.4147 1.0018 2.2282 1.5543 3.0296.4553.8985.2429.8318.091.255h.1579v-.1457l.1275-1.706.2368-2.0947.2307-2.6957.0789-.7589.3764-.9107.7468-.4918.5828.2793.4797.686-.0668.4433-.2853 1.8517-.5586 2.9021-.3643 1.9429h.2125l.2429-.2429.9835-1.3053 1.6514-2.0643.7286-.8196.85-.9046.5464-.4311h1.0321l.759 1.1293-.34 1.1657-1.0625 1.3478-.8804 1.1414-1.2628 1.7-.7893 1.36.0729.1093.1882-.0183 2.8535-.607 1.5421-.2794 1.8396-.3157.8318.3886.091.3946-.3278.8075-1.967.4857-2.3072.4614-3.4364.8136-.0425.0304.0486.0607 1.5482.1457.6618.0364h1.621l3.0175.2247.7892.522.4736.6376-.079.4857-1.2142.6193-1.6393-.3886-3.825-.9107-1.3113-.3279h-.1822v.1093l1.0929 1.0686 2.0035 1.8092 2.5075 2.3314.1275.5768-.3218.4554-.34-.0486-2.2039-1.6575-.85-.7468-1.9246-1.621h-.1275v.17l.4432.6496 2.3436 3.5214.1214 1.0807-.17.3521-.6071.2125-.6679-.1214-1.3721-1.9246L14.38 17.959l-1.1414-1.9428-.1397.079-.674 7.2552-.3156.3703-.7286.2793-.6071-.4614-.3218-.7468.3218-1.4753.3886-1.9246.3157-1.53.2853-1.9004.17-.6314-.0121-.0425-.1397.0182-1.4328 1.9672-2.1796 2.9446-1.7243 1.8456-.4128.164-.7164-.3704.0667-.6618.4008-.5889 2.386-3.0357 1.4389-1.882.929-1.0868-.0062-.1579h-.0546l-6.3385 4.1164-1.1293.1457-.4857-.4554.0608-.7467.2307-.2429 1.9064-1.3114Z"/></svg></div>
+          <div><div class="harness-name">Claude Code</div><div class="harness-type">Anthropic CLI</div></div>
+          <div class="harness-status" style="background:var(--accent-emerald)" title="Native Support"></div>
+        </a>
+        <a href="https://github.com/openai/codex" target="_blank" rel="noopener" class="harness-card">
+          <div class="harness-icon" style="background:var(--accent-violet-dim)"><svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="20" height="20" style="fill:var(--accent-violet)"><path d="M22.2819 9.8211a5.9847 5.9847 0 0 0-.5157-4.9108 6.0462 6.0462 0 0 0-6.5098-2.9A6.0651 6.0651 0 0 0 4.9807 4.1818a5.9847 5.9847 0 0 0-3.9977 2.9 6.0462 6.0462 0 0 0 .7427 7.0966 5.98 5.98 0 0 0 .511 4.9107 6.051 6.051 0 0 0 6.5146 2.9001A5.9847 5.9847 0 0 0 13.2599 24a6.0557 6.0557 0 0 0 5.7718-4.2058 5.9894 5.9894 0 0 0 3.9977-2.9001 6.0557 6.0557 0 0 0-.7475-7.0729zm-9.022 12.6081a4.4755 4.4755 0 0 1-2.8764-1.0408l.1419-.0804 4.7783-2.7582a.7948.7948 0 0 0 .3927-.6813v-6.7369l2.02 1.1686a.071.071 0 0 1 .038.052v5.5826a4.504 4.504 0 0 1-4.4945 4.4944zm-9.6607-4.1254a4.4708 4.4708 0 0 1-.5346-3.0137l.142.0852 4.783 2.7582a.7712.7712 0 0 0 .7806 0l5.8428-3.3685v2.3324a.0804.0804 0 0 1-.0332.0615L9.74 19.9502a4.4992 4.4992 0 0 1-6.1408-1.6464zM2.3408 7.8956a4.485 4.485 0 0 1 2.3655-1.9728V11.6a.7664.7664 0 0 0 .3879.6765l5.8144 3.3543-2.0201 1.1685a.0757.0757 0 0 1-.071 0l-4.8303-2.7865A4.504 4.504 0 0 1 2.3408 7.872zm16.5963 3.8558L13.1038 8.364 15.1192 7.2a.0757.0757 0 0 1 .071 0l4.8303 2.7913a4.4944 4.4944 0 0 1-.6765 8.1042v-5.6772a.79.79 0 0 0-.407-.667zm2.0107-3.0231l-.142-.0852-4.7735-2.7818a.7759.7759 0 0 0-.7854 0L9.409 9.2297V6.8974a.0662.0662 0 0 1 .0284-.0615l4.8303-2.7866a4.4992 4.4992 0 0 1 6.6802 4.66zM8.3065 12.863l-2.02-1.1638a.0804.0804 0 0 1-.038-.0567V6.0742a4.4992 4.4992 0 0 1 7.3757-3.4537l-.142.0805L8.704 5.459a.7948.7948 0 0 0-.3927.6813zm1.0976-2.3654l2.602-1.4998 2.6069 1.4998v2.9994l-2.5974 1.4997-2.6067-1.4997Z"/></svg></div>
+          <div><div class="harness-name">OpenAI Codex</div><div class="harness-type">OpenAI CLI</div></div>
+          <div class="harness-status" style="background:var(--accent-emerald)" title="Native Support"></div>
+        </a>
+        <a href="https://cursor.com" target="_blank" rel="noopener" class="harness-card">
+          <div class="harness-icon" style="background:var(--accent-blue-dim)"><svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="20" height="20" style="fill:var(--accent-blue)"><path d="M11.503.131 1.891 5.678a.84.84 0 0 0-.42.726v11.188c0 .3.162.575.42.724l9.609 5.55a1 1 0 0 0 .998 0l9.61-5.55a.84.84 0 0 0 .42-.724V6.404a.84.84 0 0 0-.42-.726L12.497.131a1.01 1.01 0 0 0-.996 0M2.657 6.338h18.55c.263 0 .43.287.297.515L12.23 22.918c-.062.107-.229.064-.229-.06V12.335a.59.59 0 0 0-.295-.51l-9.11-5.257c-.109-.063-.064-.23.061-.23"/></svg></div>
+          <div><div class="harness-name">Cursor</div><div class="harness-type">AI Editor</div></div>
+          <div class="harness-status" style="background:var(--accent-emerald)" title="Native Support"></div>
+        </a>
+        <a href="https://github.com/sst/opencode" target="_blank" rel="noopener" class="harness-card">
+          <div class="harness-icon" style="background:rgba(20,184,166,0.12)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent-teal)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="21" y2="19"/></svg></div>
+          <div><div class="harness-name">OpenCode</div><div class="harness-type">SST Terminal Agent</div></div>
+          <div class="harness-status" style="background:var(--accent-emerald)" title="Native Support"></div>
+        </a>
+        <a href="https://modelcontextprotocol.io" target="_blank" rel="noopener" class="harness-card">
+          <div class="harness-icon" style="background:rgba(245,158,11,0.15)"><svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="20" height="20" style="fill:var(--accent-amber)"><path d="M13.85 0a4.16 4.16 0 0 0-2.95 1.217L1.456 10.66a.835.835 0 0 0 0 1.18.835.835 0 0 0 1.18 0l9.442-9.442a2.49 2.49 0 0 1 3.541 0 2.49 2.49 0 0 1 0 3.541L8.59 12.97l-.1.1a.835.835 0 0 0 0 1.18.835.835 0 0 0 1.18 0l.1-.098 7.03-7.034a2.49 2.49 0 0 1 3.542 0l.049.05a2.49 2.49 0 0 1 0 3.54l-8.54 8.54a1.96 1.96 0 0 0 0 2.755l1.753 1.753a.835.835 0 0 0 1.18 0 .835.835 0 0 0 0-1.18l-1.753-1.753a.266.266 0 0 1 0-.394l8.54-8.54a4.185 4.185 0 0 0 0-5.9l-.05-.05a4.16 4.16 0 0 0-2.95-1.218c-.2 0-.401.02-.6.048a4.17 4.17 0 0 0-1.17-3.552A4.16 4.16 0 0 0 13.85 0m0 3.333a.84.84 0 0 0-.59.245L6.275 10.56a4.186 4.186 0 0 0 0 5.902 4.186 4.186 0 0 0 5.902 0L19.16 9.48a.835.835 0 0 0 0-1.18.835.835 0 0 0-1.18 0l-6.985 6.984a2.49 2.49 0 0 1-3.54 0 2.49 2.49 0 0 1 0-3.54l6.983-6.985a.835.835 0 0 0 0-1.18.84.84 0 0 0-.59-.245"/></svg></div>
+          <div><div class="harness-name">MCP Server</div><div class="harness-type">8 AETHER Tools</div></div>
+          <div class="harness-status" style="background:var(--accent-emerald)" title="Native Support"></div>
+        </a>
+      </div>
+      <div style="margin-top:48px;padding:28px;border-radius:var(--radius-lg);background:var(--bg-secondary);border:1px solid var(--border-subtle);" class="reveal">
+        <div style="display:flex;align-items:flex-start;gap:20px;">
+          <div style="width:44px;height:44px;border-radius:var(--radius-md);background:var(--accent-cyan-dim);display:flex;align-items:center;justify-content:center;flex-shrink:0;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent-cyan)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg></div>
+          <div style="flex:1;">
+            <h4 style="font-family:var(--font-display);font-size:16px;font-weight:600;margin-bottom:8px;">Single Command Install</h4>
+            <p style="font-size:14px;color:var(--text-secondary);line-height:1.6;margin-bottom:16px;">Install everything across all supported harnesses with one command.</p>
+            <div class="install-cmd"><span style="color:var(--text-tertiary)">$</span> npx tsx bin/aether.ts install <span style="color:var(--accent-cyan)">--all</span> <span style="color:var(--accent-cyan)">--target</span> all-harnesses <span style="color:var(--accent-cyan)">--mcp</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WORKFLOWS -->
+<section id="workflows" class="divider-top">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-label">54 End-to-End Workflows</div>
+      <h2 class="section-title">Verified execution pipelines</h2>
+      <p class="section-subtitle">Every workflow is a 5-stage pipeline with explicit dependencies, failure handling, and completion criteria.</p>
+    </div>
+    <div class="workflow-visual reveal">
+      <div class="workflow-steps">
+        <div class="workflow-step">
+          <div class="workflow-step-circle" style="border-color:var(--accent-cyan);color:var(--accent-cyan)">1</div>
+          <div class="workflow-step-title">Neural Context</div>
+          <div class="workflow-step-desc">Slice context to &lt;25% capacity. Identify AST blast radius.</div>
+        </div>
+        <div class="workflow-step">
+          <div class="workflow-step-circle" style="border-color:var(--accent-violet);color:var(--accent-violet)">2</div>
+          <div class="workflow-step-title">Red-Green Contract</div>
+          <div class="workflow-step-desc">Write failing tests. Verify RED phase before implementation.</div>
+        </div>
+        <div class="workflow-step">
+          <div class="workflow-step-circle" style="border-color:var(--accent-blue);color:var(--accent-blue)">3</div>
+          <div class="workflow-step-title">Leased Swarm</div>
+          <div class="workflow-step-desc">Exclusive file-write leases. Minimal implementation. Local verify.</div>
+        </div>
+        <div class="workflow-step">
+          <div class="workflow-step-circle" style="border-color:var(--accent-rose);color:var(--accent-rose)">4</div>
+          <div class="workflow-step-title">Adversarial Gate</div>
+          <div class="workflow-step-desc">6 hostile challengers. Executable reproducers required. Zero blockers.</div>
+        </div>
+        <div class="workflow-step">
+          <div class="workflow-step-circle" style="border-color:var(--accent-emerald);color:var(--accent-emerald)">5</div>
+          <div class="workflow-step-title">Provenance Commit</div>
+          <div class="workflow-step-desc">SHA-256 memory record. Merkle checkpoint. Zero-loss continuity.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MODELS -->
+<section id="models" class="divider-top">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-label">Model Support</div>
+      <h2 class="section-title">Provider-agnostic intelligence</h2>
+      <p class="section-subtitle">AETHER's harness layer abstracts every major AI provider through a unified interface. Swap models without rewriting agents, skills, or workflows.</p>
+    </div>
+    <div class="models-grid reveal">
+      <div class="model-card model-card--anthropic">
+        <div class="model-card-header">
+          <div class="model-provider-icon" style="background:rgba(216,167,97,0.15)">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#d8a761" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/><path d="M2 12h20"/></svg>
+          </div>
+          <div>
+            <div class="model-name">Anthropic</div>
+            <div class="model-badge">Primary Provider</div>
+          </div>
+        </div>
+        <div class="model-tags">
+          <span class="model-tag">Claude Opus</span>
+          <span class="model-tag">Claude Sonnet</span>
+          <span class="model-tag">Claude Haiku</span>
+          <span class="model-tag">claude-fable-5-2</span>
+        </div>
+        <p class="model-card-desc">Native first-class support via Anthropic SDK. Full extended thinking, tool use, vision, and the 1M context window. Default for AETHER agents and all Fable-tier workloads.</p>
+      </div>
+      <div class="model-card model-card--google">
+        <div class="model-card-header">
+          <div class="model-provider-icon" style="background:rgba(66,133,244,0.12)">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#4285f4" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          </div>
+          <div>
+            <div class="model-name">Google</div>
+            <div class="model-badge">Cloud Provider</div>
+          </div>
+        </div>
+        <div class="model-tags">
+          <span class="model-tag">Gemini 3 Pro</span>
+          <span class="model-tag">Gemini 2.5 Flash</span>
+          <span class="model-tag">Gemma 3</span>
+        </div>
+        <p class="model-card-desc">Vertex AI and Generative Language API integrations. Supports multimodal reasoning, tool calling, and function-calling schemas with adapter parity.</p>
+      </div>
+      <div class="model-card model-card--openai">
+        <div class="model-card-header">
+          <div class="model-provider-icon" style="background:rgba(16,163,127,0.12)">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#10a37f" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 0 1 10 10c0 5.52-4.48 10-10 10S2 17.52 2 12 6.48 2 12 2z"/><path d="M8 12h8m-4-4v8"/></svg>
+          </div>
+          <div>
+            <div class="model-name">OpenAI</div>
+            <div class="model-badge">Cloud Provider</div>
+          </div>
+        </div>
+        <div class="model-tags">
+          <span class="model-tag">GPT-4o</span>
+          <span class="model-tag">o3</span>
+          <span class="model-tag">o4-mini</span>
+        </div>
+        <p class="model-card-desc">OpenAI API adapter for GPT-4o, reasoning models (o3, o4-mini). Structured outputs and function-calling interface through the OpenAI SDK wrapper.</p>
+      </div>
+      <div class="model-card model-card--local">
+        <div class="model-card-header">
+          <div class="model-provider-icon" style="background:rgba(99,102,241,0.12)">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M6 10h.01M6 14h.01"/></svg>
+          </div>
+          <div>
+            <div class="model-name">Local / Open</div>
+            <div class="model-badge">Self-Hosted</div>
+          </div>
+        </div>
+        <div class="model-tags">
+          <span class="model-tag">Ollama</span>
+          <span class="model-tag">vLLM</span>
+          <span class="model-tag">Llama 4</span>
+          <span class="model-tag">DeepSeek</span>
+          <span class="model-tag">Qwen</span>
+          <span class="model-tag">Mistral</span>
+        </div>
+        <p class="model-card-desc">Fully offline via Ollama or vLLM inference servers. Supports Llama 4, DeepSeek, Qwen, Mistral, and any OpenAI-compatible endpoint. No data leaves your network.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOOKS -->
+<section id="hooks" class="divider-top">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-label">Deterministic Hooks</div>
+      <h2 class="section-title">Sub-35ms safety gates</h2>
+      <p class="section-subtitle">Four lifecycle hooks intercept every prompt, tool use, edit, and compaction with non-blocking execution budgets.</p>
+    </div>
+    <div class="hooks-grid reveal">
+      <div class="hook-card">
+        <div class="hook-card-header"><span class="hook-card-name">pre-prompt-security-and-slice</span><span class="hook-card-event">PrePromptSubmit</span></div>
+        <p class="hook-card-desc">Scan untrusted files for indirect prompt injection, strip high-entropy secrets, compute AST PageRank context slice.</p>
+        <div class="hook-card-meta"><span>Priority: 10</span><span>Budget: 50ms</span></div>
+      </div>
+      <div class="hook-card">
+        <div class="hook-card-header"><span class="hook-card-name">pre-tool-command-sandbox</span><span class="hook-card-event">PreToolUse</span></div>
+        <p class="hook-card-desc">Verify exclusive file-write lease held. Block destructive shell AST patterns. Bash, Shell, Edit, Write matchers.</p>
+        <div class="hook-card-meta"><span>Priority: 20</span><span>Budget: 35ms</span></div>
+      </div>
+      <div class="hook-card">
+        <div class="hook-card-header"><span class="hook-card-name">post-edit-incremental-verify</span><span class="hook-card-event">PostToolUse</span></div>
+        <p class="hook-card-desc">Invalidate stale Layer-3 memory hashes for modified files. Trigger targeted AST-mapped unit test on every edit.</p>
+        <div class="hook-card-meta"><span>Priority: 30</span><span>Budget: 1200ms</span></div>
+      </div>
+      <div class="hook-card">
+        <div class="hook-card-header"><span class="hook-card-name">pre-compact-merkle-checkpoint</span><span class="hook-card-event">PreCompact</span></div>
+        <p class="hook-card-desc">Persist Zero-Loss Continuity Merkle checkpoint with falsified debugging hypotheses and verified DAG task state.</p>
+        <div class="hook-card-meta"><span>Priority: 40</span><span>Budget: 80ms</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ECOSYSTEM -->
+<section id="ecosystem" class="divider-top">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-label">External Ecosystem</div>
+      <h2 class="section-title">15 integrated ecosystems</h2>
+      <p class="section-subtitle">License-audited adapters with strict isolation boundaries. Permissive ecosystems get native in-process adapters; copyleft projects are sandboxed to out-of-process HTTP/CDP only.</p>
+    </div>
+    <div class="ecosystem-grid reveal">
+      <a href="https://github.com/All-Hands-AI/OpenHands" target="_blank" rel="noopener" class="eco-card">
+        <div class="eco-card-icon" style="background:var(--accent-cyan-dim)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent-cyan)" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M18 11V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v0"/><path d="M14 10V4a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v2"/><path d="M10 10.5V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v8"/><path d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.83L7 15"/></svg></div>
+        <div><div class="eco-card-name">OpenHands</div><div class="eco-card-cat">Autonomous SWE Runtime</div></div>
+        <span class="eco-card-license">MIT</span>
+      </a>
+      <a href="https://github.com/affaan-m/everything-claude-code" target="_blank" rel="noopener" class="eco-card">
+        <div class="eco-card-icon" style="background:var(--accent-violet-dim)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent-violet)" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
+        <div><div class="eco-card-name">ECC</div><div class="eco-card-cat">Harness &amp; Skill Architecture</div></div>
+        <span class="eco-card-license">MIT</span>
+      </a>
+      <a href="https://github.com/obra/superpowers" target="_blank" rel="noopener" class="eco-card">
+        <div class="eco-card-icon" style="background:var(--accent-emerald-dim)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent-emerald)" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg></div>
+        <div><div class="eco-card-name">Superpowers</div><div class="eco-card-cat">TDD &amp; Micro-Plan</div></div>
+        <span class="eco-card-license">MIT</span>
+      </a>
+      <a href="https://github.com/microsoft/playwright" target="_blank" rel="noopener" class="eco-card">
+        <div class="eco-card-icon" style="background:var(--accent-blue-dim)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="M10 8l6 4-6 4V8z" fill="var(--accent-blue)" stroke="none"/></svg></div>
+        <div><div class="eco-card-name">Playwright</div><div class="eco-card-cat">Browser Automation</div></div>
+        <span class="eco-card-license">Apache-2.0</span>
+      </a>
+      <a href="https://github.com/vercel-labs/agent-browser" target="_blank" rel="noopener" class="eco-card">
+        <div class="eco-card-icon" style="background:rgba(20,184,166,0.12)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#14b8a6" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/><path d="M11 8v6"/><path d="M8 11h6"/></svg></div>
+        <div><div class="eco-card-name">Agent Browser</div><div class="eco-card-cat">A11y Tree Protocol</div></div>
+        <span class="eco-card-license">MIT</span>
+      </a>
+      <a href="https://github.com/browser-use/browser-use" target="_blank" rel="noopener" class="eco-card">
+        <div class="eco-card-icon" style="background:rgba(245,158,11,0.15)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent-amber)" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
+        <div><div class="eco-card-name">Browser Use</div><div class="eco-card-cat">DOM Distillation</div></div>
+        <span class="eco-card-license">MIT</span>
+      </a>
+      <a href="https://github.com/Skyvern-AI/skyvern" target="_blank" rel="noopener" class="eco-card">
+        <div class="eco-card-icon" style="background:rgba(139,92,246,0.12)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg></div>
+        <div><div class="eco-card-name">Skyvern</div><div class="eco-card-cat">Vision-LLM Automation</div></div>
+        <span class="eco-card-license" style="color:var(--accent-amber)">AGPL-3.0</span>
+      </a>
+      <a href="https://github.com/microsoft/OmniParser" target="_blank" rel="noopener" class="eco-card">
+        <div class="eco-card-icon" style="background:var(--accent-cyan-dim)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent-cyan)" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></div>
+        <div><div class="eco-card-name">OmniParser</div><div class="eco-card-cat">Screen Parsing &amp; Grounding</div></div>
+        <span class="eco-card-license">Apache-2.0</span>
+      </a>
+      <a href="https://lightpanda.io" target="_blank" rel="noopener" class="eco-card">
+        <div class="eco-card-icon" style="background:var(--accent-violet-dim)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent-violet)" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><path d="M8 21h8"/><path d="M12 17v4"/><circle cx="12" cy="10" r="3"/></svg></div>
+        <div><div class="eco-card-name">Lightpanda</div><div class="eco-card-cat">Headless Browser (CDP)</div></div>
+        <span class="eco-card-license" style="color:var(--accent-amber)">BSL-1.1</span>
+      </a>
+      <a href="https://github.com/microsoft/autogen" target="_blank" rel="noopener" class="eco-card">
+        <div class="eco-card-icon" style="background:var(--accent-emerald-dim)">🤖</div>
+        <div><div class="eco-card-name">AutoGen</div><div class="eco-card-cat">Multi-Agent Orchestration</div></div>
+        <span class="eco-card-license">MIT</span>
+      </a>
+      <a href="https://github.com/FoundationAgents/OpenManus" target="_blank" rel="noopener" class="eco-card">
+        <div class="eco-card-icon" style="background:rgba(59,130,246,0.12)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M18 11V6a2 2 0 0 0-4 0"/><path d="M14 10V4a2 2 0 0 0-4 0"/><path d="M10 10.5V6a2 2 0 0 0-4 0"/><path d="M22 17h-3"/><path d="M6 17H3"/><path d="M19 14v3"/><path d="M5 14v3"/></svg></div>
+        <div><div class="eco-card-name">OpenManus</div><div class="eco-card-cat">Generalist Plan-Act-Observe</div></div>
+        <span class="eco-card-license">MIT</span>
+      </a>
+      <a href="https://github.com/comfyanonymous/ComfyUI" target="_blank" rel="noopener" class="eco-card">
+        <div class="eco-card-icon" style="background:rgba(244,63,94,0.12)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#f43f5e" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.9 5.7h6.1l-5 3.6 1.9 5.7-5-3.6-5 3.6 1.9-5.7-5-3.6h6.1z"/></svg></div>
+        <div><div class="eco-card-name">ComfyUI</div><div class="eco-card-cat">Node-Based Media Graph</div></div>
+        <span class="eco-card-license" style="color:var(--accent-amber)">GPL-3.0</span>
+      </a>
+      <a href="https://github.com/mrdoob/three.js" target="_blank" rel="noopener" class="eco-card">
+        <div class="eco-card-icon" style="background:var(--accent-blue-dim)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></div>
+        <div><div class="eco-card-name">Three.js</div><div class="eco-card-cat">3D Spatial Scene Graph</div></div>
+        <span class="eco-card-license">MIT</span>
+      </a>
+      <a href="https://puter.com" target="_blank" rel="noopener" class="eco-card">
+        <div class="eco-card-icon" style="background:var(--accent-violet-dim)">💻</div>
+        <div><div class="eco-card-name">Puter</div><div class="eco-card-cat">Cloud OS &amp; VFS</div></div>
+        <span class="eco-card-license">MIT</span>
+      </a>
+      <a href="https://github.com/morluto/rea" target="_blank" rel="noopener" class="eco-card">
+        <div class="eco-card-icon" style="background:var(--accent-emerald-dim)">🔬</div>
+        <div><div class="eco-card-name">REA</div><div class="eco-card-cat">Research Architecture Synthesis</div></div>
+        <span class="eco-card-license">Apache-2.0</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- SECURITY -->
+<section id="security" class="divider-top">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-label">Security by Design</div>
+      <h2 class="section-title">Every boundary enforced</h2>
+      <p class="section-subtitle">Security is structural. From untrusted content spotlighting to license boundary enforcement, AETHER's threat model is explicit.</p>
+    </div>
+    <div class="security-grid reveal">
+      <div class="security-card">
+        <div class="security-card-icon" style="background:var(--accent-cyan-dim)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent-cyan)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></div>
+        <h4 class="security-card-title">Untrusted Content Spotlighting</h4>
+        <p class="security-card-desc">All repo files, web pages, and MCP payloads pass through the spotlighting gate. Injection directives are quarantined inline — never reach the model as live instructions.</p>
+      </div>
+      <div class="security-card">
+        <div class="security-card-icon" style="background:var(--accent-violet-dim)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent-violet)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
+        <h4 class="security-card-title">MCP Tool Manifest Guard</h4>
+        <p class="security-card-desc">Untrusted tool registration is impossible. Only tools in the local AETHER_MCP_TOOLS manifest are accepted. Permission denials emit structured JSON-RPC -32001 errors.</p>
+      </div>
+      <div class="security-card">
+        <div class="security-card-icon" style="background:rgba(244,63,94,0.12)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent-rose)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0zM12 9v4m0 4h.01"/></svg></div>
+        <h4 class="security-card-title">License Boundary Enforcement</h4>
+        <p class="security-card-desc">Permissive (MIT, Apache-2.0) ecosystems get native adapters. Copyleft (AGPL-3.0, GPL-3.0, BSL-1.1) are strictly out-of-process HTTP/CDP only.</p>
+      </div>
+      <div class="security-card">
+        <div class="security-card-icon" style="background:rgba(245,158,11,0.15)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent-amber)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/></svg></div>
+        <h4 class="security-card-title">Shannon Entropy Secret Scanning</h4>
+        <p class="security-card-desc">Detects high-entropy tokens (Shannon &gt; 4.35) matching credential signatures. Zero hardcoded secrets policy enforced on every commit.</p>
+      </div>
+      <div class="security-card">
+        <div class="security-card-icon" style="background:var(--accent-emerald-dim)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent-emerald)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+        <h4 class="security-card-title">Network Egress Policy</h4>
+        <p class="security-card-desc">Shell commands are gated by configurable egress rules. Only whitelisted hosts reachable. Enforced at the tool-call boundary.</p>
+      </div>
+      <div class="security-card">
+        <div class="security-card-icon" style="background:var(--accent-blue-dim)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+        <h4 class="security-card-title">Integrity-Chained Audit Log</h4>
+        <p class="security-card-desc">Every gate decision is recorded with SHA-256 hash chain. Tampering detectable. Complete forensic trail from security scan through adversarial verdict.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CREDITS -->
+<section id="credits" class="divider-top">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-label">Open Source Credits</div>
+      <h2 class="section-title">Built on permissive foundations</h2>
+      <p class="section-subtitle">Every dependency, inspiration, and ecosystem is credited with SPDX license identifiers. No uncredited borrowings.</p>
+    </div>
+    <div class="credits-grid reveal">
+      <a href="https://github.com/modelcontextprotocol/specification" target="_blank" rel="noopener" class="credit-card">
+        <div class="credit-icon" style="background:var(--accent-cyan-dim)">📡</div>
+        <div><div class="credit-name">Model Context Protocol</div><div class="credit-author">Anthropic &amp; MCP Community</div></div>
+        <span class="credit-link" style="color:var(--accent-cyan)">MIT →</span>
+      </a>
+      <a href="https://github.com/tree-sitter/tree-sitter" target="_blank" rel="noopener" class="credit-card">
+        <div class="credit-icon" style="background:var(--accent-emerald-dim)">🌳</div>
+        <div><div class="credit-name">Tree-sitter</div><div class="credit-author">Max Brunsfeld &amp; Contributors</div></div>
+        <span class="credit-link" style="color:var(--accent-emerald)">MIT →</span>
+      </a>
+      <a href="https://git.ffmpeg.org/ffmpeg.git" target="_blank" rel="noopener" class="credit-card">
+        <div class="credit-icon" style="background:rgba(249,115,22,0.12)">🎬</div>
+        <div><div class="credit-name">FFmpeg &amp; libebur128</div><div class="credit-author">Fabrice Bellard, FFmpeg Team</div></div>
+        <span class="credit-link" style="color:var(--accent-orange)">LGPL-2.1 →</span>
+      </a>
+      <a href="https://github.com/remotion-dev/remotion" target="_blank" rel="noopener" class="credit-card">
+        <div class="credit-icon" style="background:var(--accent-violet-dim)">🎥</div>
+        <div><div class="credit-name">Remotion &amp; Whisper.cpp</div><div class="credit-author">Jonny Burger &amp; Georgi Gerganov</div></div>
+        <span class="credit-link" style="color:var(--accent-violet)">MIT →</span>
+      </a>
+      <a href="https://bottosson.github.io/posts/oklab/" target="_blank" rel="noopener" class="credit-card">
+        <div class="credit-icon" style="background:var(--accent-cyan-dim)">🎨</div>
+        <div><div class="credit-name">OKLab / OKLCH &amp; APCA</div><div class="credit-author">Björn Ottosson &amp; Andrew Somers</div></div>
+        <span class="credit-link" style="color:var(--accent-cyan)">MIT →</span>
+      </a>
+      <a href="https://github.com/mrdoob/three.js" target="_blank" rel="noopener" class="credit-card">
+        <div class="credit-icon" style="background:var(--accent-blue-dim)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></div>
+        <div><div class="credit-name">Three.js, D3.js &amp; Motion</div><div class="credit-author">mrdoob, Mike Bostock &amp; Matt Perry</div></div>
+        <span class="credit-link" style="color:var(--accent-blue)">MIT →</span>
+      </a>
+      <a href="https://github.com/opentofu/opentofu" target="_blank" rel="noopener" class="credit-card">
+        <div class="credit-icon" style="background:var(--accent-emerald-dim)">🏗️</div>
+        <div><div class="credit-name">OpenTofu, AWS CDK &amp; CNCF</div><div class="credit-author">Linux Foundation &amp; CNCF</div></div>
+        <span class="credit-link" style="color:var(--accent-emerald)">Apache-2.0 →</span>
+      </a>
+      <a href="https://www.wireguard.com/" target="_blank" rel="noopener" class="credit-card">
+        <div class="credit-icon" style="background:rgba(249,115,22,0.12)">🔒</div>
+        <div><div class="credit-name">WireGuard, Caddy &amp; Netfilter</div><div class="credit-author">Jason Donenfeld, Matthew Holt</div></div>
+        <span class="credit-link" style="color:var(--accent-orange)">MIT/Apache →</span>
+      </a>
+      <a href="https://github.com/pgvector/pgvector" target="_blank" rel="noopener" class="credit-card">
+        <div class="credit-icon" style="background:var(--accent-violet-dim)">🗄️</div>
+        <div><div class="credit-name">PostgreSQL, Patroni &amp; pgvector</div><div class="credit-author">PostgreSQL Global Dev Group</div></div>
+        <span class="credit-link" style="color:var(--accent-violet)">MIT →</span>
+      </a>
+      <a href="https://github.com/affaan-m/everything-claude-code" target="_blank" rel="noopener" class="credit-card">
+        <div class="credit-icon" style="background:rgba(245,158,11,0.15)">⚡</div>
+        <div><div class="credit-name">Everything Claude Code</div><div class="credit-author">Affaan Mustafa &amp; Contributors</div></div>
+        <span class="credit-link" style="color:var(--accent-amber)">MIT →</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="cta-bg"></div>
+  <div class="container cta-content">
+    <div class="reveal">
+      <h2 class="cta-title">Ready to build with<br><span class="gradient-text">deterministic intelligence</span>?</h2>
+      <p class="cta-desc">Open source. Apache-2.0. 117 agents. 540 skills. Zero filler.</p>
+      <div class="cta-actions">
+        <a href="https://github.com/Tabrej96/AETHER" target="_blank" rel="noopener" class="btn-primary">
+          <svg width="18" height="18" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+          Star on GitHub
+        </a>
+        <a href="#architecture" class="btn-secondary">Explore Architecture</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-left">
+      <svg width="20" height="20" viewBox="0 0 30 30" fill="none" style="flex-shrink:0">
+        <path d="M15 2L27 9V21L15 28L3 21V9L15 2Z" stroke="url(#fGrad)" stroke-width="1.8" fill="none"/>
+        <circle cx="15" cy="16" r="3" fill="url(#fGrad)"/>
+        <defs><linearGradient id="fGrad" x1="3" y1="2" x2="27" y2="28"><stop stop-color="#06b6d4"/><stop offset="1" stop-color="#8b5cf6"/></linearGradient></defs>
+      </svg>
+      <span>AETHER — Apache-2.0 — Built by Tabrej</span>
+    </div>
+    <div class="footer-right">
+      <a href="https://github.com/Tabrej96/AETHER" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://github.com/Tabrej96/AETHER/blob/main/ROADMAP.md" target="_blank" rel="noopener">Roadmap</a>
+      <a href="https://github.com/Tabrej96/AETHER/blob/main/LICENSE" target="_blank" rel="noopener">Apache-2.0</a>
+    </div>
+  </div>
 </footer>
+
+<script>
+  function switchTab(btn, id) {
+    document.querySelectorAll('.tab-bar button').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById(id).classList.add('active');
+  }
+  const observer = new IntersectionObserver(entries => { entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); }); }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  // Counter animation
+  const counterObserver = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const el = entry.target;
+        const target = parseInt(el.dataset.target);
+        const duration = 1800;
+        const start = performance.now();
+        function update(now) {
+          const elapsed = now - start;
+          const progress = Math.min(elapsed / duration, 1);
+          const eased = 1 - Math.pow(1 - progress, 3);
+          el.textContent = Math.round(eased * target);
+          if (progress < 1) requestAnimationFrame(update);
+        }
+        requestAnimationFrame(update);
+        counterObserver.unobserve(el);
+      }
+    });
+  }, { threshold: 0.5 });
+  document.querySelectorAll('.hero-metric-val').forEach(el => counterObserver.observe(el));
+  // Scroll progress
+  window.addEventListener('scroll', () => {
+    const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+    const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+    const progress = (scrollTop / scrollHeight) * 100;
+    const bar = document.getElementById('scrollProgress');
+    if (bar) bar.style.width = progress + '%';
+  });
+
+  // Custom Cursor
+  const cursorDot = document.createElement('div');
+  cursorDot.className = 'cursor-dot';
+  const cursorRing = document.createElement('div');
+  cursorRing.className = 'cursor-ring';
+  document.body.appendChild(cursorDot);
+  document.body.appendChild(cursorRing);
+  let mouseX = 0, mouseY = 0, ringX = 0, ringY = 0;
+  document.addEventListener('mousemove', e => {
+    mouseX = e.clientX; mouseY = e.clientY;
+    cursorDot.style.left = mouseX + 'px';
+    cursorDot.style.top = mouseY + 'px';
+  });
+  function animateRing() {
+    ringX += (mouseX - ringX) * 0.15;
+    ringY += (mouseY - ringY) * 0.15;
+    cursorRing.style.left = ringX + 'px';
+    cursorRing.style.top = ringY + 'px';
+    requestAnimationFrame(animateRing);
+  }
+  animateRing();
+  document.querySelectorAll('a, button, .tilt-card, .arch-card, .engine-card, .skill-domain-card, .model-card, .pipeline-icon').forEach(el => {
+    el.addEventListener('mouseenter', () => cursorRing.classList.add('hover'));
+    el.addEventListener('mouseleave', () => cursorRing.classList.remove('hover'));
+  });
+
+  // Particle Canvas
+  const canvas = document.getElementById('particleCanvas');
+  if (canvas) {
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+    function resizeCanvas() {
+      canvas.width = canvas.parentElement.offsetWidth;
+      canvas.height = canvas.parentElement.offsetHeight;
+    }
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+    class Particle {
+      constructor() { this.reset(); }
+      reset() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.size = Math.random() * 1.5 + 0.5;
+        this.speedX = (Math.random() - 0.5) * 0.4;
+        this.speedY = (Math.random() - 0.5) * 0.4;
+        this.opacity = Math.random() * 0.4 + 0.1;
+      }
+      update() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+        if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
+        if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
+      }
+      draw() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(139, 92, 246, ${this.opacity})`;
+        ctx.fill();
+      }
+    }
+    for (let i = 0; i < 60; i++) particles.push(new Particle());
+    function animateParticles() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particles.forEach(p => { p.update(); p.draw(); });
+      particles.forEach((a, i) => {
+        particles.slice(i + 1).forEach(b => {
+          const dx = a.x - b.x, dy = a.y - b.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < 120) {
+            ctx.beginPath();
+            ctx.strokeStyle = `rgba(139, 92, 246, ${0.08 * (1 - dist / 120)})`;
+            ctx.lineWidth = 0.5;
+            ctx.moveTo(a.x, a.y);
+            ctx.lineTo(b.x, b.y);
+            ctx.stroke();
+          }
+        });
+      });
+      requestAnimationFrame(animateParticles);
+    }
+    animateParticles();
+  }
+
+  // Auto-typing terminal
+  const terminalLines = [
+    { text: 'aether launch --task "add auth middleware"', cls: 'prompt-line' },
+    { text: '→ Routing via TCCI score...', cls: 'term-muted', delay: 600 },
+    { text: '→ Spawning engineer-agent swarm (4 nodes)', cls: 'term-muted', delay: 500 },
+    { text: '✓ Swarm acquired file-write leases', cls: 'term-success', delay: 700 },
+    { text: '→ ContextEngine: 847 tokens across 12 files', cls: 'term-muted', delay: 600 },
+    { text: '→ AdversarialGate: 6 challengers armed', cls: 'term-muted', delay: 500 },
+    { text: '⏳ RED phase — tests written, awaiting GREEN', cls: 'term-info', delay: 800 },
+  ];
+  const typedText = document.getElementById('typedText');
+  const typedOutput = document.getElementById('typedOutput');
+  let lineIndex = 0;
+  function typeNextLine() {
+    if (lineIndex >= terminalLines.length) {
+      if (typedOutput) {
+        const last = document.createElement('div');
+        last.className = 'terminal-line typing-line';
+        last.innerHTML = '<span class="prompt">$</span> <span class="cursor-blink">_</span>';
+        typedOutput.appendChild(last);
+      }
+      return;
+    }
+    const line = terminalLines[lineIndex];
+    if (lineIndex === 0 && typedText) {
+      let charIdx = 0;
+      const typeInterval = setInterval(() => {
+        if (charIdx < line.text.length) {
+          typedText.textContent += line.text[charIdx];
+          charIdx++;
+        } else {
+          clearInterval(typeInterval);
+          lineIndex++;
+          setTimeout(typeNextLine, 400);
+        }
+      }, 45);
+    } else {
+      setTimeout(() => {
+        if (typedOutput) {
+          const div = document.createElement('div');
+          div.className = 'terminal-line ' + (line.cls || '');
+          div.textContent = line.text;
+          typedOutput.appendChild(div);
+        }
+        lineIndex++;
+        setTimeout(typeNextLine, line.delay || 500);
+      }, 200);
+    }
+  }
+  setTimeout(typeNextLine, 800);
+
+  // 3D Tilt on cards
+  document.querySelectorAll('.tilt-card, .arch-card, .engine-card, .hero-terminal').forEach(card => {
+    card.addEventListener('mousemove', e => {
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
+      const rotateX = ((y - centerY) / centerY) * -6;
+      const rotateY = ((x - centerX) / centerX) * 6;
+      card.style.transform = `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+    });
+    card.addEventListener('mouseleave', () => {
+      card.style.transform = 'perspective(800px) rotateX(0) rotateY(0)';
+    });
+  });
+
+  // Pipeline hover effect
+  document.querySelectorAll('.pipeline-node').forEach(node => {
+    node.addEventListener('mouseenter', () => {
+      node.querySelector('.pipeline-icon').style.transform = 'scale(1.15)';
+      node.querySelector('.pipeline-icon').style.borderColor = 'var(--accent-cyan)';
+      node.querySelector('.pipeline-icon').style.boxShadow = '0 0 28px rgba(6,182,212,0.35)';
+    });
+    node.addEventListener('mouseleave', () => {
+      node.querySelector('.pipeline-icon').style.transform = 'scale(1)';
+      node.querySelector('.pipeline-icon').style.borderColor = '';
+      node.querySelector('.pipeline-icon').style.boxShadow = '';
+    });
+  });
+
+  // Stagger + reveal: set up observer, then tag grid items, then observe them
+  const revealObs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); revealObs.unobserve(e.target); } });
+  }, { threshold: 0.05 });
+  document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
+  // Tag grid children with stagger delays and observe them
+  document.querySelectorAll('.arch-grid, .engines-grid, .agents-row, .skills-overview, .security-grid, .credits-grid').forEach(grid => {
+    Array.from(grid.children).forEach((item, i) => {
+      item.classList.add('reveal');
+      item.style.transitionDelay = (i * 0.07) + 's';
+      revealObs.observe(item);
+    });
+  });
+
+  // Magnetic effect on buttons
+  document.querySelectorAll('.btn-primary, .btn-secondary').forEach(btn => {
+    btn.addEventListener('mousemove', e => {
+      const rect = btn.getBoundingClientRect();
+      const x = e.clientX - rect.left - rect.width / 2;
+      const y = e.clientY - rect.top - rect.height / 2;
+      btn.style.transform = `translate(${x * 0.15}px, ${y * 0.15}px)`;
+    });
+    btn.addEventListener('mouseleave', () => {
+      btn.style.transform = '';
+    });
+  });
+
+  // Workflow step glow on hover
+  document.querySelectorAll('.workflow-step').forEach(step => {
+    step.addEventListener('mouseenter', () => {
+      step.style.boxShadow = '0 0 40px -10px rgba(6,182,212,0.15)';
+      step.style.borderColor = 'rgba(6,182,212,0.3)';
+    });
+    step.addEventListener('mouseleave', () => {
+      step.style.boxShadow = '';
+      step.style.borderColor = '';
+    });
+  });
+
+  // Tab hover ripple
+  document.querySelectorAll('.tab-bar button').forEach(btn => {
+    btn.addEventListener('mouseenter', () => {
+      btn.style.background = 'rgba(139,92,246,0.1)';
+    });
+    btn.addEventListener('mouseleave', () => {
+      if (!btn.classList.contains('active')) btn.style.background = '';
+    });
+  });
+</script>
+
 </body>
 </html>
