@@ -56,6 +56,17 @@ modal app or a bare frontend:
 npx tsx bin/aether.ts build "Build a coffee shop website with subscriptions" --out ./cofi-shop
 cd ./cofi-shop
 npm install && cp .env.example .env && npm run dev
+npx tsx bin/aether.ts build "Build a coffee shop website with subscriptions" --out ./cofi-shop --verify   # also run its tests + build the UI
+```
+
+**Structure** (professional layout, enforced by verification — code is never scattered at the root):
+
+```
+frontend/   React (Vite) + React Router — one route per page, global CSS imported
+backend/    Express + SQLite (better-sqlite3) — REST API, JWT auth, commerce service
+deploy/     provider-ready configs: render/ aws/ digitalocean/ vercel/ netlify/ cloudflare-pages/
+Dockerfile  single image: API + built frontend (SPA fallback) + .dockerignore
+.github/workflows/ci.yml   the product ships its own CI (tests + frontend build)
 ```
 
 What you get (driven by the industry domain pack, not a generic template):
@@ -64,6 +75,8 @@ What you get (driven by the industry domain pack, not a generic template):
   `/`, `/menu`, `/cart`, `/checkout`, `/customer/subscriptions`,
   `/admin/dashboard`, `/admin/inventory`, `/staff/order-display`, …
   (React + React Router — Subscriptions is its own page, not a modal.)
+  Cart/checkout are functional: localStorage cart with live catalog prices,
+  checkout signs in and posts an idempotent, server-priced order.
 - **Real backend** — Express + SQLite: a real schema, seed data, JWT auth
   (register/login/me), REST routes for every entity, auth-gated endpoints,
   and input validation. `npm test` exercises it over real HTTP.
@@ -73,8 +86,19 @@ What you get (driven by the industry domain pack, not a generic template):
   and an order state machine (illegal transitions → 409). The generated
   test suite proves all of it against a running app on an ephemeral port
   with an isolated test DB.
-- **Deployment + ops** — `Dockerfile`, `docker-compose.yml`, `.env.example`,
-  and a `README.md` explaining how to run/configure/deploy.
+- **Deployment + ops, real-world** — single-container mode (backend serves
+  the built frontend) for AWS ECS Fargate / Render / DigitalOcean, or split
+  providers: backend on Render/AWS/DO + frontend on Vercel/Netlify/Cloudflare
+  Pages with `VITE_API_BASE`. Details in `deploy/README.md`. No secrets in
+  the repo — `.env.example` stays placeholder-only.
+
+**Independent verification (§13):** every build prints a 17-check report
+(structure, CSS integrity, page routing, API surface, DB schema, seed, auth,
+commerce layer, real tests, deployment, provider configs, manifest
+consistency, docker hygiene, CI, template hygiene, frontend↔API consistency).
+`--verify` additionally runs the generated test suite **and** the frontend
+production build — a broken UI or undeclared dependency fails the verdict,
+never a rubber stamp.
 
 The domain is inferred from concrete keywords first (coffee → coffee-shop) so a
 capability word like "subscriptions" doesn't hijack the industry. Verify any
