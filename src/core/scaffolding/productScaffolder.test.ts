@@ -78,10 +78,14 @@ describe('scaffoldProduct — multi-page full-stack guarantee', () => {
     assert.match(db, /better-sqlite3/);
     assert.match(db, /CREATE TABLE IF NOT EXISTS/);
     assert.match(db, /INSERT INTO menu_items/);
-    // And the API surface is a real REST router, not `res.json({ page })` stubs.
+    // The API surface is a real REST router, not `res.json({ page })` stubs.
+    // Order writes go through the commerce service (server-side pricing +
+    // idempotency + state machine), so the INSERT lives in commerce.ts.
     const orders = res.files.find((f) => f.path === 'server/src/routes/orders.ts')!.content;
-    assert.match(orders, /INSERT INTO orders/);
+    assert.match(orders, /from '\.\.\/services\/commerce\.js'/);
     assert.match(orders, /requireAuth/);
+    const commerce = res.files.find((f) => f.path === 'server/src/services/commerce.ts')!.content;
+    assert.match(commerce, /INSERT INTO orders/);
   });
 
   it('uses React Router on the frontend (real routing, not one modals page)', () => {
@@ -125,11 +129,50 @@ describe('scaffoldProduct — multi-page full-stack guarantee', () => {
   });
 });
 
-describe('scaffoldProduct — other domains', () => {
-  it('a SaaS prompt scaffolds a SaaS product', () => {
-    const res = scaffoldProduct({ prompt: 'Build a SaaS analytics dashboard' });
-    assert.equal(res.domain, 'saas');
-    assert.ok(res.files.some((f) => f.path === 'server/src/db.ts'));
-    assert.ok(res.files.some((f) => f.path === 'web/src/App.tsx'));
+describe('scaffoldProduct — commerce service layer (real business logic)', () => {
+  const coffee = scaffoldProduct({ prompt: 'Build a coffee shop website with subscriptions' });
+  const saas = scaffoldProduct({ prompt: 'Build a SaaS analytics dashboard' });
+
+  it('emits a commerce service + commerce-backed orders route for order domains', () => {
+    const svc = coffee.files.find((f) => f.path === 'server/src/services/commerce.ts');
+    assert.ok(svc, 'commerce service expected');
+    const c = svc!.content;
+    assert.match(c, /export function priceCart/);
+    assert.match(c, /export function createOrder/);
+    assert.match(c, /ORDER_TRANSITIONS/);
+    assert.match(c, /export function transitionOrder/);
+    // Orders route must use the service, not trust client totals.
+    const orders = coffee.files.find((f) => f.path === 'server/src/routes/orders.ts')!.content;
+    assert.match(orders, /from '\.\.\/services\/commerce\.js'/);
+    assert.doesNotMatch(orders, /price_cents \?\? 0 \* Number/, 'must not sum client-supplied prices');
+  });
+
+  it('does NOT emit a commerce service for non-order domains', () => {
+    assert.ok(!saas.files.some((f) => f.path === 'server/src/services/commerce.ts'));
+    // But every domain still gets a real test suite.
+    assert.ok(saas.files.some((f) => f.path === 'server/test/api.test.ts'));
+  });
+
+  it('the orders DDL has a state machine + idempotency key', () => {
+    const db = coffee.files.find((f) => f.path === 'server/src/db.ts')!.content;
+    assert.match(db, /status TEXT NOT NULL DEFAULT 'pending' CHECK\(status IN \('pending','confirmed','preparing','ready','completed','cancelled'\)\)/);
+    assert.match(db, /idempotency_key TEXT UNIQUE/);
+  });
+
+  it('the generated test suite is a real HTTP integration test (no placeholders)', () => {
+    const t = coffee.files.find((f) => f.path === 'server/test/api.test.ts')!.content;
+    assert.doesNotMatch(t, /assert\.ok\(true, 'wired'\)/, 'placeholder assertion must be gone');
+    assert.match(t, /fetch\(base \+ path/, 'tests must drive real HTTP');
+    assert.match(t, /Idempotency-Key/, 'must test idempotent replays');
+    assert.match(t, /illegal\.status, 409/, 'must test the state machine');
+    assert.match(t, /WELCOME10/, 'must test the seeded coupon path');
+    assert.match(t, /process\.env\.DATABASE_FILE/, 'must use an isolated test DB');
+  });
+
+  it('documents the commerce env vars (demo vs production)', () => {
+    const env = coffee.files.find((f) => f.path === '.env.example')!.content;
+    assert.match(env, /TAX_BPS=/);
+    assert.match(env, /PRODUCTION/);
+    assert.match(env, /DEMO/);
   });
 });

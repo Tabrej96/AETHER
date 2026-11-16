@@ -136,6 +136,12 @@ interface ApiPlan {
   fields: string[];
   /** which verbs the resource supports. */
   verbs: Array<'list' | 'get' | 'create'>;
+  /**
+   * Special-cased resources that need real business logic, not generic CRUD.
+   * orders → the generated commerce service (server-side pricing, tax,
+   * coupons, idempotency, state machine).
+   */
+  special?: 'order';
 }
 
 // Primary-noun map: what is the domain's core public entity?
@@ -215,7 +221,7 @@ function planApis(pack: DomainPack): ApiPlan[] {
     return all.some((f) => f.toLowerCase().includes(needle));
   };
   if (hasFeature('order')) {
-    plans.push({ resource: 'orders', table: 'orders', auth: 'user', fields: ['user_id', 'status', 'total_cents', 'items'], verbs: ['list', 'get', 'create'] });
+    plans.push({ resource: 'orders', table: 'orders', auth: 'user', fields: ['user_id', 'status', 'total_cents', 'items'], verbs: ['list', 'get', 'create'], special: 'order' });
   }
   if (hasFeature('subscription')) {
     plans.push({ resource: 'subscriptions', table: 'subscriptions', auth: 'user', fields: ['user_id', 'plan', 'cadence', 'status'], verbs: ['list', 'create'] });
@@ -283,11 +289,26 @@ data/
   files.push({
     path: '.env.example',
     kind: 'config',
-    content: `# Copy to .env and fill in.
+    content: `# ${pack.name} — environment (copy to .env and fill in)
+#
+# DEMO (local dev) — works out of the box:
+#   DATABASE_FILE points at a local SQLite file that auto-creates + seeds,
+#   JWT_SECRET is a dev default, payments stay off.
+# PRODUCTION — replace the demo values below; the app reads the same names,
+# so no code changes are needed to switch from demo to real infrastructure.
+
+# Core
 PORT=4000
 WEB_PORT=5173
 DATABASE_FILE=./data/${slug(name)}.sqlite
 JWT_SECRET=change-me-in-production
+
+# Commerce (server-side pricing)
+# Tax rate in basis points (500 = 5%). Integer minor-unit math throughout.
+TAX_BPS=${COMMERCE_TAX_BPS}
+# Payment provider. Leave blank to keep payments in 'pending' state;
+# when real keys are present, wire the provider's webhooks and replace the
+# placeholder hash in seed() with real bcrypt hashes before first boot.
 PAYMENT_PROVIDER=stripe
 STRIPE_SECRET_KEY=
 STRIPE_WEBHOOK_SECRET=
@@ -514,21 +535,11 @@ function generateServer(name: string, pack: DomainPack, apis: ApiPlan[]): Scaffo
   // routes (data-driven)
   out.push(...generateRouteFiles(apis));
 
-  // api test
+  // api test — REAL HTTP integration test against the running app
   out.push({
     path: 'server/test/api.test.ts',
     kind: 'test',
-    content: [
-      `import { describe, it } from 'node:test';`,
-      `import assert from 'node:assert/strict';`,
-      `import { createServer } from '../src/app.js';`,
-      ``,
-      `describe('${pack.name} API', () => {`,
-      `  it('exposes /health', () => {`,
-      `    assert.ok(true, 'wired');`,
-      `  });`,
-      `});`,
-    ].join('\n'),
+    content: generateApiTest(apis, pack, name),
   });
 
   return out;
@@ -573,11 +584,18 @@ function generateDdl(apis: ApiPlan[]): string {
     for (const f of a.fields) {
       const type = sqlTypeForField(f);
       const def = defaultValueForField(f);
+      // Orders get a real state machine in the schema, not a free-text status.
+      if (a.special === 'order' && f === 'status') {
+        cols.push(`status TEXT NOT NULL DEFAULT 'pending' CHECK(status IN ('pending','confirmed','preparing','ready','completed','cancelled'))`);
+        continue;
+      }
       // Only emit DEFAULT when there is an actual value; a bare "DEFAULT ,"
       // is a SQL syntax error.
       cols.push(def === '' ? `${f} ${type}` : `${f} ${type} DEFAULT ${def}`);
     }
     const colDefs = ['id TEXT PRIMARY KEY', ...cols, 'created_at TEXT DEFAULT CURRENT_TIMESTAMP'];
+    // Idempotent order creation (mission: "Idempotent order creation").
+    if (a.special === 'order') colDefs.push('idempotency_key TEXT UNIQUE');
     blocks.push(`CREATE TABLE IF NOT EXISTS ${a.table} (\n  ${colDefs.join(',\n  ')}\n);`);
   }
 
@@ -630,8 +648,19 @@ ${rows}
 `;
   }
 
+  // Seed one live promotion so the coupon path in the commerce service is
+  // demonstrable (WELCOME10 = 10% off, stored as 1000 basis points).
+  const hasPromos = apis.some((a) => a.resource === 'promotions');
+  const promoLines = hasPromos
+    ? `  const spcount = (db.prepare('SELECT COUNT(*) AS n FROM promotions').get() as { n: number }).n;
+  if (spcount === 0) {
+    db.prepare('INSERT INTO promotions (id, code, type, value_cents) VALUES (?, ?, ?, ?)').run('promo_welcome10', 'WELCOME10', 'percent', 1000);
+  }
+`
+    : '';
+
   return `function seed() {
-${primaryLines}  const acount = (db.prepare('SELECT COUNT(*) AS n FROM users').get() as { n: number }).n;
+${primaryLines}${promoLines}  const acount = (db.prepare('SELECT COUNT(*) AS n FROM users').get() as { n: number }).n;
   if (acount === 0) {
     db.prepare("INSERT INTO users (id, email, name, password_hash, role) VALUES (?, ?, ?, ?, 'admin')").run('admin1', 'admin@${slug(name)}.test', 'Admin', 'dev-admin-hash');
   }
@@ -685,9 +714,17 @@ function generateRouteFiles(apis: ApiPlan[]): ScaffoldedFile[] {
     ].join('\n'),
   });
 
-  // One CRUD file per resource, generated from the API plan.
+  // Commerce service — real business logic that the orders route depends on.
+  const hasOrders = apis.some((a) => a.special === 'order');
+  if (hasOrders) {
+    out.push({ path: 'server/src/services/commerce.ts', kind: 'backend', content: generateCommerceService(apis) });
+  }
+
+  // One route file per resource. Orders get the commerce-backed router
+  // (server-side pricing, idempotency, state machine); everything else is CRUD.
   for (const a of apis) {
-    out.push({ path: `server/src/routes/${slugify(a.resource)}.ts`, kind: 'backend', content: generateCrudRoute(a) });
+    const content = a.special === 'order' ? generateOrderRoute() : generateCrudRoute(a);
+    out.push({ path: `server/src/routes/${slugify(a.resource)}.ts`, kind: 'backend', content });
   }
 
   // admin.ts — cross-resource summary, admin-only
@@ -788,6 +825,315 @@ function generateCrudRoute(a: ApiPlan): string {
   }
 
   return lines.join('\n');
+}
+
+/**
+ * The commerce service — the generated backend's REAL business logic.
+ *
+ * Order creation is NOT "insert what the client sent". The server:
+ *  - validates line items (quantity, item ids)
+ *  - prices every line from the database (never trusts client-supplied totals)
+ *  - applies one coupon (percent in basis points / fixed cents), if valid
+ *  - computes tax in integer minor units and returns the full breakdown
+ *  - is idempotent: a repeated `Idempotency-Key` returns the original order
+ *    instead of creating a duplicate
+ *  - stores the order in its initial state-machine state ('pending')
+ */
+function generateCommerceService(apis: ApiPlan[]): string {
+  const primary = apis[0];
+  const priceField = primary.fields.find((f) => f.endsWith('_cents')) ?? 'price_cents';
+  const primaryKey = primary.table;
+  const hasPromos = apis.some((a) => a.resource === 'promotions');
+  // Fixed-amount coupons and percent coupons need value_cents; the tax rate
+  // defaults to COMMERCE_TAX_BPS (5%) and is env-tunable at runtime.
+  return [
+    `// ${primary?.resource ?? 'catalog'} commerce service — real order pricing`,
+    `import db from '../db.js';`,
+    ``,
+    `/** Server-side tax rate in basis points (${COMMERCE_TAX_BPS} = 5%). Tunable via env per deployment. */`,
+    `const TAX_BPS = Number(process.env.TAX_BPS ?? ${COMMERCE_TAX_BPS});`,
+    ``,
+    `export interface CartLine {`,
+    `  id: string;`,
+    `  qty: number;`,
+    `}`,
+    ``,
+    `export interface PriceBreakdown {`,
+    `  subtotal_cents: number;`,
+    `  discount_cents: number;`,
+    `  tax_cents: number;`,
+    `  total_cents: number;`,
+    `  currency: 'USD';`,
+    `}`,
+    ``,
+    `/** Price a cart from the database. Every line is priced server-side. */`,
+    `export function priceCart(lines: CartLine[], couponCode?: string): PriceBreakdown {`,
+    `  let subtotalCents = 0;`,
+    `  for (const line of lines) {`,
+    `    if (!line.id || line.qty <= 0) throw Object.assign(new Error('invalid cart line'), { status: 400 });`,
+    `    const item = db.prepare('SELECT ${priceField} FROM ${primaryKey} WHERE id = ?').get(line.id) as { [k: string]: unknown } | undefined;`,
+    `    if (!item) throw Object.assign(new Error(\`item \${line.id} not found\`), { status: 404 });`,
+    `    subtotalCents += Number(item['${priceField}']) * line.qty;`,
+    `  }`,
+    ``,
+    `  // One coupon: percent (basis points) or fixed cents, when active.`,
+    `  let discountCents = 0;`,
+    hasPromos
+      ? `  if (couponCode) {
+    const promo = db.prepare('SELECT code, type, value_cents FROM promotions WHERE code = ?').get(couponCode) as any;
+    if (promo) {
+      discountCents = promo.type === 'percent'
+        ? Math.round((subtotalCents * Number(promo.value_cents)) / 10000)
+        : Math.min(Number(promo.value_cents), subtotalCents);
+    }
+  }`
+      : `  void couponCode; // no promotions table in this product`,
+    ``,
+    `  const taxableCents = Math.max(0, subtotalCents - discountCents);`,
+    `  const taxCents = Math.round((taxableCents * TAX_BPS) / 10000);`,
+    `  return {`,
+    `    subtotal_cents: subtotalCents,`,
+    `    discount_cents: discountCents,`,
+    `    tax_cents: taxCents,`,
+    `    total_cents: taxableCents + taxCents,`,
+    `    currency: 'USD',`,
+    `  };`,
+    `}`,
+    ``,
+    `/**`,
+    ` * Create an order idempotently. Replaying the same idempotency key returns`,
+    ` * the already-created order instead of a duplicate (safe client retries).`,
+    ` */`,
+    `export function createOrder(userId: string, lines: CartLine[], opts: { couponCode?: string; idempotencyKey: string }): { id: string; total_cents: number; status: string } {`,
+    `  const existing = db.prepare('SELECT id, total_cents, status FROM orders WHERE idempotency_key = ?').get(opts.idempotencyKey) as any;`,
+    `  if (existing) return existing;`,
+    ``,
+    `  const breakdown = priceCart(lines, opts.couponCode);`,
+    `  const id = \`or_\${Date.now()}\`;`,
+    `  db.prepare('INSERT INTO orders (id, user_id, status, total_cents, items, idempotency_key) VALUES (?, ?, ?, ?, ?, ?)')`,
+    `    .run(id, userId, 'pending', breakdown.total_cents, JSON.stringify(lines), opts.idempotencyKey);`,
+    `  return { id, total_cents: breakdown.total_cents, status: 'pending' };`,
+    `}`,
+    ``,
+    `/** Order state machine — only legal transitions, nothing else. */`,
+    `export type OrderStatus = 'pending' | 'confirmed' | 'preparing' | 'ready' | 'completed' | 'cancelled';`,
+    `export const ORDER_TRANSITIONS: Record<OrderStatus, OrderStatus[]> = {`,
+    `  pending: ['confirmed', 'cancelled'],`,
+    `  confirmed: ['preparing', 'cancelled'],`,
+    `  preparing: ['ready'],`,
+    `  ready: ['completed'],`,
+    `  completed: [],`,
+    `  cancelled: [],`,
+    `};`,
+    ``,
+    `export function transitionOrder(orderId: string, to: OrderStatus): string {`,
+    `  const order = db.prepare('SELECT status FROM orders WHERE id = ?').get(orderId) as { status: string } | undefined;`,
+    `  if (!order) throw Object.assign(new Error('order not found'), { status: 404 });`,
+    `  const from = order.status as OrderStatus;`,
+    `  if (!ORDER_TRANSITIONS[from]?.includes(to)) {`,
+    `    throw Object.assign(new Error(\`illegal transition \${from} -> \${to}\`), { status: 409 });`,
+    `  }`,
+    `  db.prepare('UPDATE orders SET status = ? WHERE id = ?').run(to, orderId);`,
+    `  return to;`,
+    `}`,
+    ``,
+  ].join('\n');
+}
+
+/**
+ * The orders router, driven by the commerce service instead of generic CRUD.
+ * POST /orders prices server-side; POST /orders/:id/status advances the
+ * state machine (staff/admin only in a real deploy — here, authenticated).
+ */
+function generateOrderRoute(): string {
+  return [
+    `import { Router } from 'express';`,
+    `import db from '../db.js';`,
+    `import { requireAuth, type AuthedRequest } from '../middleware/auth.js';`,
+    `import { createOrder, transitionOrder, type OrderStatus, type CartLine } from '../services/commerce.js';`,
+    ``,
+    `export const OrdersRouter = Router();`,
+    ``,
+    `OrdersRouter.post('/', requireAuth, (req: AuthedRequest, res) => {`,
+    `  const items = req.body?.items;`,
+    `  if (!Array.isArray(items) || items.length === 0) return res.status(400).json({ error: 'items[] required' });`,
+    `  const idempotencyKey = String(req.headers['idempotency-key'] ?? \`anon_\${Date.now()}\`);`,
+    `  try {`,
+    `    const result = createOrder(req.user!.id, items as CartLine[], { couponCode: req.body?.couponCode, idempotencyKey });`,
+    `    res.status(201).json(result);`,
+    `  } catch (e: any) {`,
+    `    res.status(e.status ?? 400).json({ error: e.message });`,
+    `  }`,
+    `});`,
+    ``,
+    `OrdersRouter.get('/', requireAuth, (req: AuthedRequest, res) => {`,
+    `  const rows = db.prepare('SELECT * FROM orders WHERE user_id = ?').all(req.user!.id);`,
+    `  res.json(rows);`,
+    `});`,
+    ``,
+    `OrdersRouter.get('/:id', requireAuth, (req: AuthedRequest, res) => {`,
+    `  const row = db.prepare('SELECT * FROM orders WHERE id = ? AND user_id = ?').get(req.params.id, req.user!.id);`,
+    `  if (!row) return res.status(404).json({ error: 'Not found' });`,
+    `  res.json(row);`,
+    `});`,
+    ``,
+    `OrdersRouter.post('/:id/status', requireAuth, (req: AuthedRequest, res) => {`,
+    `  const to = String(req.body?.status ?? '') as OrderStatus;`,
+    `  try {`,
+    `    const status = transitionOrder(req.params.id, to);`,
+    `    res.json({ id: req.params.id, status });`,
+    `  } catch (e: any) {`,
+    `    res.status(e.status ?? 400).json({ error: e.message });`,
+    `  }`,
+    `});`,
+    ``,
+  ].join('\n');
+}
+
+/** Lifted so the commerce service and the integration test agree on the rate. */
+const COMMERCE_TAX_BPS = 500; // 5% tax, in basis points
+
+/**
+ * The generated product's REAL test suite — boots the app on an ephemeral
+ * port against a throwaway SQLite file and proves the business logic:
+ * server-side pricing, integer-minor-unit tax, seeded coupon, idempotent
+ * order creation, and the order state machine. Not a placeholder.
+ */
+function generateApiTest(apis: ApiPlan[], pack: DomainPack, name: string): string {
+  const primary = apis[0];
+  const priceField = primary.fields.find((f) => f.endsWith('_cents')) ?? 'price_cents';
+  const hasOrders = apis.some((a) => a.special === 'order');
+  const hasPromos = apis.some((a) => a.resource === 'promotions');
+  const hasAdmin = apis.some((a) => a.auth === 'admin');
+  const userRes = (apis.find((a) => a.auth !== 'public') ?? apis[0]).resource;
+
+  const commerceBlock = hasOrders
+    ? `
+  it('prices an order server-side with tax (integer minor units)', async () => {
+    const catalog = (await api('/api/${primary.resource}')).body as any[];
+    const price = Number(catalog.find((i) => i.id === 'i1')!.${priceField});
+    const key = \`k-\${Date.now()}\`;
+    const created = await api('/api/orders', { method: 'POST', headers: { 'Idempotency-Key': key }, body: JSON.stringify({ items: [{ id: 'i1', qty: 2 }] }) }, token);
+    assert.equal(created.status, 201);
+    const subtotal = price * 2;
+    const tax = Math.round((subtotal * ${COMMERCE_TAX_BPS}) / 10000);
+    assert.equal(created.body.total_cents, subtotal + tax, 'total must be server-recomputed, not client-trusted');
+    assert.equal(created.body.status, 'pending');
+    // Idempotent replay: same key returns the ORIGINAL order, no duplicate.
+    const replay = await api('/api/orders', { method: 'POST', headers: { 'Idempotency-Key': key }, body: JSON.stringify({ items: [{ id: 'i1', qty: 2 }] }) }, token);
+    assert.equal(replay.status, 201);
+    assert.equal(replay.body.id, created.body.id);
+  });
+
+${hasPromos ? `  it('applies the seeded WELCOME10 coupon', async () => {
+    const catalog = (await api('/api/${primary.resource}')).body as any[];
+    const price = Number(catalog.find((i) => i.id === 'i1')!.${priceField});
+    const created = await api('/api/orders', { method: 'POST', body: JSON.stringify({ items: [{ id: 'i1', qty: 1 }], couponCode: 'WELCOME10' }) }, token);
+    assert.equal(created.status, 201);
+    const discount = Math.round((price * 1000) / 10000); // 10% in basis points
+    const taxable = price - discount;
+    const tax = Math.round((taxable * ${COMMERCE_TAX_BPS}) / 10000);
+    assert.equal(created.body.total_cents, taxable + tax);
+  });
+
+` : ''}  it('enforces the order state machine', async () => {
+    const created = await api('/api/orders', { method: 'POST', body: JSON.stringify({ items: [{ id: 'i1', qty: 1 }] }) }, token);
+    const id = created.body.id;
+    const illegal = await api(\`/api/orders/\${id}/status\`, { method: 'POST', body: JSON.stringify({ status: 'completed' }) }, token);
+    assert.equal(illegal.status, 409, 'pending -> completed is not a legal transition');
+    const ok = await api(\`/api/orders/\${id}/status\`, { method: 'POST', body: JSON.stringify({ status: 'confirmed' }) }, token);
+    assert.equal(ok.status, 200);
+    assert.equal(ok.body.status, 'confirmed');
+  });
+`
+    : '';
+
+  const adminBlock = hasAdmin
+    ? `
+  it('admin sees a cross-table summary (RBAC enforced)', async () => {
+    const login = await api('/api/auth/login', { method: 'POST', body: JSON.stringify({ email: 'admin@${slug(name)}.test', password: 'dev-admin-hash' }) });
+    assert.equal(login.status, 200, 'seeded admin credentials must work');
+    const { status, body } = await api('/api/admin/summary', {}, login.body.token);
+    assert.equal(status, 200);
+    assert.equal(typeof body.${primary.table}, 'number');
+    const rejected = await api('/api/admin/summary');
+    assert.equal(rejected.status, 401, 'admin routes require auth');
+  });
+`
+    : '';
+
+  return `// ${pack.name} — real HTTP integration test (node:test, no placeholders)
+import { describe, it, before, after } from 'node:test';
+import assert from 'node:assert/strict';
+import type { AddressInfo } from 'node:net';
+import fs from 'node:fs';
+
+// Isolated DB: db.ts opens SQLite at module load, so point it at a
+// throwaway file BEFORE importing the app — the test never touches dev data.
+const TEST_DB = './data/test.sqlite';
+for (const ext of ['', '-wal', '-shm']) {
+  try { fs.rmSync(TEST_DB + ext, { force: true }); } catch { /* first run */ }
+}
+process.env.DATABASE_FILE = TEST_DB;
+const { createServer } = await import('../src/app.js');
+
+let base = '';
+let server: import('node:http').Server;
+let token = '';
+
+before(async () => {
+  server = createServer().listen(0);
+  await new Promise<void>((resolve) => server.on('listening', () => resolve()));
+  base = \`http://127.0.0.1:\${(server.address() as AddressInfo).port}\`;
+});
+after(() => new Promise<void>((resolve) => server.close(() => resolve())));
+
+async function api(path: string, init: RequestInit = {}, bearer?: string) {
+  const res = await fetch(base + path, {
+    ...init,
+    headers: {
+      'Content-Type': 'application/json',
+      ...(bearer ? { Authorization: \`Bearer \${bearer}\` } : {}),
+      ...(init.headers as Record<string, string> | undefined),
+    },
+  });
+  return { status: res.status, body: (await res.json()) as any };
+}
+
+describe('${pack.name} API', () => {
+  it('exposes /health', async () => {
+    const { status, body } = await api('/health');
+    assert.equal(status, 200);
+    assert.equal(body.ok, true);
+  });
+
+  it('seeds the primary catalog (${primary.resource})', async () => {
+    const { status, body } = await api('/api/${primary.resource}');
+    assert.equal(status, 200);
+    assert.ok(Array.isArray(body));
+    assert.ok(body.length >= 3, \`expected seeded rows, got \${body.length}\`);
+  });
+
+  it('rejects unauthenticated access to /api/${userRes}', async () => {
+    const { status } = await api('/api/${userRes}');
+    assert.equal(status, 401);
+  });
+
+  it('registers and logs in a customer', async () => {
+    const email = \`t\${Math.random().toString(36).slice(2)}@test.io\`;
+    const reg = await api('/api/auth/register', { method: 'POST', body: JSON.stringify({ email, name: 'T', password: 'pw12345' }) });
+    assert.equal(reg.status, 201);
+    const dup = await api('/api/auth/register', { method: 'POST', body: JSON.stringify({ email, name: 'T', password: 'pw12345' }) });
+    assert.equal(dup.status, 409, 'duplicate email must be rejected');
+    const login = await api('/api/auth/login', { method: 'POST', body: JSON.stringify({ email, password: 'pw12345' }) });
+    assert.equal(login.status, 200);
+    token = login.body.token;
+    const me = await api('/api/auth/me', {}, token);
+    assert.equal(me.status, 200);
+    assert.equal(me.body.email, email);
+  });
+${commerceBlock}${adminBlock}});
+`;
 }
 
 /** Generate an admin summary route (cross-resource counts). */
