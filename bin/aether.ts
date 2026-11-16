@@ -623,11 +623,15 @@ if (command === 'audit') {
   // short prompt. Writes a runnable project (server + web + docker + tests) to
   // disk — NOT the AETHER monorepo, NOT a single-page modal app.
   const { scaffoldProduct } = await import('../src/core/scaffolding/productScaffolder');
+  // Positional prompt: everything after the command word, excluding flag values.
+  const FLAG_VALUES = new Set(['--prompt', '--out', '--name']);
+  const positional = args.slice(1).filter((a, i) => {
+    const prev = args.slice(1)[i - 1];
+    return !a.startsWith('--') && !FLAG_VALUES.has(prev);
+  });
   const promptIdx = args.indexOf('--prompt');
   const prompt =
-    promptIdx !== -1 && args[promptIdx + 1]
-      ? args[promptIdx + 1]
-      : args.filter((a, i) => !a.startsWith('--') && args[i - 1] !== '--prompt' && args[i - 1] !== '--out' && args[i - 1] !== '--name').join(' ').trim();
+    promptIdx !== -1 && args[promptIdx + 1] ? args[promptIdx + 1] : positional.join(' ').trim();
   const outIdx = args.indexOf('--out');
   const nameIdx = args.indexOf('--name');
   const outDir = outIdx !== -1 && args[outIdx + 1] ? path.resolve(process.cwd(), args[outIdx + 1]) : path.resolve(process.cwd());
@@ -653,8 +657,24 @@ if (command === 'audit') {
   console.log(`\nFrontend routes (${result.pages.length}): ${result.pages.join(', ')}`);
   console.log(`Backend API (${result.apiRoutes.length}): ${result.apiRoutes.join(', ')}`);
   console.log(`Database tables (${result.dbTables.length}): ${result.dbTables.join(', ')}`);
-  console.log(`\nNext steps:\n  cd ${result.projectName === outDir ? '.' : path.relative(process.cwd(), outDir) || '.'}`);
-  console.log(`  npm install && cp .env.example .env && npm run dev`);
+
+  // §13 — independent definition of done: AETHER verifies the product against
+  // its own plan. The generator's claims are never the final authority.
+  const { buildReport, renderReport, runGeneratedTests } = await import('../src/core/scaffolding/verifyScaffold');
+  const dynamic = args.includes('--verify')
+    ? runGeneratedTests(path.join(outDir, 'server'))
+    : undefined;
+  const report = buildReport(result, result.files, dynamic);
+  console.log(renderReport(report));
+  if (report.failed > 0) {
+    console.log('\nAETHER will not declare this product complete. Address the failed requirements above (they are specific and actionable).');
+  }
+
+  if (!dynamic) {
+    console.log(`\nNext steps:\n  cd ${result.projectName === outDir ? '.' : path.relative(process.cwd(), outDir) || '.'}`);
+    console.log(`  npm install && cp .env.example .env && npm run dev`);
+    console.log(`  aether build "${prompt}" --out <dir> --verify   # also run the generated test suite`);
+  }
 } else if (command === 'install') {
   const isInstallAll = args.includes('--all');
   const targetIdx = args.indexOf('--target');
