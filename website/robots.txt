@@ -1,0 +1,8 @@
+# AETHER — open-source AI engineering harness
+# Allow indexing of all site pages.
+User-agent: *
+Allow: /
+
+# Sitemap base: update the URL below to your actual host
+# (GitHub Pages / Netlify / Vercel / custom domain) once deployed.
+Sitemap: https://Tabrej96.github.io/AETHER/sitemap.xml

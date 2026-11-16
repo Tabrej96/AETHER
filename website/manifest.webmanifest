@@ -1,0 +1,17 @@
+{
+  "name": "AETHER — The 100x Open-Source AI Engineering Harness",
+  "short_name": "AETHER",
+  "description": "Open-source AI coding harness with neural context intelligence, dynamic agent swarms, adversarial verification gates, and a 7-layer provenance memory system.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#09090b",
+  "theme_color": "#06b6d4",
+  "categories": ["developer", "productivity", "engineering"],
+  "icons": [
+    { "src": "assets/icons/pwa-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "assets/icons/pwa-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "assets/icons/pwa-512-maskable.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
