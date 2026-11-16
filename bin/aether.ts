@@ -660,20 +660,20 @@ if (command === 'audit') {
 
   // §13 — independent definition of done: AETHER verifies the product against
   // its own plan. The generator's claims are never the final authority.
-  const { buildReport, renderReport, runGeneratedTests } = await import('../src/core/scaffolding/verifyScaffold');
-  const dynamic = args.includes('--verify')
-    ? runGeneratedTests(path.join(outDir, 'server'))
-    : undefined;
-  const report = buildReport(result, result.files, dynamic);
+  const { buildReport, renderReport, runGeneratedTests, runFrontendBuild } = await import('../src/core/scaffolding/verifyScaffold');
+  const wantDynamic = args.includes('--verify');
+  const dynamic = wantDynamic ? runGeneratedTests(path.join(outDir, 'backend')) : undefined;
+  const frontendBuild = wantDynamic ? runFrontendBuild(path.join(outDir, 'frontend')) : undefined;
+  const report = buildReport(result, result.files, dynamic, frontendBuild);
   console.log(renderReport(report));
   if (report.failed > 0) {
     console.log('\nAETHER will not declare this product complete. Address the failed requirements above (they are specific and actionable).');
   }
 
-  if (!dynamic) {
+  if (!wantDynamic) {
     console.log(`\nNext steps:\n  cd ${result.projectName === outDir ? '.' : path.relative(process.cwd(), outDir) || '.'}`);
     console.log(`  npm install && cp .env.example .env && npm run dev`);
-    console.log(`  aether build "${prompt}" --out <dir> --verify   # also run the generated test suite`);
+    console.log(`  aether build "${prompt}" --out <dir> --verify   # also run the generated test suite + frontend build`);
   }
 } else if (command === 'install') {
   const isInstallAll = args.includes('--all');

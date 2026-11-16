@@ -65,7 +65,7 @@ describe('verifyScaffoldStatic — broken scaffolds must FAIL (engine is not a r
 
   it('detects a syntax error in generated code', () => {
     const files = mutate((fs) => {
-      const db = fs.find((f) => f.path === 'server/src/db.ts')!;
+      const db = fs.find((f) => f.path === 'backend/src/db.ts')!;
       db.content = db.content + '\nconst oops = ;\n';
     });
     const check = find(verifyScaffoldStatic(base, files), 'syntax');
@@ -75,7 +75,7 @@ describe('verifyScaffoldStatic — broken scaffolds must FAIL (engine is not a r
 
   it('detects a removed seed invocation', () => {
     const files = mutate((fs) => {
-      const db = fs.find((f) => f.path === 'server/src/db.ts')!;
+      const db = fs.find((f) => f.path === 'backend/src/db.ts')!;
       db.content = db.content.replace(/\nseed\(\);\n/, '\n');
     });
     assert.equal(find(verifyScaffoldStatic(base, files), 'seed-invoked').status, 'fail');
@@ -83,7 +83,7 @@ describe('verifyScaffoldStatic — broken scaffolds must FAIL (engine is not a r
 
   it('detects an unmounted API resource', () => {
     const files = mutate((fs) => {
-      const index = fs.find((f) => f.path === 'server/src/index.ts')!;
+      const index = fs.find((f) => f.path === 'backend/src/index.ts')!;
       index.content = index.content.replace(/app\.use\('\/api\/subscriptions', .*?;/, '/* removed */');
     });
     assert.equal(find(verifyScaffoldStatic(base, files), 'api-surface').status, 'fail');
@@ -91,7 +91,7 @@ describe('verifyScaffoldStatic — broken scaffolds must FAIL (engine is not a r
 
   it('detects placeholder test suites', () => {
     const files = mutate((fs) => {
-      const t = fs.find((f) => f.path === 'server/test/api.test.ts')!;
+      const t = fs.find((f) => f.path === 'backend/test/api.test.ts')!;
       t.content = "import { describe, it } from 'node:test';\nimport assert from 'node:assert/strict';\ndescribe('x', () => { it('ok', () => assert.ok(true, 'wired')); });\n";
     });
     assert.equal(find(verifyScaffoldStatic(base, files), 'real-tests').status, 'fail');
@@ -99,7 +99,7 @@ describe('verifyScaffoldStatic — broken scaffolds must FAIL (engine is not a r
 
   it('detects a stripped commerce service', () => {
     const files = mutate((fs) => {
-      const c = fs.find((f) => f.path === 'server/src/services/commerce.ts')!;
+      const c = fs.find((f) => f.path === 'backend/src/services/commerce.ts')!;
       c.content = c.content.replace('export function priceCart', 'function priceCartRemoved');
     });
     assert.equal(find(verifyScaffoldStatic(base, files), 'commerce-logic').status, 'fail');
@@ -121,6 +121,62 @@ describe('verifyScaffoldStatic — broken scaffolds must FAIL (engine is not a r
     const report = buildReport(base, files);
     assert.equal(report.verdict, 'incomplete');
     assert.ok(report.failed >= 1);
+  });
+});
+
+describe('verifyScaffoldStatic — professional structure + css + deploy (§9/§11)', () => {
+  const result = scaffoldProduct({ prompt: 'Build a coffee shop website with subscriptions' });
+
+  it('enforces frontend/ + backend/ top-level structure', () => {
+    const check = find(verifyScaffoldStatic(result, result.files), 'structure');
+    assert.equal(check.status, 'pass', check.evidence);
+  });
+
+  it('catches code scattered at the repo root', () => {
+    const files = result.files.map((f) => ({ ...f }));
+    files.push({ path: 'src/rogue.ts', kind: 'frontend', content: 'export const x = 1;' });
+    assert.equal(find(verifyScaffoldStatic(result, files), 'structure').status, 'fail');
+  });
+
+  it('passes CSS integrity on a clean generation (styles imported)', () => {
+    const check = find(verifyScaffoldStatic(result, result.files), 'css-integrity');
+    assert.equal(check.status, 'pass', check.evidence);
+  });
+
+  it('detects an unimported stylesheet (the "broken UI" defect)', () => {
+    const files = result.files.map((f) => {
+      if (f.path === 'frontend/src/main.tsx') return { ...f, content: f.content.replace("import './styles.css';", '') };
+      return { ...f };
+    });
+    const check = find(verifyScaffoldStatic(result, files), 'css-integrity');
+    assert.equal(check.status, 'fail');
+    assert.match(check.evidence, /never imported/);
+  });
+
+  it('detects a deleted stylesheet', () => {
+    const files = result.files.map((f) => ({ ...f })).filter((f) => !f.path.endsWith('styles.css'));
+    assert.equal(find(verifyScaffoldStatic(result, files), 'css-integrity').status, 'fail');
+  });
+
+  it('verifies provider-specific deploy configs (backend + frontend targets)', () => {
+    const check = find(verifyScaffoldStatic(result, result.files), 'deploy-ready');
+    assert.equal(check.status, 'pass', check.evidence);
+    const deploy = result.files.filter((f) => f.path.startsWith('deploy/'));
+    assert.ok(deploy.some((f) => /render|aws|digitalocean/i.test(f.path)), 'backend provider target present');
+    assert.ok(deploy.some((f) => /vercel|netlify|cloudflare/i.test(f.path)), 'frontend provider target present');
+  });
+
+  it('fails deploy-ready when deploy/ is absent', () => {
+    const files = result.files.map((f) => ({ ...f })).filter((f) => !f.path.startsWith('deploy/'));
+    assert.equal(find(verifyScaffoldStatic(result, files), 'deploy-ready').status, 'fail');
+  });
+
+  it('folds a failed frontend build into the verdict', () => {
+    const report = buildReport(result, result.files, undefined, { ran: true, passed: 0, failed: 1, detail: 'frontend build FAILED — the UI does not compile' });
+    assert.equal(report.verdict, 'incomplete');
+    assert.equal(find(report.checks, 'frontend-build').status, 'fail');
+    const ok = buildReport(result, result.files, undefined, { ran: true, passed: 1, failed: 0, detail: 'frontend production build succeeded' });
+    assert.equal(find(ok.checks, 'frontend-build').status, 'pass');
   });
 });
 

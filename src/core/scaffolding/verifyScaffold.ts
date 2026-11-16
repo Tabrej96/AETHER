@@ -81,7 +81,7 @@ export function verifyScaffoldStatic(result: ScaffoldResult, files: ScaffoldedFi
   );
 
   // 2. Every planned page is a distinct, resolvable route.
-  const app = fileOf(files, 'web/src/App.tsx') ?? '';
+  const app = fileOf(files, 'frontend/src/App.tsx') ?? '';
   const missingRoutes = result.pages.filter((p) => !app.includes(`path="${p === '/' ? '/' : p}"`));
   add(
     'pages-routed',
@@ -95,12 +95,12 @@ export function verifyScaffoldStatic(result: ScaffoldResult, files: ScaffoldedFi
   // 3. Every planned API resource has a router file + a mount in BOTH entry
   //    points (index.ts runs; app.ts is the test seam).
   const apis = result.apiRoutes.map((r) => r.replace('/api/', ''));
-  const indexTs = fileOf(files, 'server/src/index.ts') ?? '';
-  const appTs = fileOf(files, 'server/src/app.ts') ?? '';
+  const indexTs = fileOf(files, 'backend/src/index.ts') ?? '';
+  const appTs = fileOf(files, 'backend/src/app.ts') ?? '';
   const missingRouter: string[] = [];
   const missingMount: string[] = [];
   for (const a of apis) {
-    const routeFile = fileOf(files, `server/src/routes/${a.replace(/-/g, '-').split('/').join('/')}.ts`) ?? fileOf(files, `server/src/routes/${a}.ts`);
+    const routeFile = fileOf(files, `backend/src/routes/${a.replace(/-/g, '-').split('/').join('/')}.ts`) ?? fileOf(files, `backend/src/routes/${a}.ts`);
     if (!routeFile) missingRouter.push(a);
     if (!indexTs.includes(`/api/${a}`) || !appTs.includes(`/api/${a}`)) missingMount.push(a);
   }
@@ -114,7 +114,7 @@ export function verifyScaffoldStatic(result: ScaffoldResult, files: ScaffoldedFi
   );
 
   // 4. Every planned table exists in the DDL.
-  const db = fileOf(files, 'server/src/db.ts') ?? '';
+  const db = fileOf(files, 'backend/src/db.ts') ?? '';
   const missingTables = result.dbTables.filter((t) => !db.includes(`CREATE TABLE IF NOT EXISTS ${t}`));
   add(
     'db-schema',
@@ -134,10 +134,10 @@ export function verifyScaffoldStatic(result: ScaffoldResult, files: ScaffoldedFi
   // 6. Auth: register/login routes + requireAuth middleware defined AND used
   //    by at least one route. (Presence of user-scoped columns is evidence,
   //    not a gate — a non-commerce domain may have none and still be wired.)
-  const authRoute = fileOf(files, 'server/src/routes/auth.ts') ?? '';
-  const mw = fileOf(files, 'server/src/middleware/auth.ts') ?? '';
+  const authRoute = fileOf(files, 'backend/src/routes/auth.ts') ?? '';
+  const mw = fileOf(files, 'backend/src/middleware/auth.ts') ?? '';
   const anyRouteUsesAuth = files
-    .filter((f) => f.path.startsWith('server/src/routes/') && !f.path.includes('/auth.ts'))
+    .filter((f) => f.path.startsWith('backend/src/routes/') && !f.path.includes('/auth.ts'))
     .some((f) => /requireAuth/.test(f.content));
   const authOk = /\/register/.test(authRoute) && /\/login/.test(authRoute) && /export function requireAuth/.test(mw);
   add(
@@ -152,8 +152,8 @@ export function verifyScaffoldStatic(result: ScaffoldResult, files: ScaffoldedFi
   // 7. Commerce: order domains must carry real business logic, not CRUD.
   const hasOrders = apis.includes('orders');
   if (hasOrders) {
-    const commerce = fileOf(files, 'server/src/services/commerce.ts') ?? '';
-    const ordersRoute = fileOf(files, 'server/src/routes/orders.ts') ?? '';
+    const commerce = fileOf(files, 'backend/src/services/commerce.ts') ?? '';
+    const ordersRoute = fileOf(files, 'backend/src/routes/orders.ts') ?? '';
     // Anchor on the exported signatures — a stripped service must not pass
     // just because the identifiers survive as substrings of renamed locals.
     const ok =
@@ -179,7 +179,7 @@ export function verifyScaffoldStatic(result: ScaffoldResult, files: ScaffoldedFi
   }
 
   // 8. Tests: a real HTTP integration suite, never the placeholder stub.
-  const test = fileOf(files, 'server/test/api.test.ts') ?? '';
+  const test = fileOf(files, 'backend/test/api.test.ts') ?? '';
   add(
     'real-tests',
     'Test suite is a real HTTP integration test (no placeholder assertions)',
@@ -187,8 +187,42 @@ export function verifyScaffoldStatic(result: ScaffoldResult, files: ScaffoldedFi
     test.includes('fetch(base') ? 'drives real HTTP against an ephemeral-port app' : 'test suite is a placeholder'
   );
 
-  // 9. Deployment: the product is runnable and documentable, and no real
-  //    secrets are committed to the example env (placeholders stay empty).
+  // 9. Professional structure: top-level layout separates frontend/backend.
+  const topDirs = new Set(files.map((f) => f.path.split('/')[0]).filter((d) => d && !d.startsWith('.')));
+  const hasTopLevelCode =
+    [...topDirs].some((d) => d === 'src' || d === 'lib' || d === 'server' || d === 'web');
+  const structOk = topDirs.has('frontend') && topDirs.has('backend') && !hasTopLevelCode;
+  add(
+    'structure',
+    'Professional top-level structure (frontend/ + backend/, code not scattered at root)',
+    structOk,
+    structOk
+      ? `top-level layout: frontend/ + backend/ + deploy/ (clean separation)`
+      : `unexpected top-level dirs: ${[...topDirs].join(', ')} — code must live under frontend/ or backend/`
+  );
+
+  // 10. CSS integrity: the global stylesheet must EXIST, be non-trivial,
+  //     and actually be IMPORTED — an unimported stylesheet renders every
+  //     page unstyled (the "broken UI" defect).
+  const cssFile = files.find((f) => /\.css$/.test(f.path) && f.path.includes('frontend'));
+  const css = cssFile?.content ?? '';
+  const cssImported = files.some((f) => /\.(ts|tsx)$/.test(f.path) && /from ['"]\.\/styles\.css['"]|import ['"]\.\/styles\.css['"]/.test(f.content));
+  const cssOk = !!cssFile && css.trim().split('\n').length >= 10 && cssImported;
+  add(
+    'css-integrity',
+    'Global stylesheet exists, is non-trivial, and is imported',
+    cssOk,
+    cssOk
+      ? `${(css.trim().split('\n').length ?? 0)} lines of CSS loaded via import`
+      : !cssFile
+        ? 'no frontend stylesheet file found'
+        : !cssImported
+          ? `styles.css exists but is never imported — the UI renders unstyled`
+          : 'stylesheet is empty'
+  );
+
+  // 11. Deployment: the product is runnable and documentable, and no real
+  //     secrets are committed to the example env (placeholders stay empty).
   const env = fileOf(files, '.env.example') ?? '';
   const depArtifacts =
     !!fileOf(files, 'Dockerfile') && !!fileOf(files, 'docker-compose.yml') && !!fileOf(files, 'README.md');
@@ -207,6 +241,21 @@ export function verifyScaffoldStatic(result: ScaffoldResult, files: ScaffoldedFi
         : 'committed secret detected in .env.example (sk_/pk_ value assigned to a provider key)'
   );
 
+  // 12. Deploy-ready: provider-specific configs for real-world targets.
+  //     Backend → Render / AWS / DigitalOcean; Frontend → Vercel / Netlify /
+  //     Cloudflare Pages. A product without any provider path is not
+  //     "production prepared" (§11).
+  const deployFiles = files.filter((f) => f.path.startsWith('deploy/')).map((f) => f.path);
+  const providerHit = deployFiles.filter((p) => /render|aws|digitalocean|vercel|netlify|cloudflare/i.test(p)).length;
+  add(
+    'deploy-ready',
+    'Provider-specific deploy configs present (backend + frontend targets)',
+    deployFiles.length >= 3 && providerHit >= 3,
+    deployFiles.length
+      ? `${deployFiles.length} files under deploy/; ${providerHit} provider-specific config(s)`
+      : 'no deploy/ directory — product has no real deployment path'
+  );
+
   return checks;
 }
 
@@ -219,6 +268,40 @@ export interface DynamicVerification {
   passed?: number;
   failed?: number;
   detail: string;
+}
+
+/**
+ * Build the generated frontend with its own Vite toolchain. A product whose
+ * UI does not compile (broken JSX, missing import, CSS framework without
+ * config) must fail verification — this is the direct answer to the
+ * "gave broken UI" defect class. Requires `npm install` at the root.
+ */
+export function runFrontendBuild(frontendDir: string, timeoutMs = 240_000): DynamicVerification {
+  const root = path.dirname(frontendDir); // project root (workspaces live here)
+  if (!fs.existsSync(path.join(root, 'node_modules'))) {
+    return { ran: false, detail: 'dependencies not installed — frontend build skipped (run `npm install`, then re-run --verify)' };
+  }
+  // The frontend workspace builds from the PROJECT ROOT with `npm run build -w frontend`.
+  const r = spawnSync(
+    process.platform === 'win32' ? 'cmd' : 'sh',
+    process.platform === 'win32' ? ['/d', '/s', '/c', 'npm run build -w frontend'] : ['-c', 'npm run build -w frontend'],
+    { cwd: root, timeout: timeoutMs, encoding: 'utf8', stdio: 'pipe', env: { ...process.env, FORCE_COLOR: '0' } }
+  );
+  if (r.error || r.status === null) {
+    return { ran: false, detail: `frontend build could not be spawned (${r.error?.message ?? 'unknown'})` };
+  }
+  const out = `${r.stdout ?? ''}\n${r.stderr ?? ''}`;
+  const ok = r.status === 0 && fs.existsSync(path.join(frontendDir, 'dist', 'index.html'));
+  if (ok) {
+    return { ran: true, passed: 1, failed: 0, detail: 'frontend production build succeeded (dist/index.html emitted)' };
+  }
+  const errLine = out.split('\n').find((l) => /error|failed|cannot find/i.test(l)) ?? '';
+  return {
+    ran: true,
+    passed: 0,
+    failed: 1,
+    detail: `frontend build FAILED — the UI does not compile${errLine ? ` (${errLine.trim().slice(0, 160)})` : ''}`,
+  };
 }
 
 /**
@@ -308,7 +391,12 @@ function interpretTestRun(r: { status: number | null; error?: Error; stdout?: st
 // Combined report + rendering
 // ---------------------------------------------------------------------------
 
-export function buildReport(result: ScaffoldResult, files: ScaffoldedFile[], dynamic?: DynamicVerification): VerificationReport {
+export function buildReport(
+  result: ScaffoldResult,
+  files: ScaffoldedFile[],
+  dynamic?: DynamicVerification,
+  frontendBuild?: DynamicVerification
+): VerificationReport {
   const checks = [...verifyScaffoldStatic(result, files)];
   if (dynamic) {
     checks.push({
@@ -316,6 +404,14 @@ export function buildReport(result: ScaffoldResult, files: ScaffoldedFile[], dyn
       label: 'Generated test suite passes against the running app',
       status: dynamic.ran ? dynamic.failed === 0 ? 'pass' : 'fail' : 'skip',
       evidence: dynamic.detail,
+    });
+  }
+  if (frontendBuild) {
+    checks.push({
+      id: 'frontend-build',
+      label: 'Frontend production build succeeds (UI actually compiles)',
+      status: frontendBuild.ran ? frontendBuild.failed === 0 ? 'pass' : 'fail' : 'skip',
+      evidence: frontendBuild.detail,
     });
   }
   const passed = checks.filter((c) => c.status === 'pass').length;
