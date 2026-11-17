@@ -13,7 +13,7 @@
 ## 60-second path (human or agent)
 
 ```bash
-git clone https://github.com/Tabrej96/anythingwithaether.git && cd AETHER
+git clone https://github.com/Tabrej96/AETHER.git && cd AETHER
 npx tsx bin/aether.ts validate     # no npm install needed — zero runtime deps
 ```
 

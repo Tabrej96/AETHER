@@ -50,6 +50,15 @@ Engine treat it as policy, not suggestion (see
 
 ## 3. How agents are used
 
+- **`aether build "<prompt>" --out <dir>`** materializes a professional full-stack
+  product from ANY prompt (any industry/app type): `frontend/` + `backend/`
+  + `deploy/` structure, Express/SQLite API with JWT auth, server-side business
+  logic (commerce + payment provider layer for order domains), provider-ready
+  deploy configs (Render / AWS / DigitalOcean / Vercel / Netlify / Cloudflare),
+  its own CI workflow, and a verification report — pass `--verify` to also run
+  the generated HTTP test suite + frontend production build. Engine:
+  `src/core/scaffolding/productScaffolder.ts` + `verifyScaffold.ts` (§13: the
+  generator never declares done on its own authority).
 - **`aether install --target <harness>`** writes the agents into your harness's
   agent conventions (`.claude/agents/`, `AGENTS.md`, `.cursor/`, …).
 - **The Swarm Engine** schedules agents over a task DAG with exclusive file
