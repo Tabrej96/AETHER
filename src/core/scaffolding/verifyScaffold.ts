@@ -376,6 +376,105 @@ export function verifyScaffoldStatic(result: ScaffoldResult, files: ScaffoldedFi
     dangling.length === 0 ? 'all page fetch targets resolve to planned resources' : `dangling fetch targets: ${[...new Set(dangling)].slice(0, 4).join('; ')}`
   );
 
+  // 18. PWA: installable on any phone/iPad — manifest + service worker +
+  //     theme/apple metas must all be present (a half-PWA is worse than
+  //     none: it installs as a broken app).
+  const manifest = fileOf(files, 'frontend/public/manifest.webmanifest') ?? '';
+  const sw = fileOf(files, 'frontend/public/sw.js') ?? '';
+  const icon = fileOf(files, 'frontend/public/icon.svg') ?? '';
+  const html = fileOf(files, 'frontend/index.html') ?? '';
+  const pwaOk =
+    /"display"\s*:\s*"standalone"/.test(manifest) &&
+    manifest.includes('"icons"') &&
+    /SHELL|cache/i.test(sw) &&
+    icon.includes('<svg') &&
+    html.includes('rel="manifest"') &&
+    html.includes('theme-color') &&
+    html.includes('apple-mobile-web-app-capable');
+  add(
+    'pwa-manifest',
+    'PWA is complete (manifest + service worker + icons + metas)',
+    pwaOk,
+    pwaOk
+      ? 'manifest.webmanifest (standalone), sw.js, generated icon, index.html PWA metas all present'
+      : 'PWA incomplete: ' +
+        [!manifest && 'no manifest', !icon && 'no generated icon', !/SHELL|cache/i.test(sw) && 'no service worker cache logic', !html.includes('rel="manifest"') && 'manifest not linked in index.html', !html.includes('apple-mobile-web-app-capable') && 'no iOS PWA metas']
+          .filter(Boolean)
+          .join(', ')
+  );
+
+  // 19. Handover doc: PROJECT.md with every required section present.
+  const projDoc = fileOf(files, 'PROJECT.md') ?? '';
+  const requiredDocSections = ['Architecture', 'Pages', 'Data model', 'API', 'Design system', 'Deploy', 'Verification'];
+  const missingSections = requiredDocSections.filter((s) => !projDoc.includes(s));
+  add(
+    'project-doc',
+    'PROJECT.md handover doc carries the required sections',
+    projDoc.length > 200 && missingSections.length === 0,
+    projDoc.length > 200 && missingSections.length === 0
+      ? `PROJECT.md present with ${requiredDocSections.length} required sections`
+      : missingSections.length
+        ? `PROJECT.md missing sections: ${missingSections.join(', ')}`
+        : 'PROJECT.md missing or too short to be a handover doc'
+  );
+
+  // 20. UI render-proof shipped: the SSR smoke test file exists and covers
+  //     EVERY planned route (the zero-browser answer to "broken UI").
+  const smoke = fileOf(files, 'frontend/src/ssr-smoke.ts') ?? '';
+  const routesCovered = result.pages.filter((p) => smoke.includes(`"${p === '/' ? '/' : p}"`) || (p === '/' && smoke.includes('"/"')));
+  add(
+    'ui-render-proof',
+    'UI render-proof (SSR smoke test) covers every planned route',
+    smoke.includes('renderToString') && smoke.includes('MemoryRouter') && routesCovered.length === result.pages.length,
+    routesCovered.length === result.pages.length
+      ? `ssr-smoke.ts covers all ${result.pages.length} routes; run via npx tsx`
+      : `ssr-smoke.ts missing or covers ${routesCovered.length}/${result.pages.length} routes`
+  );
+
+  // 21. Mobile wrapper (emitted only for mobile builds): iOS-only — the
+  //     workflow must build an .ipa on a macos runner and must NOT contain
+  //     any Android-shaped string (user's hard rule, enforced here).
+  const capConfig = fileOf(files, 'capacitor.config.ts');
+  const capDepsOk = (() => {
+    try {
+      const rootPkg2 = JSON.parse(fileOf(files, 'package.json') || '{}') as { devDependencies?: Record<string, string> };
+      return !!(rootPkg2.devDependencies?.['@capacitor/core'] && rootPkg2.devDependencies?.['@capacitor/ios']);
+    } catch {
+      return false;
+    }
+  })();
+  if (capConfig !== undefined) {
+    const mobWorkflow = fileOf(files, '.github/workflows/mobile-build.yml') ?? '';
+    const noAndroid =
+      !/@capacitor\/android/.test(fileOf(files, 'package.json') ?? '') &&
+      !/android|\.aab|gradle/i.test(mobWorkflow);
+    const mobOk =
+      mobWorkflow.includes('macos-14') &&
+      mobWorkflow.includes('.ipa') &&
+      /cap sync ios/.test(mobWorkflow) &&
+      noAndroid &&
+      capConfig.includes('ios') &&
+      capDepsOk;
+    add(
+      'mobile-ios',
+      'iOS native shell is wired (Capacitor iOS-only + cloud .ipa CI, no Android)',
+      mobOk,
+      mobOk
+        ? 'capacitor.config.ts (iOS) + @capacitor/ios devDep + macos-14 workflow uploads .ipa; no Android strings anywhere'
+        : 'mobile wrapper incomplete: ' +
+          [!mobWorkflow.includes('macos-14') && 'no macos runner', !/cap sync ios/.test(mobWorkflow) && 'no cap sync ios step', !mobWorkflow.includes('.ipa') && 'no .ipa artifact', !noAndroid && 'Android leakage found (must be iOS-only)', !capConfig.includes('ios') && 'capacitor config has no ios platform', !capDepsOk && '@capacitor deps not declared']
+            .filter(Boolean)
+            .join(', ')
+    );
+  } else {
+    checks.push({
+      id: 'mobile-ios',
+      label: 'iOS native shell is wired',
+      status: 'skip',
+      evidence: 'mobile build not requested — PWA + responsive web only',
+    });
+  }
+
   return checks;
 }
 
@@ -511,11 +610,62 @@ function interpretTestRun(r: { status: number | null; error?: Error; stdout?: st
 // Combined report + rendering
 // ---------------------------------------------------------------------------
 
+/**
+ * Run the product's UI render-proof (frontend/src/ssr-smoke.ts) with the
+ * project's own tsx — every route is server-rendered and must produce
+ * non-empty HTML. Catches "the UI never renders" (broken-UI defect class)
+ * without a browser. Honest-skip when dependencies are not installed.
+ */
+export function runUiRender(frontendDir: string, timeoutMs = 180_000): DynamicVerification {
+  const root = path.dirname(frontendDir);
+  if (!fs.existsSync(path.join(frontendDir, 'src', 'ssr-smoke.ts'))) {
+    return { ran: false, detail: 'no SSR smoke test shipped at frontend/src/ssr-smoke.ts' };
+  }
+  const nodeModules = findNodeModulesPath(frontendDir);
+  if (!nodeModules) {
+    return { ran: false, detail: 'dependencies not installed — UI render-proof skipped (run `npm install`, then re-run --verify)' };
+  }
+  let argv: string[] | null = null;
+  try {
+    const tsxPkg = JSON.parse(fs.readFileSync(path.join(nodeModules, 'tsx', 'package.json'), 'utf8')) as { bin?: string | Record<string, string> };
+    const rel = typeof tsxPkg.bin === 'string' ? tsxPkg.bin : tsxPkg.bin?.tsx ?? 'dist/cli.mjs';
+    const tsxCli = path.resolve(nodeModules, 'tsx', rel);
+    if (fs.existsSync(tsxCli)) argv = [tsxCli, 'frontend/src/ssr-smoke.ts'];
+  } catch {
+    /* fall through to npx */
+  }
+  const run = (args: string[], via: 'node' | 'npx') => {
+    const r =
+      via === 'node'
+        ? spawnSync(process.execPath, args, { cwd: root, timeout: timeoutMs, encoding: 'utf8', stdio: 'pipe', env: { ...process.env, FORCE_COLOR: '0' } })
+        : spawnSync(process.platform === 'win32' ? 'cmd' : 'sh', process.platform === 'win32' ? ['/d', '/s', '/c', args.join(' ')] : ['-c', args.join(' ')], {
+            cwd: root,
+            timeout: timeoutMs,
+            encoding: 'utf8',
+            stdio: 'pipe',
+            shell: false,
+          });
+    if (r.error || r.status === null) {
+      return { ran: false, detail: `UI render-proof could not be spawned (${r.error?.message ?? 'unknown'})` } as DynamicVerification;
+    }
+    const out = `${r.stdout ?? ''}\n${r.stderr ?? ''}`;
+    if (r.status === 0 && out.includes('UI RENDER-PROOF: PASS')) {
+      const routes = Number((out.match(/(\d+) of \d+ routes render/) ?? [])[1] ?? 0);
+      return { ran: true, passed: routes, failed: 0, detail: `every route server-renders (${routes} routes, zero-browser proof)` };
+    }
+    const errLine = out.split('\n').find((l) => /✗|Error|AssertionError/.test(l)) ?? '';
+    return { ran: true, passed: 0, failed: 1, detail: `UI render-proof FAILED${errLine ? ` — ${errLine.trim().slice(0, 160)}` : ''} (a route does not render)` };
+  };
+  if (argv) return run(argv, 'node');
+  return run(['npx', 'tsx', 'frontend/src/ssr-smoke.ts'], 'npx');
+}
+
 export function buildReport(
   result: ScaffoldResult,
   files: ScaffoldedFile[],
   dynamic?: DynamicVerification,
-  frontendBuild?: DynamicVerification
+  frontendBuild?: DynamicVerification,
+  uiRender?: DynamicVerification
 ): VerificationReport {
   const checks = [...verifyScaffoldStatic(result, files)];
   if (dynamic) {
@@ -532,6 +682,14 @@ export function buildReport(
       label: 'Frontend production build succeeds (UI actually compiles)',
       status: frontendBuild.ran ? frontendBuild.failed === 0 ? 'pass' : 'fail' : 'skip',
       evidence: frontendBuild.detail,
+    });
+  }
+  if (uiRender) {
+    checks.push({
+      id: 'ui-render',
+      label: 'UI render-proof: every route server-renders (no broken UI)',
+      status: uiRender.ran ? uiRender.failed === 0 ? 'pass' : 'fail' : 'skip',
+      evidence: uiRender.detail,
     });
   }
   const passed = checks.filter((c) => c.status === 'pass').length;

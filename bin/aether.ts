@@ -20,6 +20,7 @@
 
 import fs from 'node:fs';
 import path from 'node:path';
+import { spawnSync } from 'node:child_process';
 import {
   AETHER_AGENTS,
   AETHER_RULES,
@@ -637,11 +638,23 @@ if (command === 'audit') {
   const outDir = outIdx !== -1 && args[outIdx + 1] ? path.resolve(process.cwd(), args[outIdx + 1]) : path.resolve(process.cwd());
   const nameArg = nameIdx !== -1 && args[nameIdx + 1] ? args[nameIdx + 1] : undefined;
   if (!prompt) {
-    console.error('Usage: aether build "<prompt>" [--out <dir>] [--name <project>]\nExample: aether build "Build a coffee shop website" --out ./cofi-shop');
+    console.error(
+      'Usage: aether build "<prompt>" [--out <dir>] [--name <project>] [--mobile] [--no-auto-verify]\n' +
+        '  "application"/"app"/"mobile" in the prompt (or --mobile) adds the PWA + iOS native shell (NO Android).\n' +
+        '  Verification is ON by default: installs deps and runs the test suite, frontend build,\n' +
+        '  and the every-route UI render-proof. Use --no-auto-verify to only write files.\n' +
+        'Example: aether build "Build a Cofi Shop Application" --out ./cofi-app',
+    );
     process.exit(1);
   }
 
-  const result = scaffoldProduct({ prompt, projectName: nameArg, generateDeployment: !args.includes('--no-deployment') });
+  const mobile = args.includes('--mobile') || /\b(application|apps?|mobile)\b/i.test(prompt);
+  const result = scaffoldProduct({
+    prompt,
+    projectName: nameArg,
+    generateDeployment: !args.includes('--no-deployment'),
+    mobile,
+  });
 
   // Write all files to disk (creating directories as needed).
   let written = 0;
@@ -660,20 +673,64 @@ if (command === 'audit') {
 
   // §13 — independent definition of done: AETHER verifies the product against
   // its own plan. The generator's claims are never the final authority.
-  const { buildReport, renderReport, runGeneratedTests, runFrontendBuild } = await import('../src/core/scaffolding/verifyScaffold');
-  const wantDynamic = args.includes('--verify');
+  const { buildReport, renderReport, runGeneratedTests, runFrontendBuild, runUiRender } = await import('../src/core/scaffolding/verifyScaffold');
+  // COMPLETE-CONTROL FLOW: verification is ON by default — one prompt should
+  // yield a *verified* app, not an unverified one. `--no-auto-verify` is the
+  // escape hatch (files only, no install). `--verify` remains as a no-op
+  // alias for the default when the user asked for it explicitly.
+  const wantDynamic = !args.includes('--no-auto-verify');
+  if (wantDynamic && !fs.existsSync(path.join(outDir, 'node_modules'))) {
+    // Auto-install: the tool takes complete control — installs deps + builds
+    // the native SQLite module so the verification below can actually run.
+    // Honest: a failed install is reported, never papered over.
+    console.log('Dependencies not installed — running `npm install` + native SQLite build (auto-verify)…');
+    const install = spawnSync(
+      process.platform === 'win32' ? 'cmd' : 'sh',
+      process.platform === 'win32' ? ['/d', '/s', '/c', 'npm install && (cd node_modules/better-sqlite3 && npx --yes node-gyp rebuild --release)'] : ['-c', 'npm install && (cd node_modules/better-sqlite3 && npx --yes node-gyp rebuild --release)'],
+      { cwd: outDir, timeout: 600_000, encoding: 'utf8', stdio: 'inherit', shell: false }
+    );
+    if (install.status !== 0) {
+      console.log('\n⚠ auto-verify could not install dependencies — reporting the build unverified (honest skip, not a fake pass).\n');
+    }
+  }
   const dynamic = wantDynamic ? runGeneratedTests(path.join(outDir, 'backend')) : undefined;
   const frontendBuild = wantDynamic ? runFrontendBuild(path.join(outDir, 'frontend')) : undefined;
-  const report = buildReport(result, result.files, dynamic, frontendBuild);
+  const uiRender = wantDynamic ? runUiRender(path.join(outDir, 'frontend')) : undefined;
+  const report = buildReport(result, result.files, dynamic, frontendBuild, uiRender);
+
+  // Stamp the measured verdict into PROJECT.md so the handover doc carries
+  // evidence, not a promise.
+  const projPath = path.join(outDir, 'PROJECT.md');
+  if (fs.existsSync(projPath)) {
+    let doc = fs.readFileSync(projPath, 'utf8');
+    const stamp = [
+      `VERDICT: ${report.verdict.toUpperCase()} — ${report.passed} passed · ${report.failed} failed · ${report.skipped} skipped (dynamic: ${wantDynamic ? 'ran' : 'skipped (--no-auto-verify)'})`,
+      report.checks
+        .filter((c) => c.status === 'fail')
+        .map((c) => `  ✖ ${c.label}: ${c.evidence}`)
+        .join('\n'),
+      report.failed === 0 && wantDynamic
+        ? '  ✔ generated test suite, frontend production build, and the UI render-proof (every route server-renders) all passed.'
+        : '',
+    ]
+      .filter((l) => l.length > 0)
+      .join('\n');
+    doc = doc
+      .replace('<!-- AETHER-VERIFICATION-SNAPSHOT -->\nVERDICT: pending — run `aether build ... --verify` (or `npm test` + the SSR\nsmoke above) to populate this section with measured evidence.', `<!-- AETHER-VERIFICATION-SNAPSHOT -->\n${stamp}`)
+      .replace('<!-- END-AETHER-VERIFICATION-SNAPSHOT -->', '<!-- END-AETHER-VERIFICATION-SNAPSHOT -->');
+    fs.writeFileSync(projPath, doc, 'utf8');
+  }
+
   console.log(renderReport(report));
   if (report.failed > 0) {
     console.log('\nAETHER will not declare this product complete. Address the failed requirements above (they are specific and actionable).');
-  }
-
-  if (!wantDynamic) {
-    console.log(`\nNext steps:\n  cd ${result.projectName === outDir ? '.' : path.relative(process.cwd(), outDir) || '.'}`);
-    console.log(`  npm install && cp .env.example .env && npm run dev`);
-    console.log(`  aether build "${prompt}" --out <dir> --verify   # also run the generated test suite + frontend build`);
+  } else {
+    console.log('\n=== APP READY ===');
+    console.log(`  ${result.projectName} is verified: ${report.passed} requirements met${wantDynamic ? ' (tests + build + every-route render-proof ran)' : ' (static checks only)'}.`);
+    console.log(`  Run it:       cd ${result.projectName === outDir ? '.' : path.relative(process.cwd(), outDir) || '.'} && npm run dev`);
+    console.log(`  Handover:     PROJECT.md (architecture, data model, API, design, deploy matrix, mobile)`);
+    console.log(`  Mobile:       PWA installable today (Add to Home Screen)${mobile ? ' + .ipa via .github/workflows/mobile-build.yml (cloud CI — pull the artifact; App Store submission needs YOUR signing secrets)' : ''}`);
+    console.log(`  Honest gaps:  ${report.skipped} check(s) skipped${report.skipped ? ' — see the report for why' : ''}. No fabricated passes.`);
   }
 } else if (command === 'install') {
   const isInstallAll = args.includes('--all');

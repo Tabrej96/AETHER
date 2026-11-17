@@ -284,8 +284,29 @@ describe('runGeneratedTests — honest pre-checks (no fabricated runs)', () => {
     const result = scaffoldProduct({ prompt: 'Build a coffee shop website with subscriptions' });
     const complete = buildReport(result, result.files, { ran: true, passed: 8, failed: 0, detail: '8 generated tests passed' });
     assert.equal(complete.verdict, 'complete');
-    assert.equal(complete.skipped, 0);
+    // Non-mobile build: exactly the mobile-ios check honestly skips.
+    assert.equal(complete.skipped, 1);
     const broken = buildReport(result, result.files, { ran: true, passed: 5, failed: 3, detail: '3 failures' });
     assert.equal(broken.verdict, 'incomplete');
+  });
+
+  it('mobile builds fold the UI render-proof into the verdict', () => {
+    const result = scaffoldProduct({ prompt: 'Build a Cofi Shop Application', mobile: true });
+    const uiOk = buildReport(result, result.files, undefined, undefined, { ran: true, passed: 24, failed: 0, detail: 'all routes render' });
+    assert.equal(uiOk.verdict, 'complete');
+    assert.equal(find(uiOk.checks, 'ui-render').status, 'pass');
+    assert.equal(find(uiOk.checks, 'mobile-ios').status, 'pass');
+    const uiBroken = buildReport(result, result.files, undefined, undefined, { ran: true, passed: 23, failed: 1, detail: 'one route does not render' });
+    assert.equal(uiBroken.verdict, 'incomplete');
+    assert.equal(find(uiBroken.checks, 'ui-render').status, 'fail');
+  });
+
+  it('mobile-ios static check fails when the Android-only dep leaks in', () => {
+    const result = scaffoldProduct({ prompt: 'Build a Cofi Shop Application', mobile: true });
+    const files = result.files.map((f) => ({ ...f }));
+    const pkg = files.find((f) => f.path === 'package.json')!;
+    pkg.content = pkg.content.replace('"@capacitor/ios": "^6.1.0"', '"@capacitor/ios": "^6.1.0", "@capacitor/android": "^6.1.0"');
+    const checks = verifyScaffoldStatic(result, files);
+    assert.equal(find(checks, 'mobile-ios').status, 'fail');
   });
 });
