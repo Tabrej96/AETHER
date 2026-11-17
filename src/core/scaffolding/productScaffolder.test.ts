@@ -222,3 +222,72 @@ describe('scaffoldProduct — commerce service layer (real business logic)', () 
     assert.match(env, /DEMO/);
   });
 });
+
+describe('scaffoldProduct — payment provider layer (mission §10)', () => {
+  const coffee = scaffoldProduct({ prompt: 'Build a coffee shop website with subscriptions' });
+  const saas = scaffoldProduct({ prompt: 'Build a SaaS analytics dashboard' });
+
+  it('order domains emit the payments service + webhook route, mounted in index.ts and app.ts', () => {
+    const svc = coffee.files.find((f) => f.path === 'backend/src/services/payments.ts');
+    const route = coffee.files.find((f) => f.path === 'backend/src/routes/payments.ts');
+    assert.ok(svc, 'payments service expected for order domains');
+    assert.ok(route, 'payments route expected for order domains');
+    // Gateway abstraction, not a fabricated provider: mock is clearly labelled,
+    // stripe fails fast without a key, razorpay is honestly "not implemented".
+    assert.match(svc!.content, /export interface PaymentGateway/);
+    assert.match(svc!.content, /export class MockGateway/);
+    assert.match(svc!.content, /export class StripeGateway/);
+    assert.match(svc!.content, /export function selectGateway/);
+    assert.match(svc!.content, /not implemented in this generated build/);
+    assert.match(route!.content, /export const webhookRouter = Router\(\)/);
+    assert.match(route!.content, /export const paymentsRouter = webhookRouter/);
+    assert.match(route!.content, /webhookRouter\.post\('\/webhook'/);
+    // Both entrypoints mount the router.
+    const index = coffee.files.find((f) => f.path === 'backend/src/index.ts')!.content;
+    const app = coffee.files.find((f) => f.path === 'backend/src/app.ts')!.content;
+    assert.match(index, /import \{ paymentsRouter \} from '\.\/routes\/payments\.js'/);
+    assert.match(index, /app\.use\('\/api\/payments', paymentsRouter\)/);
+    assert.match(app, /app\.use\('\/api\/payments', paymentsRouter\)/);
+  });
+
+  it('the orders DDL gains payment_ref and the orders route gains /:id/pay', () => {
+    const db = coffee.files.find((f) => f.path === 'backend/src/db.ts')!.content;
+    assert.match(db, /payment_ref TEXT/);
+    const orders = coffee.files.find((f) => f.path === 'backend/src/routes/orders.ts')!.content;
+    assert.match(orders, /\/:id\/pay/);
+    assert.match(orders, /chargeOrder/);
+  });
+
+  it('.env.example documents PAYMENT_PROVIDER with the mock demo default', () => {
+    const env = coffee.files.find((f) => f.path === '.env.example')!.content;
+    assert.match(env, /PAYMENT_PROVIDER=mock/);
+    assert.match(env, /STRIPE_SECRET_KEY=/);
+    assert.match(env, /mock/); // labelled-mock honesty note
+  });
+
+  it('the generated test suite covers charge + webhook (idempotent replays)', () => {
+    const t = coffee.files.find((f) => f.path === 'backend/test/api.test.ts')!.content;
+    assert.match(t, /\/pay\b/); // dynamic /orders/${id}/pay call
+    assert.match(t, /\/api\/payments\/webhook/);
+    assert.match(t, /PAYMENT_PROVIDER = 'mock'/);
+  });
+
+  it('deploy blueprints carry payment env vars for order domains', () => {
+    const compose = coffee.files.find((f) => f.path === 'docker-compose.yml')!.content;
+    assert.match(compose, /PAYMENT_PROVIDER/);
+    assert.match(compose, /STRIPE_SECRET_KEY/);
+    const render = coffee.files.find((f) => f.path === 'deploy/render/backend.yml')!.content;
+    assert.match(render, /PAYMENT_PROVIDER/);
+  });
+
+  it('non-order domains get NO payment plumbing (no fake provider support)', () => {
+    assert.ok(!saas.files.some((f) => f.path === 'backend/src/services/payments.ts'), 'no payments service');
+    assert.ok(!saas.files.some((f) => f.path === 'backend/src/routes/payments.ts'), 'no payments route');
+    const index = saas.files.find((f) => f.path === 'backend/src/index.ts')!.content;
+    assert.doesNotMatch(index, /paymentsRouter/);
+    const env = saas.files.find((f) => f.path === '.env.example')!.content;
+    assert.doesNotMatch(env, /PAYMENT_PROVIDER/);
+    const compose = saas.files.find((f) => f.path === 'docker-compose.yml')!.content;
+    assert.doesNotMatch(compose, /PAYMENT_PROVIDER/);
+  });
+});

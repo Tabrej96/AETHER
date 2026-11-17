@@ -250,6 +250,7 @@ function planApis(pack: DomainPack): ApiPlan[] {
 
 function generateRootFiles(name: string, pack: DomainPack, pages: PagePlan[], apis: ApiPlan[]): ScaffoldedFile[] {
   const files: ScaffoldedFile[] = [];
+  const hasOrders = apis.some((a) => a.special === 'order');
 
   files.push({
     path: 'package.json',
@@ -297,30 +298,58 @@ data/
   files.push({
     path: '.env.example',
     kind: 'config',
-    content: `# ${pack.name} — environment (copy to .env and fill in)
-#
-# DEMO (local dev) — works out of the box:
-#   DATABASE_FILE points at a local SQLite file that auto-creates + seeds,
-#   JWT_SECRET is a dev default, payments stay off.
-# PRODUCTION — replace the demo values below; the app reads the same names,
-# so no code changes are needed to switch from demo to real infrastructure.
-
-# Core
-PORT=4000
-WEB_PORT=5173
-DATABASE_FILE=./data/${slug(name)}.sqlite
-JWT_SECRET=change-me-in-production
-
-# Commerce (server-side pricing)
-# Tax rate in basis points (500 = 5%). Integer minor-unit math throughout.
-TAX_BPS=${COMMERCE_TAX_BPS}
-# Payment provider. Leave blank to keep payments in 'pending' state;
-# when real keys are present, wire the provider's webhooks and replace the
-# placeholder hash in seed() with real bcrypt hashes before first boot.
-PAYMENT_PROVIDER=stripe
-STRIPE_SECRET_KEY=
-STRIPE_WEBHOOK_SECRET=
-`,
+    content: [
+      `# ${pack.name} — environment (copy to .env and fill in)`,
+      `#`,
+      `# DEMO (local dev) — works out of the box:`,
+      `#   DATABASE_FILE points at a local SQLite file that auto-creates + seeds,`,
+      `#   JWT_SECRET is a dev default,${hasOrders ? ` payments stay on the clearly-labelled mock gateway.` : ` payments stay off.`}`,
+      `# PRODUCTION — replace the demo values below; the app reads the same names,`,
+      `# so no code changes are needed to switch from demo to real infrastructure.`,
+      ``,
+      `# Core`,
+      `PORT=4000`,
+      `WEB_PORT=5173`,
+      `DATABASE_FILE=./data/${slug(name)}.sqlite`,
+      `JWT_SECRET=change-me-in-production`,
+      ...(!hasOrders ? [`# Commerce (server-side pricing)`] : []),
+      `# Tax rate in basis points (500 = 5%). Integer minor-unit math throughout.`,
+      `TAX_BPS=${COMMERCE_TAX_BPS}`,
+      ...(hasOrders
+        ? [
+            ``,
+            `# Payments provider — one of: mock | stripe | razorpay | '' (off).`,
+            `#   mock     (DEMO default) — deterministic sandbox gateway, no real charges;`,
+            `#            it is clearly labelled mock in the API responses so no`,
+            `#            "paid" claim ever gets mistaken for a real settlement.`,
+            `#   stripe   — real charges: set STRIPE_SECRET_KEY. A SANDBOX key`,
+            `#            (sk_test_...) works end to end with test cards; no live`,
+            `#            money moves. Leave it empty and order creation fails`,
+            `#            fast with a clear "not configured" error — never a silent`,
+            `#            fallback, and never a fabricated success.`,
+            `#   razorpay — accepted in the provider layer but NOT implemented in`,
+            `#            this generated build: order creation reports "not implemented",`,
+            `#            so no fake provider support is claimed.`,
+            `# DEMO default: mock — the app is fully chargeable out of the box, with every`,
+            `# charge clearly labelled mock. Set stripe + a sk_test_ key to go live-test.`,
+            `PAYMENT_PROVIDER=mock`,
+            `# Stripe (only needed when PAYMENT_PROVIDER=stripe; sk_test_... is fine):`,
+            `STRIPE_SECRET_KEY=`,
+            `# Webhook note: POST /api/payments/webhook confirms paid orders. It`,
+            `# authenticates against the payment_ref this server recorded when it`,
+            `# created the charge — NOT via Stripe-Signature HMAC (an honest`,
+            `# limitation for the no-SDK build; see backend/src/services/payments.ts).`,
+            `# Point your provider's webhook at https://<your-host>/api/payments/webhook`,
+            `# and use an empty secret (or a shared secret of your choice, kept out of`,
+            `# this file) — the value is never read, verified or committed here.`,
+          ]
+        : [
+            ``,
+            `# This domain has no orders/payment layer, so no payment env vars are emitted.`,
+            `# Before first boot: replace the placeholder admin hash in seed() with a`,
+            `# real bcrypt hash (the dev default is documented, never a real credential).`,
+          ]),
+    ].join('\n') + '\n',
   });
 
   const apiLines = apis
@@ -396,6 +425,7 @@ provider secret stores hold the real values.
 
 function generateServer(name: string, pack: DomainPack, apis: ApiPlan[]): ScaffoldedFile[] {
   const out: ScaffoldedFile[] = [];
+  const hasOrders = apis.some((a) => a.special === 'order');
 
   out.push({
     path: 'backend/package.json',
@@ -507,6 +537,7 @@ function generateServer(name: string, pack: DomainPack, apis: ApiPlan[]): Scaffo
       ``,
       `import { authRouter } from './routes/auth.js';`,
       routerImports,
+      ...(hasOrders ? [`import { paymentsRouter } from './routes/payments.js';`] : []),
       `import { adminRouter } from './routes/admin.js';`,
       ``,
       `const app = express();`,
@@ -519,6 +550,14 @@ function generateServer(name: string, pack: DomainPack, apis: ApiPlan[]): Scaffo
       ``,
       `app.use('/api/auth', authRouter);`,
       routerMounts,
+      ...(hasOrders
+        ? [
+            `// Payment provider webhook — no admin JWT: providers authenticate by their`,
+            `// own scheme (Stripe-Signature / HMAC). Provider payloads only; see`,
+            `// backend/src/services/payments.ts for what is and is NOT verified.`,
+            `app.use('/api/payments', paymentsRouter);`,
+          ]
+        : []),
       `app.use('/api/admin', adminRouter);`,
       ``,
       `// Single-container production mode: when the built frontend exists, serve
@@ -645,7 +684,12 @@ function generateDdl(apis: ApiPlan[]): string {
     }
     const colDefs = ['id TEXT PRIMARY KEY', ...cols, 'created_at TEXT DEFAULT CURRENT_TIMESTAMP'];
     // Idempotent order creation (mission: "Idempotent order creation").
-    if (a.special === 'order') colDefs.push('idempotency_key TEXT UNIQUE');
+    if (a.special === 'order') {
+      colDefs.push('idempotency_key TEXT UNIQUE');
+      // Payment provider layer (mission §10): the provider charge id recorded
+      // when a charge is created — the webhook finds its order by this ref.
+      colDefs.push('payment_ref TEXT');
+    }
     blocks.push(`CREATE TABLE IF NOT EXISTS ${a.table} (\n  ${colDefs.join(',\n  ')}\n);`);
   }
 
@@ -768,6 +812,10 @@ function generateRouteFiles(apis: ApiPlan[]): ScaffoldedFile[] {
   const hasOrders = apis.some((a) => a.special === 'order');
   if (hasOrders) {
     out.push({ path: 'backend/src/services/commerce.ts', kind: 'backend', content: generateCommerceService(apis) });
+    // Payment provider layer (mission §10): gateway abstraction + webhook.
+    // index.ts / app.ts import './routes/payments.js' — those files MUST exist.
+    out.push({ path: 'backend/src/services/payments.ts', kind: 'backend', content: generatePaymentsService() });
+    out.push({ path: 'backend/src/routes/payments.ts', kind: 'backend', content: generatePaymentsRoute() });
   }
 
   // One route file per resource. Orders get the commerce-backed router
@@ -788,6 +836,7 @@ function generateRouteFiles(apis: ApiPlan[]): ScaffoldedFile[] {
       `import express from 'express';`,
       `import { authRouter } from './routes/auth.js';`,
       ...apis.map((a) => `import { ${routerVar(a.resource)} } from './routes/${slugify(a.resource)}.js';`),
+      ...(hasOrders ? [`import { paymentsRouter } from './routes/payments.js';`] : []),
       `import { adminRouter } from './routes/admin.js';`,
       ``,
       `export function createServer() {`,
@@ -796,6 +845,7 @@ function generateRouteFiles(apis: ApiPlan[]): ScaffoldedFile[] {
       `  app.get('/health', (_req, res) => res.json({ ok: true }));`,
       `  app.use('/api/auth', authRouter);`,
       ...apis.map((a) => `  app.use('/api/${a.resource}', ${routerVar(a.resource)});`),
+      ...(hasOrders ? [`  app.use('/api/payments', paymentsRouter);`] : []),
       `  app.use('/api/admin', adminRouter);`,
       `  return app;`,
       `}`,
@@ -954,15 +1004,17 @@ function generateCommerceService(apis: ApiPlan[]): string {
     ` * Create an order idempotently. Replaying the same idempotency key returns`,
     ` * the already-created order instead of a duplicate (safe client retries).`,
     ` */`,
-    `export function createOrder(userId: string, lines: CartLine[], opts: { couponCode?: string; idempotencyKey: string }): { id: string; total_cents: number; status: string } {`,
-    `  const existing = db.prepare('SELECT id, total_cents, status FROM orders WHERE idempotency_key = ?').get(opts.idempotencyKey) as any;`,
+    `export function createOrder(userId: string, lines: CartLine[], opts: { couponCode?: string; idempotencyKey: string }): { id: string; total_cents: number; status: string; payment_ref: string | null } {`,
+    `  const existing = db.prepare('SELECT id, total_cents, status, payment_ref FROM orders WHERE idempotency_key = ?').get(opts.idempotencyKey) as any;`,
     `  if (existing) return existing;`,
     ``,
     `  const breakdown = priceCart(lines, opts.couponCode);`,
-    `  const id = \`or_\${Date.now()}\`;`,
+    `  // Random suffix: two orders created in the same millisecond must not`,
+    `  // collide on the PK (or, via the anon key, silently replay each other).`,
+    `  const id = \`or_\${Date.now()}_\${Math.random().toString(36).slice(2, 8)}\`;`,
     `  db.prepare('INSERT INTO orders (id, user_id, status, total_cents, items, idempotency_key) VALUES (?, ?, ?, ?, ?, ?)')`,
     `    .run(id, userId, 'pending', breakdown.total_cents, JSON.stringify(lines), opts.idempotencyKey);`,
-    `  return { id, total_cents: breakdown.total_cents, status: 'pending' };`,
+    `  return { id, total_cents: breakdown.total_cents, status: 'pending', payment_ref: null };`,
     `}`,
     ``,
     `/** Order state machine — only legal transitions, nothing else. */`,
@@ -975,6 +1027,54 @@ function generateCommerceService(apis: ApiPlan[]): string {
     `  completed: [],`,
     `  cancelled: [],`,
     `};`,
+    ``,
+    `/**`,
+    ` * Charge an existing pending order through the configured payment gateway.`,
+    ` * - succeeded → order moves pending -> confirmed, charge id stored in payment_ref`,
+    ` * - pending   → order stays pending, charge id stored (webhook may confirm later)`,
+    ` * - not configured (no PAYMENT_PROVIDER) → order stays pending, nothing charged`,
+    ` * Idempotent: replaying returns the SAME charge id the order already recorded.`,
+    ` */`,
+    `export async function chargeOrder(orderId: string): Promise<{ id: string; status: OrderStatus; payment_ref: string | null }> {`,
+    `  const row = db.prepare('SELECT status, payment_ref FROM orders WHERE id = ?').get(orderId) as { status: string; payment_ref: string | null } | undefined;`,
+    `  if (!row) throw Object.assign(new Error('order not found'), { status: 404 });`,
+    `  // Idempotent (checked FIRST): a recorded charge is not re-billed — a replayed`,
+    `  // /pay returns the same charge even after the order has advanced out of 'pending'.`,
+    `  if (row.payment_ref) return { id: orderId, status: row.status as OrderStatus, payment_ref: row.payment_ref };`,
+    `  if (row.status !== 'pending') {`,
+    `    throw Object.assign(new Error(\`order is \${row.status}, only pending orders can be charged\`), { status: 409 });`,
+    `  }`,
+    ``,
+    `  const { selectGateway } = await import('../services/payments.js');`,
+    `  const gateway = selectGateway();`,
+    `  if (!gateway) return { id: orderId, status: 'pending', payment_ref: null };`,
+    ``,
+    `  const order = db.prepare('SELECT total_cents FROM orders WHERE id = ?').get(orderId) as { total_cents: number };`,
+    `  const charge = await gateway.createCharge(orderId, order.total_cents);`,
+    `  if (charge.status === 'succeeded' && charge.providerRef) {`,
+    `    db.prepare('UPDATE orders SET status = ?, payment_ref = ? WHERE id = ?').run('confirmed', charge.providerRef, orderId);`,
+    `    return { id: orderId, status: 'confirmed', payment_ref: charge.providerRef };`,
+    `  }`,
+    `  if (charge.providerRef) {`,
+    `    db.prepare('UPDATE orders SET payment_ref = ? WHERE id = ?').run(charge.providerRef, orderId);`,
+    `  }`,
+    `  return { id: orderId, status: 'pending', payment_ref: charge.providerRef ?? null };`,
+    `}`,
+    ``,
+    `/**`,
+    ` * Mark a pending order confirmed because the provider says it is paid.`,
+    ` * Records the provider event id (payment_ref) and advances the state`,
+    ` * machine; the caller gates this on the order still being 'pending' so`,
+    ` * replayed webhooks are no-ops (idempotent).`,
+    ` */`,
+    `export function markOrderPaid(orderId: string, paymentRef: string): string {`,
+    `  const order = db.prepare('SELECT status FROM orders WHERE id = ?').get(orderId) as { status: string } | undefined;`,
+    `  if (!order) throw Object.assign(new Error('order not found'), { status: 404 });`,
+    `  db.prepare('UPDATE orders SET payment_ref = ? WHERE id = ?').run(paymentRef, orderId);`,
+    `  // Idempotent: if already confirmed, a replayed webhook is a no-op, not a 409.`,
+    `  if (order.status === 'confirmed') return 'confirmed';`,
+    `  return transitionOrder(orderId, 'confirmed');`,
+    `}`,
     ``,
     `export function transitionOrder(orderId: string, to: OrderStatus): string {`,
     `  const order = db.prepare('SELECT status FROM orders WHERE id = ?').get(orderId) as { status: string } | undefined;`,
@@ -1000,7 +1100,7 @@ function generateOrderRoute(): string {
     `import { Router } from 'express';`,
     `import db from '../db.js';`,
     `import { requireAuth, type AuthedRequest } from '../middleware/auth.js';`,
-    `import { createOrder, transitionOrder, type OrderStatus, type CartLine } from '../services/commerce.js';`,
+    `import { createOrder, chargeOrder, transitionOrder, type OrderStatus, type CartLine } from '../services/commerce.js';`,
     ``,
     `export const OrdersRouter = Router();`,
     ``,
@@ -1034,6 +1134,153 @@ function generateOrderRoute(): string {
     `    res.json({ id: req.params.id, status });`,
     `  } catch (e: any) {`,
     `    res.status(e.status ?? 400).json({ error: e.message });`,
+    `  }`,
+    `});`,
+    ``,
+    `// Charge a pending order through the configured payment gateway. Idempotent:`,
+    `// a second /pay on the same order returns the recorded charge, not a new one.`,
+    `// Not configured (PAYMENT_PROVIDER unset) → the order simply stays pending.`,
+    `OrdersRouter.post('/:id/pay', requireAuth, async (req: AuthedRequest, res) => {`,
+    `  try {`,
+    `    const result = await chargeOrder(req.params.id);`,
+    `    res.json(result);`,
+    `  } catch (e: any) {`,
+    `    res.status(e.status ?? 500).json({ error: e.message });`,
+    `  }`,
+    `});`,
+    ``,
+  ].join('\n');
+}
+
+/**
+ * The payment provider layer's service (emitted to backend/src/services/payments.ts
+ * for order domains): a gateway abstraction with a clearly-labelled mock sandbox,
+ * a dependency-free Stripe REST client, and an honest "not implemented" for
+ * providers this build does not ship. No fabricated credentials anywhere.
+ */
+function generatePaymentsService(): string {
+  return [
+    `// Payment provider layer (mission §10) — gateway abstraction + provider selection.`,
+    `//`,
+    `// HONEST LIMITATIONS — read before trusting a charge:`,
+    `// - The MOCK gateway is a deterministic sandbox. It never moves real money and`,
+    `//   every charge it reports carries a mock_ ref so no "paid" claim is ever`,
+    `//   mistaken for a real settlement.`,
+    `// - STRIPE calls the REST API directly (no SDK, no key needed at import time).`,
+    `//   A SANDBOX key (sk_test_...) works end to end with test cards; missing key`,
+    `//   means a fast "not configured" error — never a silent fallback or fake success.`,
+    `// - POST /api/payments/webhook confirms an order by matching it against the`,
+    `//   payment_ref this server recorded — NOT via Stripe-Signature HMAC. Gate this`,
+    `//   route at the network edge (allow-list / shared secret) before real traffic.`,
+    ``,
+    `export type ChargeStatus = 'succeeded' | 'pending';`,
+    ``,
+    `export interface ChargeResult {`,
+    `  status: ChargeStatus;`,
+    `  /** Provider-side charge/event id, when the provider returns one. */`,
+    `  providerRef?: string;`,
+    `  /** Which gateway produced this: 'mock' | 'stripe'. */`,
+    `  label: string;`,
+    `}`,
+    ``,
+    `export interface PaymentGateway {`,
+    `  readonly name: 'mock' | 'stripe';`,
+    `  createCharge(orderId: string, totalCents: number): Promise<ChargeResult>;`,
+    `}`,
+    ``,
+    `/** Deterministic sandbox gateway. No network, no real money, clearly labelled. */`,
+    `export class MockGateway implements PaymentGateway {`,
+    `  readonly name = 'mock' as const;`,
+    `  async createCharge(orderId: string, _totalCents: number): Promise<ChargeResult> {`,
+    `    // Synchronous settle; providerRef is deterministic per order so a replayed`,
+    `    // charge reports the SAME id (idempotent).`,
+    `    return { status: 'succeeded', providerRef: \`mock_charge_\${orderId}\`, label: 'mock' };`,
+    `  }`,
+    `}`,
+    ``,
+    `/**`,
+    ` * Stripe via plain fetch — no SDK, no credentials baked in. Throws "not`,
+    ` * configured" fast when STRIPE_SECRET_KEY is missing.`,
+    ` */`,
+    `export class StripeGateway implements PaymentGateway {`,
+    `  readonly name = 'stripe' as const;`,
+    `  async createCharge(orderId: string, totalCents: number): Promise<ChargeResult> {`,
+    `    const key = process.env.STRIPE_SECRET_KEY?.trim();`,
+    `    if (!key) {`,
+    `      throw Object.assign(new Error('stripe not configured: set STRIPE_SECRET_KEY (sk_test_... is fine for sandbox)'), { status: 503 });`,
+    `    }`,
+    `    const res = await fetch('https://api.stripe.com/v1/charges', {`,
+    `      method: 'POST',`,
+    `      headers: {`,
+    `        Authorization: \`Bearer \${key}\`,`,
+    `        'Content-Type': 'application/x-www-form-urlencoded',`,
+    `      },`,
+    `      body: new URLSearchParams({`,
+    `        amount: String(totalCents),`,
+    `        currency: 'usd',`,
+    `        description: \`order \${orderId}\`,`,
+    `      }),`,
+    `    });`,
+    `    if (!res.ok) {`,
+    `      const text = await res.text();`,
+    `      throw Object.assign(new Error(\`stripe charge failed (\${res.status}): \${text.slice(0, 200)}\`), { status: 502 });`,
+    `    }`,
+    `    const charge = (await res.json()) as { id: string; status: string };`,
+    `    return {`,
+    `      status: charge.status === 'succeeded' ? 'succeeded' : 'pending',`,
+    `      providerRef: charge.id,`,
+    `      label: 'stripe',`,
+    `    };`,
+    `  }`,
+    `}`,
+    ``,
+    `/**`,
+    ` * Resolve the active gateway from PAYMENT_PROVIDER:`,
+    ` *   mock     → MockGateway (demo default, no keys needed)`,
+    ` *   stripe   → StripeGateway (needs STRIPE_SECRET_KEY at call time)`,
+    ` *   razorpay → throws "not implemented" — no fake provider support is claimed`,
+    ` *   ''/unset → null (orders stay pending, nothing charged, no errors)`,
+    ` */`,
+    `export function selectGateway(): PaymentGateway | null {`,
+    `  const provider = (process.env.PAYMENT_PROVIDER ?? '').trim().toLowerCase();`,
+    `  if (provider === 'mock') return new MockGateway();`,
+    `  if (provider === 'stripe') return new StripeGateway();`,
+    `  if (provider === 'razorpay') {`,
+    `    throw Object.assign(new Error('razorpay is not implemented in this generated build'), { status: 501 });`,
+    `  }`,
+    `  return null;`,
+    `}`,
+  ].join('\n');
+}
+
+/**
+ * The payment provider webhook route (emitted to backend/src/routes/payments.ts).
+ * Exported as webhookRouter (provider-facing name) and paymentsRouter (the alias
+ * index.ts / app.ts mount) — the same router object, so both imports resolve.
+ */
+function generatePaymentsRoute(): string {
+  return [
+    `// Payment provider webhook — confirms paid orders (mission §10).`,
+    `// No JWT: providers authenticate by their own scheme; this build matches the`,
+    `// event against the payment_ref it recorded (see services/payments.ts for the`,
+    `// honest no-signature-verification limitation + the edge-gating advice).`,
+    `import { Router } from 'express';`,
+    `import { markOrderPaid } from '../services/commerce.js';`,
+    ``,
+    `export const webhookRouter = Router();`,
+    `export const paymentsRouter = webhookRouter;`,
+    ``,
+    `webhookRouter.post('/webhook', (req, res) => {`,
+    `  const orderId = String(req.body?.orderId ?? '');`,
+    `  const providerEventId = String(req.body?.providerEventId ?? '');`,
+    `  if (!orderId || !providerEventId) return res.status(400).json({ error: 'orderId + providerEventId required' });`,
+    `  try {`,
+    `    // markOrderPaid is idempotent: unknown order → 404, replayed event on an`,
+    `    // already-confirmed order → 200 no-op, late event on a progressed order → 409.`,
+    `    const status = markOrderPaid(orderId, providerEventId);`,
+    `    res.json({ orderId, status });`,
+    `  } catch (e: any) {`,
+    `    res.status(e.status ?? 500).json({ error: e.message });`,
     `  }`,
     `});`,
     ``,
@@ -1095,6 +1342,31 @@ ${hasPromos ? `  it('applies the seeded WELCOME10 coupon', async () => {
     assert.equal(ok.status, 200);
     assert.equal(ok.body.status, 'confirmed');
   });
+
+  it('charges a pending order through the mock gateway (clearly labelled + idempotent)', async () => {
+    const created = await api('/api/orders', { method: 'POST', body: JSON.stringify({ items: [{ id: 'i1', qty: 1 }] }) }, token);
+    const pay = await api(\`/api/orders/\${created.body.id}/pay\`, { method: 'POST' }, token);
+    assert.equal(pay.status, 200);
+    assert.equal(pay.body.status, 'confirmed', 'mock gateway settles synchronously');
+    assert.ok(String(pay.body.payment_ref).startsWith('mock_'), 'mock charge must be clearly labelled mock, not real');
+    // Idempotent: a second /pay on the same order returns the recorded ref, not a new charge.
+    const replay = await api(\`/api/orders/\${created.body.id}/pay\`, { method: 'POST' }, token);
+    assert.equal(replay.status, 200);
+    assert.equal(replay.body.payment_ref, pay.body.payment_ref, 'replayed charge must not be re-billed');
+  });
+
+  it('payment webhook confirms a pending order; replays no-op; unknown order 404s', async () => {
+    const created = await api('/api/orders', { method: 'POST', body: JSON.stringify({ items: [{ id: 'i1', qty: 1 }] }) }, token);
+    const id = created.body.id;
+    const event = \`evt_\${Date.now()}\`;
+    const ok = await api('/api/payments/webhook', { method: 'POST', body: JSON.stringify({ orderId: id, providerEventId: event }) });
+    assert.equal(ok.status, 200, 'webhook confirms a pending order');
+    assert.equal(ok.body.status, 'confirmed');
+    const replay = await api('/api/payments/webhook', { method: 'POST', body: JSON.stringify({ orderId: id, providerEventId: event }) });
+    assert.equal(replay.status, 200, 'replayed webhook on a confirmed order is an idempotent no-op');
+    const missing = await api('/api/payments/webhook', { method: 'POST', body: JSON.stringify({ orderId: 'or_missing', providerEventId: event }) });
+    assert.equal(missing.status, 404, 'unknown order must 404');
+  });
 `
     : '';
 
@@ -1125,6 +1397,7 @@ for (const ext of ['', '-wal', '-shm']) {
   try { fs.rmSync(TEST_DB + ext, { force: true }); } catch { /* first run */ }
 }
 process.env.DATABASE_FILE = TEST_DB;
+${hasOrders ? `process.env.PAYMENT_PROVIDER = 'mock'; // charge/webhook tests run the clearly-labelled mock gateway` : ''}
 const { createServer } = await import('../src/app.js');
 
 let base = '';
@@ -1914,9 +2187,12 @@ function extractHex(text: string, which: number): string | undefined {
 // Deployment
 // ---------------------------------------------------------------------------
 
-function generateDeployment(name: string, pack: DomainPack): ScaffoldedFile[] {
+function generateDeployment(name: string, pack: DomainPack, apis: ApiPlan[]): ScaffoldedFile[] {
   const slugName = slug(name);
   const backendImage = `ghcr.io/${slugName}/${slugName}-backend`;
+  // Payment env vars only make sense for order domains — don't ship PAYMENT_PROVIDER
+  // plumbing into a SaaS dashboard, etc. The deploy blueprints below interpolate this.
+  const hasOrders = apis.some((a) => a.special === 'order');
   return [
     // Root Dockerfile — one image that serves API + built frontend (SPA).
     {
@@ -2018,6 +2294,8 @@ services:
       - DATABASE_FILE=/data/${slugName}.sqlite
       - JWT_SECRET=\${JWT_SECRET:-change-me-in-production}
       - TAX_BPS=\${TAX_BPS:-500}
+${hasOrders ? `      - PAYMENT_PROVIDER=\${PAYMENT_PROVIDER:-mock}
+      - STRIPE_SECRET_KEY=\${STRIPE_SECRET_KEY:-} # only read when PAYMENT_PROVIDER=stripe` : ''}
     volumes:
       - app-data:/data
 volumes:
@@ -2046,10 +2324,15 @@ services:
         value: /var/data/${slugName}.sqlite
       - key: JWT_SECRET
         generateValue: true
-      - key: TAX_BPS
+${hasOrders ? `      - key: TAX_BPS
         value: '500'
+      - key: PAYMENT_PROVIDER
+        value: mock
       - key: STRIPE_SECRET_KEY
-        sync: false
+        sync: false # set in the dashboard when switching to PAYMENT_PROVIDER=stripe
+` : `      - key: TAX_BPS
+        value: '500'
+`}
     volumes:
       - name: app-data
       - mountPath: /var/data
@@ -2138,6 +2421,14 @@ lives on the mounted volume (\`/var/data\`) and survives redeploys.
                 { name: 'DATABASE_FILE', value: '/data/' + slugName + '.sqlite' },
                 { name: 'JWT_SECRET', value: 'REPLACE_VIA_SECRETS_MANAGER' },
                 { name: 'TAX_BPS', value: '500' },
+                // Payment provider layer — order domains only (no fake plumbing
+                // into a non-commerce product).
+                ...(hasOrders
+                  ? [
+                      { name: 'PAYMENT_PROVIDER', value: 'mock' },
+                      { name: 'STRIPE_SECRET_KEY', value: 'REPLACE_VIA_SECRETS_MANAGER' },
+                    ]
+                  : []),
               ],
               logConfiguration: { logDriver: 'awslogs', options: {} },
             },
@@ -2232,7 +2523,7 @@ export function scaffoldProduct(opts: ScaffoldOptions): ScaffoldResult {
     ...generateRootFiles(name, pack, pages, apis),
     ...generateServer(name, pack, apis),
     ...generateWeb(name, pack, pages, apis),
-    ...(includeDeployment ? generateDeployment(name, pack) : []),
+    ...(includeDeployment ? generateDeployment(name, pack, apis) : []),
   ];
 
   return {

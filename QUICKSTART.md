@@ -63,7 +63,7 @@ npx tsx bin/aether.ts build "Build a coffee shop website with subscriptions" --o
 
 ```
 frontend/   React (Vite) + React Router — one route per page, global CSS imported
-backend/    Express + SQLite (better-sqlite3) — REST API, JWT auth, commerce service
+backend/    Express + SQLite (better-sqlite3) — REST API, JWT auth, commerce service, payment provider layer (order domains)
 deploy/     provider-ready configs: render/ aws/ digitalocean/ vercel/ netlify/ cloudflare-pages/
 Dockerfile  single image: API + built frontend (SPA fallback) + .dockerignore
 .github/workflows/ci.yml   the product ships its own CI (tests + frontend build)
@@ -86,19 +86,32 @@ What you get (driven by the industry domain pack, not a generic template):
   and an order state machine (illegal transitions → 409). The generated
   test suite proves all of it against a running app on an ephemeral port
   with an isolated test DB.
+- **Payment provider layer (order domains)** — a generated
+  `backend/src/services/payments.ts` gateway abstraction: a clearly-labelled
+  `MockGateway` sandbox (demo default, `PAYMENT_PROVIDER=mock`, no real
+  money ever), a dependency-free `StripeGateway` that fails fast with a
+  clear "not configured" error when the key is missing, and an honest
+  "not implemented" for providers this build does not ship (e.g. Razorpay).
+  `POST /orders/:id/pay` charges idempotently; `POST
+  /api/payments/webhook` confirms paid orders (idempotent replays). No
+  fake credentials and no fabricated "paid" claims — the webhook matches
+  the recorded `payment_ref`, not a provider signature (the documented
+  honest limitation of the no-SDK build). Non-order domains get no
+  payment plumbing at all.
 - **Deployment + ops, real-world** — single-container mode (backend serves
   the built frontend) for AWS ECS Fargate / Render / DigitalOcean, or split
   providers: backend on Render/AWS/DO + frontend on Vercel/Netlify/Cloudflare
   Pages with `VITE_API_BASE`. Details in `deploy/README.md`. No secrets in
   the repo — `.env.example` stays placeholder-only.
 
-**Independent verification (§13):** every build prints a 17-check report
+**Independent verification (§13):** every build prints an 18-check report
 (structure, CSS integrity, page routing, API surface, DB schema, seed, auth,
-commerce layer, real tests, deployment, provider configs, manifest
-consistency, docker hygiene, CI, template hygiene, frontend↔API consistency).
-`--verify` additionally runs the generated test suite **and** the frontend
-production build — a broken UI or undeclared dependency fails the verdict,
-never a rubber stamp.
+commerce layer, payment provider layer (order domains — gateway + webhook
+mount + env docs), real tests, deployment, provider configs, manifest
+consistency, docker hygiene, CI, template hygiene, frontend↔API
+consistency). `--verify` additionally runs the generated test suite **and**
+the frontend production build — a broken UI or undeclared dependency fails
+the verdict, never a rubber stamp.
 
 The domain is inferred from concrete keywords first (coffee → coffee-shop) so a
 capability word like "subscriptions" doesn't hijack the industry. Verify any

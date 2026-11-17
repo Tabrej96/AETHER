@@ -178,6 +178,36 @@ export function verifyScaffoldStatic(result: ScaffoldResult, files: ScaffoldedFi
     checks.push({ id: 'commerce-logic', label: 'Orders carry real business logic', status: 'skip', evidence: 'no orders resource in this domain' });
   }
 
+  // 7b. Payment provider layer (mission §10): order domains must ship a real
+  //     gateway abstraction — no fabricated credentials, no unmounted webhook.
+  if (hasOrders) {
+    const payments = fileOf(files, 'backend/src/services/payments.ts') ?? '';
+    const paymentsRoute = fileOf(files, 'backend/src/routes/payments.ts') ?? '';
+    const pEnv = fileOf(files, '.env.example') ?? '';
+    const pOk =
+      /export interface PaymentGateway/.test(payments) &&
+      /createCharge\(/.test(payments) &&
+      /export function selectGateway/.test(payments) &&
+      /export const webhookRouter = Router\(\)/.test(paymentsRoute) &&
+      /post\('\/webhook'/.test(paymentsRoute) &&
+      indexTs.includes("app.use('/api/payments', paymentsRouter)") &&
+      appTs.includes("app.use('/api/payments', paymentsRouter)") &&
+      /PAYMENT_PROVIDER=/.test(pEnv);
+    add(
+      'payments-wired',
+      'Payment provider layer is wired (gateway abstraction + webhook route + env docs)',
+      pOk,
+      pOk
+        ? 'gateway interface + selectGateway in payments service; /api/payments/webhook mounted in index.ts + app.ts; PAYMENT_PROVIDER documented in .env.example'
+        : 'payments layer incomplete: ' +
+          [!/export interface PaymentGateway/.test(payments) && 'no PaymentGateway interface', !exportHas('selectGateway', payments) && 'no gateway selection', !/post\('\/webhook'/.test(paymentsRoute) && 'webhook route missing', !indexTs.includes('/api/payments') && 'webhook not mounted (index.ts)', !appTs.includes('/api/payments') && 'webhook not mounted (app.ts)', !/PAYMENT_PROVIDER=/.test(pEnv) && 'PAYMENT_PROVIDER undocumented']
+            .filter(Boolean)
+            .join(', ')
+    );
+  } else {
+    checks.push({ id: 'payments-wired', label: 'Payment provider layer is wired', status: 'skip', evidence: 'no orders resource in this domain' });
+  }
+
   // 8. Tests: a real HTTP integration suite, never the placeholder stub.
   const test = fileOf(files, 'backend/test/api.test.ts') ?? '';
   add(

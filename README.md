@@ -35,6 +35,7 @@ long jobs if the machine crashes. Instead of *describing* a fix, it *does* the w
 | **Quality-gated catalog** | Every agent and skill is scored by a deterministic quality gate that checks for an executable verifier, zero-regression assertions, secret handling, and crash-recovery depth |
 | **21 capability engines** | Domain intelligence, browser automation, visual computer use, reverse engineering, workspace management, creative generation, and more — all integrated through stable contracts |
 | **Extensible** | 20+ AETHER native agents, 71 ECC-inspired agents, 314 skills, 9 Capability Programs, and 21 capability engines — compose, extend, or replace any component |
+| **Materialize a real product** | `aether build "<prompt>"` turns any prompt — any industry, any app type — into a professional full-stack product: `frontend/` + `backend/` + `deploy/` layout, real Express/SQLite API with JWT auth, server-side business logic, a payment provider layer for commerce domains, provider-ready deploy configs (Render / AWS / DigitalOcean / Vercel / Netlify / Cloudflare), its own CI workflow — and an **independent verification engine** that proves every requirement before calling it done |
 
 ---
 
@@ -52,7 +53,17 @@ npx tsx bin/aether.ts validate
 
 # 3. Install AETHER into your editor (all, or just a domain pack)
 ./install.sh --all --target all-harnesses --write .
+
+# 4. Materialize a full-stack product from any prompt (works for ANY industry/domain):
+npx tsx bin/aether.ts build "Build a coffee shop website with subscriptions" --out ./cofi-shop
+# add --verify to also run the generated test suite + frontend production build
 ```
+
+The generated product is a standalone, professional repo (`frontend/`, `backend/`, `deploy/`,
+`Dockerfile`, CI workflow) — inside it: `npm install && cp .env.example .env && npm run dev`.
+Every build prints a verification report (18 static checks; `--verify` adds the generated
+HTTP test suite + frontend build). `deploy/` inside the product holds copy-paste configs for
+Render, AWS ECS Fargate, DigitalOcean, Vercel, Netlify and Cloudflare Pages.
 
 > **Optional:** the interactive React workbench needs packages:
 > `npm install --legacy-peer-deps && npm run dev` (not required for any engine or test).

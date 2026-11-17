@@ -41,6 +41,12 @@ describe('verifyScaffoldStatic — green path', () => {
     const commerce = find(checks, 'commerce-logic');
     assert.equal(commerce.status, 'pass', commerce.evidence);
   });
+
+  it('order domains pass payments-wired on a clean generation', () => {
+    const checks = verifyScaffoldStatic(result, result.files);
+    const p = find(checks, 'payments-wired');
+    assert.equal(p.status, 'pass', p.evidence);
+  });
 });
 
 describe('verifyScaffoldStatic — non-order domains', () => {
@@ -49,6 +55,7 @@ describe('verifyScaffoldStatic — non-order domains', () => {
     const checks = verifyScaffoldStatic(saas, saas.files);
     const commerce = find(checks, 'commerce-logic');
     assert.equal(commerce.status, 'skip', 'non-order domains must not be penalised for lacking a commerce layer');
+    assert.equal(find(checks, 'payments-wired').status, 'skip', 'non-order domains must not be penalised for lacking a payment layer');
     const report = buildReport(saas, saas.files);
     assert.equal(report.failed, 0, report.checks.filter((c) => c.status === 'fail').map((c) => `${c.id}: ${c.evidence}`).join(' | '));
   });
@@ -103,6 +110,25 @@ describe('verifyScaffoldStatic — broken scaffolds must FAIL (engine is not a r
       c.content = c.content.replace('export function priceCart', 'function priceCartRemoved');
     });
     assert.equal(find(verifyScaffoldStatic(base, files), 'commerce-logic').status, 'fail');
+  });
+
+  it('detects a deleted payments service (order domain)', () => {
+    const files = mutate((fs) => {
+      fs.splice(fs.findIndex((f) => f.path === 'backend/src/services/payments.ts'), 1);
+    });
+    const c = find(verifyScaffoldStatic(base, files), 'payments-wired');
+    assert.equal(c.status, 'fail');
+    assert.match(c.evidence, /no PaymentGateway interface|no gateway selection/);
+  });
+
+  it('detects an unmounted payment webhook', () => {
+    const files = mutate((fs) => {
+      const index = fs.find((f) => f.path === 'backend/src/index.ts')!;
+      index.content = index.content.replace("app.use('/api/payments', paymentsRouter);", '/* removed */');
+    });
+    const c = find(verifyScaffoldStatic(base, files), 'payments-wired');
+    assert.equal(c.status, 'fail');
+    assert.match(c.evidence, /webhook not mounted/);
   });
 
   it('detects committed secrets in .env.example', () => {
